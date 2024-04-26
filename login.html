@@ -8,21 +8,43 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-  <header class="container-fluid">
+<header class="container-fluid" margin-top="5%">
     <div class="col-12">
-            <div class="square d-flex">
-                <p class="title"><img class="logo_here" src="assets/STI ONN Logo transparent 3.png" alt="STI ONN Logo"> | STI ONN Admin</p>
-            </div>
+        <div class="square d-flex">
+            <p class="title"><img class="logo_here" src="assets/STI ONN Logo transparent 3.png" alt="STI ONN Logo"> | STI ONN Admin</p>
         </div>
-  </header>
+    </div>
+</header>
 
-
-<section class="vh-100">
+<section class="vh-100 tutu">
     <div class="container">
         <div class="row justify-content-center align-items-center h-100">
+
             <div class="col-md-9 col-lg-6 col-xl-5">
-                <img src="assets/enrollmentongoing_model.png" class="img-fluid" alt="Sample image">
+
+                <div id="carouselExampleControlsNoTouching" class="carousel slide " data-bs-touch="false" data-bs-interval="false">
+                    <div class="carousel-inner" data-bs-interval="10000">
+                        <div class="carousel-item active">
+                            <img src="assets/enrollmentongoing_model.png" class="img-fluid" alt="Sample image">
+                        </div>
+                        <div class="carousel-item" data-bs-interval="10000">
+                            <img src="assets/omnibus.jpg" class="img-fluid" alt="Sample image">
+                        </div>
+                            <div class="carousel-item" data-bs-interval="10000">
+                                <img src="assets/enroll.png" class="img-fluid" alt="Sample image">
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControlsNoTouching" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
             </div>
+
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                 <form>
                     <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
@@ -43,7 +65,7 @@
                     </div>
 
                     <div class="text-center text-lg-start mt-4 pt-2">
-                        <button type="button" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+                        <input type="submit" class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;" value="Login"/>
                     </div>
                 </form>
             </div>

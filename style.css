@@ -33,7 +33,11 @@
 .logo_here {
     position: relative;
     margin-right: 10px;
-    padding-left: 3%;
-    width: 40%;
-    height: 120%;
+    padding-left: 8%;
+    width: 50%;
+    height: 110%;
+}
+
+.tutu{
+    padding-top: 5%;
 }
