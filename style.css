@@ -1,17 +1,17 @@
 /* Google Fonts - Poppins */
     @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
 
-    * {
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
-    }
-    body {
+}
+body {
     min-height: 100%;
     background: #e3f2fd;
-    }
-    nav {
+}
+nav {
     position: fixed;
     top: 0;
     left: 0;
@@ -21,24 +21,24 @@
     align-items: center;
     background: #0B5793;
     box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
-    }
-    nav .logo {
+}
+nav .logo {
     display: flex;
     align-items: center;
     margin: 0 24px;
-    }
-    .logo .menu-icon {
+}
+.logo .menu-icon {
     color: white;
     font-size: 24px;
     margin-right: 14px;
     cursor: pointer;
-    }
+}
     .logo .logo-name {
     color: white;
     font-size: 22px;
     font-weight: 500;
-    }
-    nav .sidebar {
+}
+nav .sidebar {
     position: fixed;
     top: 0;
     left: -100%;
@@ -48,46 +48,46 @@
     background-color: #fff;
     box-shadow: 0 5px 1px rgba(0, 0, 0, 0.1);
     transition: all 0.4s ease;
-    }
-    nav.open .sidebar {
+}
+nav.open .sidebar {
     left: 0;
-    }
-    .sidebar .sidebar-content {
+}
+.sidebar .sidebar-content {
     display: flex;
     height: 100%;
     flex-direction: column;
     justify-content: space-between;
     padding: 30px 16px;
-    }
-    .sidebar-content .list {
+}
+.sidebar-content .list {
     list-style: none;
-    }
-    .list .nav-link {
+}
+.list .nav-link {
     display: flex;
     align-items: center;
     margin: 8px 0;
     padding: 14px 12px;
     border-radius: 8px;
     text-decoration: none;
-    }
-    .lists .nav-link:hover {
+}
+.lists .nav-link:hover {
     background-color: #4070f4;
-    }
-    .nav-link .icon {
+}
+.nav-link .icon {
     margin-right: 14px;
     font-size: 20px;
     color: #707070;
-    }
-    .nav-link .link {
+}
+.nav-link, .link, .bt_hover {
     font-size: 16px;
     color: #707070;
     font-weight: 400;
-    }
-    .lists .nav-link:hover .icon,
-    .lists .nav-link:hover .link {
+}
+.lists .nav-link:hover .icon,
+.lists .nav-link:hover .link {
     color: #fff;
-    }
-    .overlay {
+}
+.overlay {
     position: fixed;
     top: 0;
     left: -100%;
@@ -97,12 +97,12 @@
     pointer-events: none;
     transition: all 0.4s ease;
     background: rgba(0, 0, 0, 0.3);
-    }
-    nav.open ~ .overlay {
+}
+nav.open ~ .overlay {
     opacity: 1;
     left: 260px;
     pointer-events: auto;
-    }
+}
 
 .divider:after,
 .divider:before {
@@ -148,3 +148,36 @@
     padding-top: 5%;
 }
 
+.btn-announce{
+    min-height:80px;
+    min-width: 330px;
+    font-size: 24px;
+    padding: 24px 48px;
+    border-radius: 12px;
+    background: #4070f4;
+    color: white;
+    border: none;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.btn-announce:hover{
+    background: #0B5793;
+}
+
+.preview{
+    width: 5px;
+    height: 5px;
+    margin: 5px;
+}
+
+.previewContaineriner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.modal-alternative{
+    margin-top: 3%;
+    border-top: .1px solid rgb(128, 128, 128);
+}
