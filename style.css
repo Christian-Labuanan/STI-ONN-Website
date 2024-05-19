@@ -181,3 +181,14 @@ nav.open ~ .overlay {
     margin-top: 3%;
     border-top: .1px solid rgb(128, 128, 128);
 }
+
+.position-relative {
+    position: relative;
+}
+.position-absolute {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
