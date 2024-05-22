@@ -23,16 +23,26 @@ submit.addEventListener("click", function(event){
 
     const mail = document.getElementById('email').value;
     const pass = document.getElementById('pass').value;
+    const errorMessageElement = document.getElementById('error-message');
+    const loggingInModal = new bootstrap.Modal(document.getElementById('loggingInModal'), {
+        backdrop: 'static',
+        keyboard: false
+    });
 
     signInWithEmailAndPassword(auth, mail, pass)
     .then((userCredential) => {
         const user = userCredential.user;
-        alert("Logging In");
-        window.location.href = "home.html";
+        errorMessageElement.style.display = 'none';  // Hide error message if any
+        loggingInModal.show();  // Show logging in modal
+        setTimeout(() => {
+            window.location.href = "home.html";
+        }, 1500); // Simulate a short delay before redirecting
     })
     .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        alert("Incorrect password/username");
+        loggingInModal.hide();  // Hide logging in modal
+        errorMessageElement.style.display = 'block';
+        errorMessageElement.textContent = "Incorrect email or password. Please try again.";
     });
 });

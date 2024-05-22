@@ -14,15 +14,22 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const logoutButton = document.getElementById('logout');
+const loggingOutModal = new bootstrap.Modal(document.getElementById('loggingOutModal'), {
+    backdrop: 'static',
+    keyboard: false
+});
 
 logoutButton.addEventListener("click", function(event){
     event.preventDefault();
 
+    loggingOutModal.show();  // Show logging out modal
+
     signOut(auth).then(() => {
-        alert("Logged out successfully");
-        // Redirect to the login page or any other page after logout
-        window.location.href = "login.html";
+        setTimeout(() => {
+            window.location.href = "login.html";  // Redirect to the login page after logout
+        }, 1500);  // Simulate a short delay before redirecting
     }).catch((error) => {
+        loggingOutModal.hide();  // Hide logging out modal if there is an error
         console.error("Error signing out: ", error);
     });
 });

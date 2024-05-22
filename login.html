@@ -52,6 +52,9 @@
                     </div>
                     <div class="divider d-flex align-items-center my-4"></div>
 
+                    <!-- Error message -->
+                    <div id="error-message" class="text-danger mb-3" style="display: none;"></div>
+
                     <!-- Email input -->
                     <div class="form-outline mb-4">
                         <label class="form-label" for="form3Example3">Email address</label>
@@ -76,6 +79,21 @@
         </div>
     </div>
 </section>
+
+<!-- Logging In Modal -->
+<div class="modal fade" id="loggingInModal" tabindex="-1" aria-labelledby="loggingInModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loggingInModalLabel">Please wait</h5>
+            </div>
+            <div class="modal-body">
+                Logging In...
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function myFunction() {
   var x = document.getElementById("pass");
