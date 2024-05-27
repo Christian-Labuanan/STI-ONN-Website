@@ -192,3 +192,6 @@ nav.open ~ .overlay {
     transform: translateY(-50%);
     cursor: pointer;
 }
+.modal-content{
+    text-align: center;
+}

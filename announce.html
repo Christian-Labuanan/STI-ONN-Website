@@ -100,12 +100,24 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Submit</button>
+                    <button type="button" id="submitAnnouncement"class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </div>
     </div>
-
+      <!-- Logging Out Modal -->
+    <div class="modal fade" id="loggingOutModal" tabindex="-1" aria-labelledby="loggingOutModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="loggingOutModalLabel">Please wait</h5>
+              </div>
+              <div class="modal-body">
+                  Logging Out...
+              </div>
+          </div>
+      </div>
+  </div>
 
     <script>
         CKEDITOR.replace( 'editor' );
