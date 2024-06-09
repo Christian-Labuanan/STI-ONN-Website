@@ -8,7 +8,6 @@ const firebaseConfig = {
     appId: "1:538337032363:web:7e17df22799b2bad85dfee"
   };
   const app = firebase.initializeApp(firebaseConfig);
-
   const storage = firebase.storage();
 
   const inp = document.querySelector(".inp");
@@ -17,6 +16,13 @@ const firebaseConfig = {
   const img = document.querySelector(".img");
   const fileData = document.querySelector(".filedata");
   const loading = document.querySelector(".loading");
+  
+  const docPreview = document.createElement('iframe'); // Create an iframe for document preview
+  document.body.appendChild(docPreview); // Append iframe to body or a specific container
+  docPreview.style.display = 'none'; // Initially hide the iframe
+  docPreview.style.width = '100%';
+  docPreview.style.height = '600px';
+  const fileListContainer = document.getElementById('fileList');
   let file;
   let fileName;
   let progress = 0;
@@ -60,7 +66,7 @@ const showError = (error) => {
         uploadedFileName = snapshot.ref.name;
       },
       (error) => {
-        console.log(error);
+        showError(error);
       },
       () => {
         storage
@@ -71,11 +77,18 @@ const showError = (error) => {
             console.log("URL", url);
             if (!url) {
               img.style.display = "none";
+              loading.style.display = "none";
+            if (file.type === 'application/pdf') {
+              img.style.display = "none"; // Hide image preview if it's a document
+              docPreview.src = url; // Set the iframe src to the file URL
+              docPreview.style.display = 'block'; // Show the iframe
             } else {
               img.style.display = "block";
               loading.style.display = "none";
             }
             img.setAttribute("src", url);
+            }
+            const fileListContainer = document.getElementById('fileList');
           });
         console.log("File Uploaded Successfully");
         // Show success modal
@@ -103,6 +116,30 @@ const showError = (error) => {
         if (file) {
         displayImagePreview(file);
         }
+        fileName = Math.round(Math.random() * 9999) + file.name;
+        fileData.innerHTML = fileName;
+        console.log(file, fileName);
         }
     );
   };
+// Function to display the list of files
+const displayFiles = () => {
+  const storageRef = storage.ref().child("Files");
+  storageRef.listAll().then((result) => {
+    fileListContainer.innerHTML = ''; // Clear the existing list
+    result.items.forEach((fileRef) => {
+      fileRef.getDownloadURL().then((url) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="${url}" target="_blank">${fileRef.name}</a>`;
+        fileListContainer.appendChild(li);
+      }).catch((error) => {
+        showError(error);
+      });
+    });
+  }).catch((error) => {
+    showError(error);
+  });
+};
+
+// Initial call to display the files when the page loads
+displayFiles();
