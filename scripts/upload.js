@@ -88,7 +88,8 @@ const showError = (error) => {
             }
             img.setAttribute("src", url);
             }
-            const fileListContainer = document.getElementById('fileList');
+            // Add the new file to the list
+            displayFiles();
           });
         console.log("File Uploaded Successfully");
         // Show success modal
@@ -97,29 +98,6 @@ const showError = (error) => {
         // Hide loading indicator
         loading.style.display = "none";
       }
-    );
-        // Function to display image preview
-        const displayImagePreview = (file) => {
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-            imgPreview.src = e.target.result;
-            imgPreview.style.display = "block";
-        };
-
-        reader.readAsDataURL(file);
-        };
-
-        // Event listener for file input change
-        inp.addEventListener("change", (event) => {
-        const file = event.target.files[0];
-        if (file) {
-        displayImagePreview(file);
-        }
-        fileName = Math.round(Math.random() * 9999) + file.name;
-        fileData.innerHTML = fileName;
-        console.log(file, fileName);
-        }
     );
   };
 // Function to display the list of files
@@ -142,4 +120,6 @@ const displayFiles = () => {
 };
 
 // Initial call to display the files when the page loads
-displayFiles();
+document.addEventListener("DOMContentLoaded", (event) => {
+  displayFiles();
+});
