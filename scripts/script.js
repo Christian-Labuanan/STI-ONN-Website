@@ -12,3 +12,5 @@ const navBar = document.querySelector("nav"),
 const uploadBtn = document.getElementById('upload');
 const fileInput = document.getElementById('fileInput');
 const previewContainer = document.getElementById('previewContainer');
+
+

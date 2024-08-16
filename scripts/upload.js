@@ -1,125 +1,83 @@
-const firebaseConfig = {
-    apiKey: "AIzaSyBfZyTFzkgn8hbaPnqNEdslEglKjBkrPPs",
-    authDomain: "sti-onn-d0161.firebaseapp.com",
-    databaseURL: "https://sti-onn-d0161-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "sti-onn-d0161",
-    storageBucket: "sti-onn-d0161.appspot.com",
-    messagingSenderId: "538337032363",
-    appId: "1:538337032363:web:7e17df22799b2bad85dfee"
-  };
-  const app = firebase.initializeApp(firebaseConfig);
-  const storage = firebase.storage();
+ // Import the functions you need from the SDKs you need
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+ import { getDatabase, ref as dbRef, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+ import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 
-  const inp = document.querySelector(".inp");
-  const imgPreview = document.querySelector(".img");
-  const progressbar = document.querySelector(".progress");
-  const img = document.querySelector(".img");
-  const fileData = document.querySelector(".filedata");
-  const loading = document.querySelector(".loading");
-  
-  const docPreview = document.createElement('iframe'); // Create an iframe for document preview
-  document.body.appendChild(docPreview); // Append iframe to body or a specific container
-  docPreview.style.display = 'none'; // Initially hide the iframe
-  docPreview.style.width = '100%';
-  docPreview.style.height = '600px';
-  const fileListContainer = document.getElementById('fileList');
-  let file;
-  let fileName;
-  let progress = 0;
-  let isLoading = false;
-  let uploadedFileName;
-  // Function to display error messages
-const showError = (error) => {
-    console.error(error);
-    alert("An error occurred. Please try again.");
-};
-  const selectImage = () => {
-    inp.click();
-  };
-  const getImageData = (e) => {
-    file = e.target.files[0];
-    fileName = Math.round(Math.random() * 9999) + file.name;
-    if (fileName) {
-      fileData.style.display = "block";
-    }
-    fileData.innerHTML = fileName;
-    console.log(file, fileName);
-  };
+ // Your web app's Firebase configuration
+ const firebaseConfig = {
+     apiKey: "AIzaSyBfZyTFzkgn8hbaPnqNEdslEglKjBkrPPs",
+     authDomain: "sti-onn-d0161.firebaseapp.com",
+     databaseURL: "https://sti-onn-d0161-default-rtdb.asia-southeast1.firebasedatabase.app",
+     projectId: "sti-onn-d0161",
+     storageBucket: "sti-onn-d0161.appspot.com",
+     messagingSenderId: "538337032363",
+     appId: "1:538337032363:web:7e17df22799b2bad85dfee"
+ };
 
-  const uploadImage = () => {
-    if (!file) {
-        alert("Please select a file.");
-        return;
-    }
-    loading.style.display = "block";
-    const storageRef = storage.ref().child("Files");
-    const folderRef = storageRef.child(fileName);
-    const uploadtask = folderRef.put(file);
-    uploadtask.on(
-      "state_changed",
-      (snapshot) => {
-        console.log("Snapshot", snapshot.ref.name);
-        progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        progress = Math.round(progress);
-        progressbar.style.width = progress + "%";
-        progressbar.innerHTML = progress + "%";
-        uploadedFileName = snapshot.ref.name;
-      },
-      (error) => {
-        showError(error);
-      },
-      () => {
-        storage
-          .ref("Files")
-          .child(uploadedFileName)
-          .getDownloadURL()
-          .then((url) => {
-            console.log("URL", url);
-            if (!url) {
-              img.style.display = "none";
-              loading.style.display = "none";
-            if (file.type === 'application/pdf') {
-              img.style.display = "none"; // Hide image preview if it's a document
-              docPreview.src = url; // Set the iframe src to the file URL
-              docPreview.style.display = 'block'; // Show the iframe
-            } else {
-              img.style.display = "block";
-              loading.style.display = "none";
-            }
-            img.setAttribute("src", url);
-            }
-            // Add the new file to the list
-            displayFiles();
-          });
-        console.log("File Uploaded Successfully");
-        // Show success modal
-        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-        successModal.show();
-        // Hide loading indicator
-        loading.style.display = "none";
-      }
-    );
-  };
-// Function to display the list of files
-const displayFiles = () => {
-  const storageRef = storage.ref().child("Files");
-  storageRef.listAll().then((result) => {
-    fileListContainer.innerHTML = ''; // Clear the existing list
-    result.items.forEach((fileRef) => {
-      fileRef.getDownloadURL().then((url) => {
-        const li = document.createElement('li');
-        li.innerHTML = `<a href="${url}" target="_blank">${fileRef.name}</a>`;
-        fileListContainer.appendChild(li);
-      }).catch((error) => {
-        showError(error);
-      });
-    });
-  }).catch((error) => {
-    showError(error);
-  });
-};
+ // Initialize Firebase
+ const app = initializeApp(firebaseConfig);
+ const database = getDatabase(app);
+ const storage = getStorage(app);
 
-// Initial call to display the files when the page loads
-document.addEventListener("DOMContentLoaded", (event) => {
-  displayFiles();
-});
+ // Initialize Quill editor
+ const quill = new Quill('#editor', {
+     theme: 'snow',
+     modules: {
+         toolbar: [
+             [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+             [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+             ['bold', 'italic', 'underline'],
+             [{ 'color': [] }, { 'background': [] }],
+             [{ 'align': [] }],
+             ['link', 'image']
+         ]
+     }
+ });
+
+ // Select form and input elements
+ const postForm = document.getElementById('postForm');
+ const postedText = document.getElementById('postedText');
+ const thumbnailContainer = document.getElementById('thumbnailContainer');
+ const thumbnailImage = document.getElementById('thumbnailImage');
+ const imageUpload = document.getElementById('imageUpload');
+
+ postForm.addEventListener('submit', async (e) => {
+     e.preventDefault();
+
+     const text = quill.root.innerHTML; // Get the Quill editor content
+     const file = imageUpload.files[0]; // Get the selected file
+
+     if (text) {
+         try {
+             // Save the post data to the database
+             const postId = Date.now().toString();
+             const postRef = dbRef(database, 'posts/' + postId);
+             let imageUrl = '';
+
+             if (file) {
+                 // Upload the file to Firebase Storage
+                 const imageRef = storageRef(storage, 'images/' + postId);
+                 const snapshot = await uploadBytes(imageRef, file);
+                 imageUrl = await getDownloadURL(snapshot.ref);
+             }
+
+             // Save the post data to the database
+             await set(postRef, {
+                 text: text,
+                 imageUrl: imageUrl
+             });
+
+             // Update the display of posted content
+             postedText.innerHTML = text;
+             if (imageUrl) {
+                 thumbnailImage.src = imageUrl;
+                 thumbnailImage.style.display = 'block';
+             }
+             thumbnailContainer.style.display = 'flex';
+         } catch (error) {
+             console.error("Error posting content:", error);
+         }
+     } else {
+         alert("Text content is required.");
+     }
+ });
