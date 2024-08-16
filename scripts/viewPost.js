@@ -163,7 +163,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
                     // Refresh the posts
                     loadPosts();
                 } catch (error) {
-                    console.error("Error deleting post:", error.message); // More detailed error logging
+                    console.error("Error deleting post:", error.message);
                 }
             }
 
