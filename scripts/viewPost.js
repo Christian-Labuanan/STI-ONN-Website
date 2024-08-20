@@ -32,7 +32,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
                     const snapshot = await get(child(dbRef, 'posts'));
                     if (snapshot.exists()) {
                         const posts = snapshot.val();
-                        postsArray = Object.entries(posts); // Use entries to get key and value
+                        postsArray = Object.entries(posts).reverse(); // Reverse the order to show new posts first
                         if (postsArray.length > 0) {
                             displayPosts(postsArray);
                         } else {
@@ -45,6 +45,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
                     console.error("Error loading posts:", error);
                 }
             }
+            
+            // Helper function to check if a post is within the last 3 hours
+            function isRecent(postTimestamp) {
+                const now = new Date();
+                const postDate = new Date(postTimestamp);
+                const diffInHours = (now - postDate) / (1000 * 60 * 60); // Difference in hours
+                return diffInHours <= 3;
+            }
 
             function displayPosts(posts) {
                 postsContainer.innerHTML = '<div class="row"></div>';
@@ -55,7 +63,24 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
 
                     const card = document.createElement('div');
                     card.classList.add('card', 'shadow-sm');
-                    
+
+                    // Add 'new-post' class to highlight the newest posts if they are within the last 3 hours
+                    if (isRecent(post.timestamp)) {
+                        card.classList.add('new-post');
+
+                        // Create and add the "new" icon
+                        const newIcon = document.createElement('span');
+                        newIcon.classList.add('new-icon');
+
+                        // Add mouse hover event listener to remove the highlight and icon permanently
+                        card.addEventListener('mouseover', () => {
+                            card.classList.remove('new-post'); // Remove the highlight
+                            if (newIcon) {
+                                newIcon.remove(); // Remove the "new" icon
+                            }
+                        });
+                    }
+
                     // Check for a thumbnail image
                     if (post.imageUrl) {
                         const img = document.createElement('img');
@@ -79,17 +104,17 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
                             card.appendChild(placeholder);
                         }
                     }
-                    
+
                     const cardBody = document.createElement('div');
                     cardBody.classList.add('card-body');
-                    
+
                     const text = document.createElement('p');
                     text.classList.add('card-text');
                     text.innerHTML = getGist(post.text); // Get the gist of the text
 
                     const btnContainer = document.createElement('div');
                     btnContainer.classList.add('d-flex', 'align-items-center', 'mb-2'); // Flexbox container for buttons
-                    
+
                     const editBtn = document.createElement('button');
                     editBtn.classList.add('btn', 'btn-warning', 'me-2'); // Margin-end class for spacing
                     editBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Edit';
@@ -112,7 +137,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
                     cardBody.appendChild(btnContainer);
                     cardBody.appendChild(zoomBtn);
                     card.appendChild(cardBody);
-                    
+
                     col.appendChild(card);
                     row.appendChild(col);
                 });

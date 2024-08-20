@@ -317,3 +317,61 @@ nav.open ~ .overlay {
     /* Remove fixed width to allow responsive sizing */
     width: 100%;
 }
+
+/* Add this CSS to your stylesheet */
+.new-post {
+    border: 2px solid #4a93ff; /* Red border for new posts */
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Enhanced shadow effect */
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.new-post::before {
+    content: "New";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #4a93ff;
+    color: #fff;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.new-post:hover {
+    transform: scale(1.02); /* Slightly enlarge on hover */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3); /* Stronger shadow on hover */
+}
+
+.new-post.removed-highlight {
+    border-color: transparent; /* Remove the highlight permanently */
+}
+
+.new-post .new-icon {
+    display: inline-block; /* Show the "new" icon */
+}
+
+.new-post.removed-highlight .new-icon {
+    display: none; /* Hide the "new" icon when highlight is removed */
+}
+
+.card:hover {
+    border-color: transparent; /* Remove the highlight on hover */
+}
+
+.new-icon {
+    position: absolute; /* Position the icon within the card */
+    top: 10px; /* Adjust positioning as needed */
+    right: 10px;
+    background: #007bff; /* Background color for the icon */
+    color: #fff; /* Icon color */
+    padding: 5px;
+    border-radius: 50%;
+    display: inline-block;
+    transition: opacity 0.3s ease; /* Smooth transition for icon visibility */
+}
+
+.card:hover .new-icon {
+    display: none; /* Hide the "new" icon on hover */
+}
