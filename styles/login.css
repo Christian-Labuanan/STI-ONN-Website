@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+  :root {
+    --white-color: #fff;
+    --blue-color: #0B5793;
+    --grey-color: #707070;
+    --grey-color-light: #aaa;
+  }
+  body {
+  min-height: 100%;
+  background-color: #e7f1fc;
+  transition: all 0.5s ease;
+  }
+
+  .title{
+    color: white;
+    font-family: sans-serif;
+    font-weight: bolder;
+    width: auto;
+    padding-top: 0.1%;
+    height: auto;
+    font-size: 130%;
+}
+
+.logo_here {
+    position: relative;
+    margin-right: 10px;
+    padding-left: 8%;
+    width: 50%;
+    height: 110%;
+}
+.square,header{
+    background-color: #0B5793;
+    width: 100%;
+    height: 90px;
+}

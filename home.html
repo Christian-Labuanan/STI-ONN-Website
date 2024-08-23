@@ -1,80 +1,101 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
 <html>
     <head>
         <title>Home Page</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link
-      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
-      rel="stylesheet"
-    />
-</head>
-    <body>
-        <nav>
-            <div class="logo">
-              <i class="bx bx-menu menu-icon"></i>
-              <span class="logo-name">STI ONN | Dashboard</span>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="styles/style.css">
+    </head>
+    <body class="home-page"> <!-- Add a page-specific class here -->
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="logo_item">
+                <i class="bx bx-menu" id="sidebarOpen"></i>
+                <img src="assets/STI ONN Logo transparent 3.png" alt=""> STI ONN | Over New Navigation Admin
             </div>
-            <div class="sidebar">
-              <div class="logo">
-                <i class="bx bx-menu menu-icon"></i>
-                <span class="logo-name">STI ONN</span>
-              </div>
-              <div class="sidebar-content">
-                <ul class="lists">
-                  <li class="list">
-                    <a href="home.html" class="nav-link">
-                      <i class="bx bx-home-alt icon"></i>
-                      <span class="link">Dashboard</span>
-                    </a>
-                  </li>
-                  <li class="list">
-                    <a href="viewUploads.html" class="nav-link">
-                      <i class="bx bx-bell icon"></i>
-                      <span class="link">Announcement</span>
-                    </a>
-                  </li>
-                  <li class="list">
-                    <a href="#" class="nav-link">
-                      <i class="bx bx-calendar icon"></i>
-                      <span class="link">Room Schedules</span>
-                    </a>
-                  </li>
-                </ul>
-                <div class="bottom-cotent">
-                  <li class="list">
-                    <div id="user-info"></div>
-                  </li>
-                  <li class="list">
-                    <button id="logout" class="nav-link">
-                      <i class="bx bx-log-out icon"></i>
-                      <span class="link">Logout</span>
-                    </button>
-                  </li>
+            <div class="navbar_content">
+                <i class="bi bi-grid"></i>
+                <div id="user-info" class="user"></div>
+                <div class="dropdown">
+                    <i class="bx bx-user" id="userIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userIcon">
+                        <li><a class="dropdown-item nav-link" id="logout" data-bs-toggle="modal" data-bs-target="#loggingOutModal">Logout</a></li>
+                    </ul>
                 </div>
-              </div>
             </div>
         </nav>
-        <section class="overlay"></section>
+        <div class="main-content">
+            <!-- Sidebar -->
+            <nav class="sidebar">
+                <div class="menu_content">
+                    <ul class="menu_items">
+                        <div class="menu_title menu_dashboard"></div>
+                        <!-- Sidebar Links -->
+                        <li class="item">
+                            <a href="home.html" class="nav_link">
+                                <span class="navlink_icon"><i class="bx bx-home-alt"></i></span>
+                                <span class="navlink">Home</span>
+                            </a>
+                        </li>
+                        <li class="item">
+                            <a href="viewUploads.html" class="nav_link">
+                                <span class="navlink_icon"><i class="bx bx-flag"></i></span>
+                                <span class="navlink">Announcement</span>
+                            </a>
+                        </li>
+                        <li class="item">
+                            <a href="#" class="nav_link">
+                                <span class="navlink_icon"><i class="bx bxs-school"></i></span>
+                                <span class="navlink">Room Schedules</span>
+                            </a>
+                        </li>
+                        <li class="item">
+                            <a href="#" class="nav_link">
+                                <span class="navlink_icon"><i class="bx bx-user"></i></span>
+                                <span class="navlink">Prof Schedules</span>
+                            </a>
+                        </li>
+                        <li class="item">
+                            <a href="#" class="nav_link">
+                                <span class="navlink_icon"><i class="bx bx-cog"></i></span>
+                                <span class="navlink">Admins</span>
+                            </a>
+                        </li>
+                    </ul>
 
-        <!-- Logging Out Modal -->
-    <div class="modal fade" id="loggingOutModal" tabindex="-1" aria-labelledby="loggingOutModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="loggingOutModalLabel">Please wait</h5>
-              </div>
-              <div class="modal-body">
-                  Logging Out...
-              </div>
-          </div>
-      </div>
-  </div>
+                    <!-- Sidebar Open/Close -->
+                    <div class="bottom_content">
+                        <div class="bottom expand_sidebar">
+                            <span>Expand</span>
+                            <i class='bx bx-log-in'></i>
+                        </div>
+                        <div class="bottom collapse_sidebar">
+                            <span>Collapse</span>
+                            <i class='bx bx-log-out'></i>
+                        </div>
+                    </div>
+                </div>
+            </nav>
 
-        <script type = "module" defer src="scripts/logout.js"></script>
-        <script type = "module" defer src="/scripts/user.js"></script>
-        <script src="scripts/script.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-      </body>
+            <!-- Logging Out Modal -->
+            <div class="modal fade" id="loggingOutModal" tabindex="-1" aria-labelledby="loggingOutModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="loggingOutModalLabel">Please wait</h5>
+                        </div>
+                        <div class="modal-body">
+                            Logging Out...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scripts -->
+            <script type="module" defer src="scripts/logout.js"></script>
+            <script type="module" defer src="/scripts/user.js"></script>
+            <script src="scripts/script.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+        </body>
 </html>

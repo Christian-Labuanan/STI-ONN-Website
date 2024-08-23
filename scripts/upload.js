@@ -35,9 +35,6 @@ const quill = new Quill('#editor', {
 
 // Select form and input elements
 const postForm = document.getElementById('postForm');
-const postedText = document.getElementById('postedText');
-const thumbnailContainer = document.getElementById('thumbnailContainer');
-const thumbnailImage = document.getElementById('thumbnailImage');
 const imageUpload = document.getElementById('imageUpload');
 
 postForm.addEventListener('submit', async (e) => {
@@ -53,8 +50,8 @@ postForm.addEventListener('submit', async (e) => {
             const postRef = dbRef(database, 'posts/' + postId);
             let imageUrl = '';
 
+            // If a file is selected, upload it to Firebase Storage
             if (file) {
-                // Upload the file to Firebase Storage
                 const imageRef = storageRef(storage, 'images/' + postId);
                 const snapshot = await uploadBytes(imageRef, file);
                 imageUrl = await getDownloadURL(snapshot.ref);
@@ -64,18 +61,21 @@ postForm.addEventListener('submit', async (e) => {
             await set(postRef, {
                 text: text,
                 imageUrl: imageUrl,
-                timestamp: new Date().toISOString() // Add timestamp here
+                timestamp: new Date().toISOString() // timestamp
             });
 
-            // Update the display of posted content
-            postedText.innerHTML = text;
-            if (imageUrl) {
-                thumbnailImage.src = imageUrl;
-                thumbnailImage.style.display = 'block';
-            }
-            thumbnailContainer.style.display = 'flex';
+            // Only show the success modal if the post is successfully uploaded
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+
+            // Redirect after the user clicks the button
+            document.getElementById('redirectButton').addEventListener('click', () => {
+                window.location.href = 'viewUploads.html';
+            });
+
         } catch (error) {
             console.error("Error posting content:", error);
+            alert("There was an error uploading your post. Please try again.");
         }
     } else {
         alert("Text content is required.");
