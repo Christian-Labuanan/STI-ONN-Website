@@ -60,18 +60,18 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
                 posts.forEach(([postId, post], index) => {
                     const col = document.createElement('div');
                     col.classList.add('col-md-4', 'mb-4'); // Adjust column classes as needed
-
+            
                     const card = document.createElement('div');
                     card.classList.add('card', 'shadow-sm');
-
+            
                     // Add 'new-post' class to highlight the newest posts if they are within the last 3 hours
                     if (isRecent(post.timestamp)) {
                         card.classList.add('new-post');
-
+            
                         // Create and add the "new" icon
                         const newIcon = document.createElement('span');
                         newIcon.classList.add('new-icon');
-
+            
                         // Add mouse hover event listener to remove the highlight and icon permanently
                         card.addEventListener('mouseover', () => {
                             card.classList.remove('new-post'); // Remove the highlight
@@ -80,7 +80,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
                             }
                         });
                     }
-
+            
+                    // Add the post title above the image
+                    const cardHeader = document.createElement('div');
+                    cardHeader.classList.add('card-header');
+                    cardHeader.innerHTML = `<h5 class="card-title">${post.title}</h5>`;
+                    card.appendChild(cardHeader);
+            
                     // Check for a thumbnail image
                     if (post.imageUrl) {
                         const img = document.createElement('img');
@@ -104,44 +110,45 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
                             card.appendChild(placeholder);
                         }
                     }
-
+            
                     const cardBody = document.createElement('div');
                     cardBody.classList.add('card-body');
-
+            
                     const text = document.createElement('p');
                     text.classList.add('card-text');
                     text.innerHTML = getGist(post.text); // Get the gist of the text
-
+            
                     const btnContainer = document.createElement('div');
                     btnContainer.classList.add('d-flex', 'align-items-center', 'mb-2'); // Flexbox container for buttons
-
+            
                     const editBtn = document.createElement('button');
                     editBtn.classList.add('btn', 'btn-warning', 'me-2'); // Margin-end class for spacing
                     editBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Edit';
                     editBtn.onclick = () => editPost(postId);
-
+            
                     const deleteBtn = document.createElement('button');
                     deleteBtn.classList.add('btn', 'btn-danger');
                     deleteBtn.innerHTML = '<i class="fa-solid fa-trash"></i> Delete';
                     deleteBtn.onclick = () => deletePost(postId);
-
+            
                     btnContainer.appendChild(editBtn);
                     btnContainer.appendChild(deleteBtn);
-
+            
                     const zoomBtn = document.createElement('button');
                     zoomBtn.classList.add('zoom-btn');
                     zoomBtn.innerHTML = '<i class="fas fa-expand"></i>';
                     zoomBtn.onclick = () => zoomPost(index);
-
+            
                     cardBody.appendChild(text);
                     cardBody.appendChild(btnContainer);
                     cardBody.appendChild(zoomBtn);
                     card.appendChild(cardBody);
-
+            
                     col.appendChild(card);
                     row.appendChild(col);
                 });
             }
+
 
             // Function to get the gist of the text (e.g., first 100 characters)
             function getGist(text) {
@@ -202,14 +209,24 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
             }
 
             function updateModalContent(post) {
-                // Clear modal text and image
+                // Clear previous modal content
                 modalText.innerHTML = '';
                 const existingImage = modalContent.querySelector('img');
                 if (existingImage) {
                     existingImage.remove();
                 }
-
-                // Set the new content
+                // Update modal title with post title
+                const modalTitle = modalContent.querySelector('.modal-title');
+                if (modalTitle) {
+                    modalTitle.textContent = post.title; // Set the title dynamically
+                } else {
+                    // Create and insert modal title if it does not exist
+                    const modalHeader = document.createElement('div');
+                    modalHeader.classList.add('modal-header');
+                    modalHeader.innerHTML = `<h5 class="modal-title">${post.title}</h5>`;
+                    modalContent.insertBefore(modalHeader, modalText);
+                }
+                // Set the content and image
                 modalText.innerHTML = post.text;
 
                 if (post.imageUrl) {

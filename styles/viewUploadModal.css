@@ -18,7 +18,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90%; /* Increase width */
-    max-width: 800px; /* Adjust as needed */
+    max-width: 1020px; /* Adjust as needed */
     max-height: 80%; /* Increase max-height */
     background-color: white;
     padding: 20px;
@@ -28,6 +28,23 @@
     border-radius: 10px;
     overflow: auto; /* Allow scrolling if needed */
 }
+
+.modal-header {
+    display: flex;
+    justify-content: center; /* Center-aligns the title horizontally */
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.modal-title {
+    margin: 0;
+    text-align: center; /* Center-aligns text within the title element */
+    font-size: 1.5rem;
+    font-weight: 500;
+    flex: 1; /* Ensure the title takes full width for proper centering */
+}
+
 
 .modal-backdrop {
     position: fixed;
