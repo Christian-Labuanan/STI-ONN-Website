@@ -1,4 +1,4 @@
-.modal-content img {
+.modal-content1 img {
     width: 100%; /* Ensure image fills modal width */
     height: auto; /* Maintain aspect ratio */
     max-height: 500px; /* Increase max-height */
@@ -12,7 +12,7 @@
     text-align: right;
 }
 
-.modal-content {
+.modal-content1 {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -29,7 +29,23 @@
     overflow: auto; /* Allow scrolling if needed */
 }
 
-.modal-header {
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%; /* Increase width */
+    max-width: 1020px; /* Adjust as needed */
+    max-height: 80%; /* Increase max-height */
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    border-radius: 10px;
+    overflow: auto; /* Allow scrolling if needed */
+}
+
+.modal-header1 {
     display: flex;
     justify-content: center; /* Center-aligns the title horizontally */
     padding: 1rem;
@@ -54,7 +70,6 @@
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1040 ;
-    display: none;
 }
 
 /* Modal Navigation Buttons Styling */
@@ -77,6 +92,31 @@
 
 
 /* Basic modal backdrop styling */
+.modal-backdrop1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 999;
+    display: none; /* Initially hidden */
+}
+
+/* Basic modal content styling */
+.modal-content1 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    display: none; /* Initially hidden */
+}
+
+/* Basic modal backdrop styling */
 .modal-backdrop {
     position: fixed;
     top: 0;
@@ -84,8 +124,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-    z-index: 999; /* Should be below the modal content */
-    display: none; /* Initially hidden */
+    z-index: 999;
 }
 
 /* Basic modal content styling */
@@ -97,16 +136,23 @@
     background: white;
     padding: 20px;
     border-radius: 8px;
-    z-index: 1000; /* Above the backdrop */
-    display: none; /* Initially hidden */
+    z-index: 1000;
+    min-width: 500px; /* Set a minimum width */
 }
 
 /* Show modal */
 .modal-content.show, .modal-backdrop.show {
     display: block;
 }
+.modal-content1.show, .modal-backdrop1.show {
+    display: block;
+}
 
 .modal-content, .card {
+    z-index: 999;
+}
+
+.modal-content1, .card {
     z-index: 999;
 }
 

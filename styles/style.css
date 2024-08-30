@@ -511,8 +511,15 @@
     margin: 0 auto;
 }
 
+#postButton {
+  position: fixed;
+  top: 15%;
+  right: 5%;
+  z-index: 1000; /* Ensures the button stays on top of other elements */
+  display: block;
+  transition: opacity 0.3s ease; /* Smooth transition for opacity */
+}
 
-/* styles/editPost.css */
-#thumbnailPreview {
-  max-height: 150px;
+#postButton.dimmed {
+    opacity: 0.5; /* Dimmed state */
 }
