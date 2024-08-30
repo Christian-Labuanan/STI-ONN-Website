@@ -25,6 +25,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
 
             let postsArray = [];
             let currentIndex = 0;
+            let postIdToDelete = null;
 
             async function loadPosts() {
                 try {
@@ -51,7 +52,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
                 const now = new Date();
                 const postDate = new Date(postTimestamp);
                 const diffInHours = (now - postDate) / (1000 * 60 * 60); // Difference in hours
-                return diffInHours <= 3;
+                return diffInHours <= 3;  //highlights the new post for 3 hours
             }
 
             function displayPosts(posts) {
@@ -172,32 +173,45 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
             }
 
             async function deletePost(postId) {
+                postIdToDelete = postId; // Store the postId for later use
+                const deleteConfirmationModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+                deleteConfirmationModal.show();
+            }
+            
+            document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
                 try {
-                    const postRef = ref(database, 'posts/' + postId);
+                    const postRef = ref(database, 'posts/' + postIdToDelete);
                     const postSnapshot = await get(postRef);
                     if (postSnapshot.exists()) {
                         const post = postSnapshot.val();
-
+            
                         // If there's an image associated with the post, delete it from Storage
                         if (post.imageUrl) {
                             const imageRef = storageRef(storage, post.imageUrl);
                             await deleteObject(imageRef);
                             console.log(`Image ${post.imageUrl} deleted successfully`);
                         }
-
+            
                         // Delete the post from the Realtime Database
                         await remove(postRef);
-                        console.log(`Post ${postId} deleted successfully`);
+                        console.log(`Post ${postIdToDelete} deleted successfully`);
                     } else {
-                        console.log(`Post ${postId} does not exist`);
+                        console.log(`Post ${postIdToDelete} does not exist`);
                     }
-
+            
                     // Refresh the posts
                     loadPosts();
                 } catch (error) {
                     console.error("Error deleting post:", error.message);
                 }
-            }
+            
+                // Close the modal after deletion
+                const deleteConfirmationModalElement = document.getElementById('deleteConfirmationModal');
+                const deleteConfirmationModalInstance = bootstrap.Modal.getInstance(deleteConfirmationModalElement);
+                if (deleteConfirmationModalInstance) {
+                    deleteConfirmationModalInstance.hide(); // Close the modal
+                }
+            });
 
             function zoomPost(index) {
                 currentIndex = index;
@@ -257,5 +271,20 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebas
             document.getElementById('modalNextBtn').onclick = showNextPost;
             document.getElementById('modalBackBtn').onclick = showPreviousPost;
             modalCloseBtn.onclick = closeModal;
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const postButton = document.getElementById('postButton');
+                // Function to toggle dimmed class based on scroll position
+                function handleScroll() {
+                    if (window.scrollY > 100) {
+                        postButton.classList.add('dimmed');
+                    } else {
+                        postButton.classList.remove('dimmed');
+                    }
+                }
+                window.addEventListener('scroll', handleScroll);
+                handleScroll();
+            });
+
 
             loadPosts();
