@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-            import { getDatabase, ref, get, child, remove } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-            import { getStorage, ref as storageRef, deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+import { getDatabase, ref, get, child, remove } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+import { getStorage, ref as storageRef, deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 
             const firebaseConfig = {
                 apiKey: "AIzaSyBfZyTFzkgn8hbaPnqNEdslEglKjBkrPPs",
