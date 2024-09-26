@@ -28,6 +28,23 @@ import { getStorage, ref as storageRef, deleteObject } from "https://www.gstatic
             let postIdToDelete = null;
 
             async function loadPosts() {
+
+                try {
+                    // Show loading spinner
+                    document.getElementById('loadingSpinner').style.display = 'block';
+            
+                    const dbRef = ref(database);
+                    const snapshot = await get(child(dbRef, 'posts'));
+                    // Hide loading spinner
+                    document.getElementById('loadingSpinner').style.display = 'none';
+            
+                    // Rest of your code...
+                } catch (error) {
+                    // Handle error
+                    console.error("Error loading posts:", error);
+                    // Hide loading spinner in case of error
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                }
                 try {
                     const dbRef = ref(database);
                     const snapshot = await get(child(dbRef, 'posts'));

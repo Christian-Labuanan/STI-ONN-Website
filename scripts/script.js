@@ -1,5 +1,4 @@
 const body = document.querySelector("body");
-const darkLight = document.querySelector("#darkLight");
 const sidebar = document.querySelector(".sidebar");
 const submenuItems = document.querySelectorAll(".submenu_item");
 const sidebarOpen = document.querySelector("#sidebarOpen");
@@ -42,9 +41,3 @@ if (window.innerWidth < 768) {
 } else {
   sidebar.classList.remove("close");
 }
-// Get the button, file input element, and preview container
-const uploadBtn = document.getElementById('upload');
-const fileInput = document.getElementById('fileInput');
-const previewContainer = document.getElementById('previewContainer');
-
-

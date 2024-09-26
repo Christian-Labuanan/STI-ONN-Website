@@ -160,3 +160,61 @@
     margin-top: 3%;
     border-top: .1px solid rgb(128, 128, 128);
 }
+
+
+/* General Modal Styles */
+.modal-content1,
+.modal-content {
+    width: 90%; /* Use percentage width for responsiveness */
+    max-width: 1020px; /* Keep your max-width */
+}
+
+/* Adjusting Card Button Container */
+.btn-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap */
+    justify-content: flex-start; /* Align buttons to the left */
+}
+
+/* Make buttons stack vertically on small screens */
+@media (max-width: 576px) {
+    .modal-content1,
+    .modal-content {
+        width: 95%; /* Increase width for small devices */
+        padding: 15px; /* Adjust padding */
+    }
+
+    .btn-container {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: flex-start; /* Align buttons to the left */
+    }
+
+    .btn-container .btn {
+        width: 100%; /* Make buttons full-width */
+        margin-bottom: 10px; /* Add spacing between buttons */
+    }
+}
+
+/* Medium-sized screens */
+@media (min-width: 577px) and (max-width: 768px) {
+    .modal-content1,
+    .modal-content {
+        width: 90%; /* Keep modal width responsive */
+    }
+
+    .btn-container .btn {
+        margin-right: 10px; /* Add right margin for spacing */
+    }
+}
+
+/* Larger screens */
+@media (min-width: 769px) {
+    .modal-content1,
+    .modal-content {
+        width: 70%; /* Make it narrower for larger screens */
+    }
+
+    .btn-container .btn {
+        margin-right: 15px; /* Increase spacing */
+    }
+}

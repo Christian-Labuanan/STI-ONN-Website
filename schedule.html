@@ -26,7 +26,7 @@
             <div class="dropdown">
                 <i class="bx bx-user" id="userIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userIcon">
-                    <li><a class="dropdown-item nav-link" id="logout" href="#" data-bs-toggle="modal" data-bs-target="#loggingOutModal">Logout</a></li>
+                    <li><a class="dropdown-item nav-link" id="logout" href="#" data-bs-toggle="modal" data-bs-target="#loggingOutModal"> Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -52,7 +52,7 @@
                         </a>
                     </li>
                     <li class="item">
-                        <a href="#" class="nav_link">
+                        <a href="Schedule.html" class="nav_link">
                             <span class="navlink_icon"><i class="bx bxs-school"></i></span>
                             <span class="navlink">Room Schedules</span>
                         </a>
@@ -85,13 +85,26 @@
             </div>
         </nav>
 
+        <a href="postSchedule.html" id="postButton" class="btn btn-primary mt-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" stroke-linecap="round" stroke-width="2" stroke="#fff" fill="none" stroke-linejoin="round">
+                <path d="M10 1.833v16.333"></path>
+                <path d="M1.833 10h16.333"></path>
+            </svg>
+            <span id="tooltip" class="tooltip-text">Upload New Schedule file</span>
+        </a>
+
         <h1>Upload Room Schedule</h1>
         <input type="file" id="fileInput" accept=".xlsx, .xls">
         <button id="uploadButton">Upload</button>
 
-        <h1>Edit Room Schedule</h1>
+        <h1>Room Schedules</h1>
+        <div id="uploadedFiles"></div>
+
+        <h1>Room Content</h1>
         <div id="sheetList"></div>
         <div id="sheetData"></div>
+
+    </div>
 
     <!-- Logging Out Modal -->
     <div class="modal fade" id="loggingOutModal" tabindex="-1" aria-labelledby="loggingOutModalLabel" aria-hidden="true">
@@ -109,6 +122,7 @@
 
     <!-- Scripts -->
     <script src="scripts/script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
