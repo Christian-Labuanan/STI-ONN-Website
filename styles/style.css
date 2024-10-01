@@ -1,18 +1,18 @@
 /* Google Fonts - Poppins */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
-
 :root {
   --white-color: #fff;
   --blue-color: #0B5793;
   --grey-color: #707070;
   --grey-color-light: #aaa;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
@@ -22,7 +22,7 @@ body {
   padding-top: 60px;
 }
 
-/* navbar */
+/* Navbar */
 .navbar {
   position: fixed;
   top: 0;
@@ -35,6 +35,17 @@ body {
   padding: 15px 30px;
   z-index: 1060;
   box-shadow: 0 0 2px var(--grey-color-light);
+}
+
+.navbar img {
+  width: 110px;
+  height: 55px;
+}
+
+.navbar_content i {
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--white-color);
 }
 
 .logo_item {
@@ -57,13 +68,7 @@ body {
   column-gap: 25px;
 }
 
-.navbar_content i {
-  cursor: pointer;
-  font-size: 20px;
-  color: var(--white-color);
-}
-
-/* sidebar */
+/* Sidebar */
 .sidebar {
   background-color: var(--white-color);
   width: 260px;
@@ -75,12 +80,16 @@ body {
   z-index: 100;
   overflow-y: scroll;
   box-shadow: 0 0 1px var(--grey-color-light);
-  transition: all 0.5s ease;
+  transition: width 0.5s ease;
 }
 
 .sidebar.close {
   padding: 60px 0;
   width: 80px;
+}
+
+.sidebar.close + .main-content {
+  margin-left: 80px; /* Adjust this based on the collapsed width of your sidebar */
 }
 
 .sidebar::-webkit-scrollbar {
@@ -499,10 +508,6 @@ body {
     object-fit: contain; /* Ensure visibility */
 }
 
-.card {
-    width: 100%; /* Full width for responsiveness */
-}
-
 .new-post {
     border: 2px solid #4a93ff; /* Red border for new posts */
     border-radius: 5px;
@@ -631,22 +636,6 @@ body {
     padding-top: 5%;
 }
 
-.btn-announce {
-    min-height: 80px;
-    min-width: 330px;
-    font-size: 24px;
-    padding: 24px 48px;
-    border-radius: 12px;
-    background: #4070f4;
-    color: white;
-    border: none;
-    justify-content: center;
-    font-weight: 500;
-}
-.btn-announce:hover {
-    background: #0B5793;
-}
-
 .preview {
     width: 5px;
     height: 5px;
@@ -668,6 +657,32 @@ body {
     right: 10px;
     transform: translateY(-50%);
     cursor: pointer;
+}
+
+.postsContainer {
+  display: flex; /* Use flex for card container */
+  flex-wrap: wrap; /* Allow cards to wrap to the next line */
+  gap: 20px; /* Space between cards */
+  width: 100%; /* Take full width of main content */
+  padding: 20px; /* Optional: Add padding around cards */
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.card {
+  background-color: #f8f9fa; /* Card background */
+  border-radius: 5px; /* Rounded corners */
+  padding: 20px; /* Inner padding */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  flex: 1 1 calc(25% - 20px); /* Adjust card size to fit 4 in a row with gap */
+  min-width: 250px; /* Minimum width for cards */
+  display: flex; /* Enable flexbox */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: space-between; /* Space out items */
+  transition: transform 0.2s; /* Smooth transform effect */
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Slight lift effect on hover */
 }
 
 .zoom-btn {
@@ -707,11 +722,6 @@ body {
     height: auto; /* Maintains the aspect ratio of the image */
     max-height: 200px; /* Optional: Limits the height of the image */
     object-fit: contain; /* Ensures the entire image is visible without cropping */
-}
-
-.card {
-    /* Remove fixed width to allow responsive sizing */
-    width: 100%;
 }
 
 .new-post {
@@ -778,10 +788,13 @@ body {
 
 /* Main Content Area */
 .main-content {
+    transition: margin-left 0.3s ease; /* Smooth transition for sidebar collapse */
     margin-left: 250px; /* Adjust this based on the width of your sidebar */
     padding: 20px; /* Adds some space between the content and the edges */
-    transition: margin-left 0.3s ease; /* Smooth transition for sidebar collapse */
     padding-top: 70px;
+    justify-content: center; /* Center horizontally */
+    flex: 1;
+    width: 100%; /* Full width */
 }
 
 .main-content.collapsed {
@@ -1032,4 +1045,87 @@ body {
   color: white; /* White text color for contrast */
   padding: 10px; /* Add some padding */
   border-radius: 5px; /* Rounded corners for the background */
+}
+
+.card-button {
+  color: rgb(255, 255, 255); /* Button text color */
+  padding: 10px 15px; /* Button padding */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  font-size: 16px; /* Font size */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+  width: 100%; /* Full width for responsive design */
+}
+
+#engagement-data {
+  margin-top: 20px;
+}
+
+#chart {
+  flex: 2;                        /* Flex to occupy 2/3 of the space */
+  min-width: 300px;               /* Ensure it doesn't shrink too much */
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  max-width: 100%;  
+}
+
+canvas {
+  width: 100% ; /* Ensure canvas takes full width */
+  height: auto !important; /* Maintain aspect ratio */
+  background-color: #fff; /* White background for the chart */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Full-screen container for chart and calendar */
+#chart-calendar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  width: 125%;                  /* Take up the full width of the screen */
+  padding: 20px;                /* Ensure padding around the edges */
+  flex-wrap: nowrap;            /* Prevent items from wrapping on larger screens */
+}
+
+/* Chart styles */
+.chart-container {
+  flex: 2;                      /* Chart takes up more space than the calendar */
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  width: 100%;                  /* Allow the chart to expand to fill its container */
+}
+
+/* Calendar wrapper styles */
+.calendar-wrapper {
+  flex: 1;                      /* Calendar takes up less space than the chart */
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  width: 100%;                  /* Allow the calendar to expand to fill its container */
+}
+
+/* Ensure flex elements take the entire width of the page */
+.analytics {
+  width: 100%;
+  margin-left: -10%;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  #chart-calendar-container {
+    flex-direction: column;     /* Stacks chart and calendar on smaller screens */
+    align-items: center;
+  }
+
+  .chart-container, .calendar-wrapper {
+    max-width: 100%;            /* Full width for both elements when stacked */
+    margin-bottom: 20px;        /* Space between stacked elements */
+  }
 }

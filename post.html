@@ -14,76 +14,79 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo_item">
-            <i class="bx bx-menu" id="sidebarOpen"></i>
-            <img src="assets/STI ONN Logo transparent 3.png" alt="STI ONN Logo"> STI ONN | Post Announcements
+   <nav class="navbar">
+    <div class="logo_item">
+        <i class="bx bx-menu" id="sidebarOpen"></i>
+        <img src="assets/STI ONN Logo transparent 3.png" alt="STI ONN Logo"> STI ONN | Announcements
+    </div>
+    <div class="navbar_content">
+        <i class="bi bi-grid"></i>
+        <div id="user-info" class="user"></div>
+        <div class="dropdown">
+            <i class="bx bx-user" id="userIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userIcon">
+                <li><a class="dropdown-item nav-link" id="logout" data-bs-toggle="modal" data-bs-target="#loggingOutModal">Logout</a></li>
+            </ul>
         </div>
-        <div class="navbar_content">
-            <i class="bi bi-grid"></i>
-            <div id="user-info" class="user"></div>
-            <div class="dropdown">
-                <i class="bx bx-user" id="userIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userIcon">
-                    <li><a class="dropdown-item nav-link" id="logout" data-bs-toggle="modal" data-bs-target="#loggingOutModal">Logout</a></li>
-                </ul>
+    </div>
+</nav>
+
+<!-- Flex Container for Sidebar and Main Content -->
+<div class="d-flex">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="menu_content">
+            <ul class="menu_items">
+                <div class="menu_title menu_dashboard"></div>
+                <!-- Sidebar Links -->
+                <li class="item">
+                    <a href="home.html" class="nav_link">
+                        <span class="navlink_icon"><i class="bx bx-home-alt"></i></span>
+                        <span class="navlink">Home</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="viewUploads.html" class="nav_link">
+                        <span class="navlink_icon"><i class="bx bx-flag"></i></span>
+                        <span class="navlink">Announcement</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="schedule.html" class="nav_link">
+                        <span class="navlink_icon"><i class="bx bxs-school"></i></span>
+                        <span class="navlink">Room Schedules</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#" class="nav_link">
+                        <span class="navlink_icon"><i class="bx bx-user"></i></span>
+                        <span class="navlink">Prof Schedules</span>
+                    </a>
+                </li>
+                <li class="item">
+                    <a href="#" class="nav_link">
+                        <span class="navlink_icon"><i class="bx bx-cog"></i></span>
+                        <span class="navlink">Admins</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Sidebar Open/Close -->
+            <div class="bottom_content">
+                <div class="bottom expand_sidebar">
+                    <span>Expand</span>
+                    <i class='bx bx-log-in'></i>
+                </div>
+                <div class="bottom collapse_sidebar">
+                    <span>Collapse</span>
+                    <i class='bx bx-log-out'></i>
+                </div>
             </div>
         </div>
     </nav>
-        <div class="main-content">
-        <!-- Sidebar -->
-        <nav class="sidebar">
-            <div class="menu_content">
-                <ul class="menu_items">
-                    <div class="menu_title menu_dashboard"></div>
-                    <!-- Sidebar Links -->
-                    <li class="item">
-                        <a href="home.html" class="nav_link">
-                            <span class="navlink_icon"><i class="bx bx-home-alt"></i></span>
-                            <span class="navlink">Home</span>
-                        </a>
-                    </li>
-                    <li class="item">
-                        <a href="viewUploads.html" class="nav_link">
-                            <span class="navlink_icon"><i class="bx bx-flag"></i></span>
-                            <span class="navlink">Announcement</span>
-                        </a>
-                    </li>
-                    <li class="item">
-                        <a href="schedule.html" class="nav_link">
-                            <span class="navlink_icon"><i class="bx bxs-school"></i></span>
-                            <span class="navlink">Room Schedules</span>
-                        </a>
-                    </li>
-                    <li class="item">
-                        <a href="#" class="nav_link">
-                            <span class="navlink_icon"><i class="bx bx-user"></i></span>
-                            <span class="navlink">Prof Schedules</span>
-                        </a>
-                    </li>
-                    <li class="item">
-                        <a href="#" class="nav_link">
-                            <span class="navlink_icon"><i class="bx bx-cog"></i></span>
-                            <span class="navlink">Admins</span>
-                        </a>
-                    </li>
-                </ul>
 
-                <!-- Sidebar Open/Close -->
-                <div class="bottom_content">
-                    <div class="bottom expand_sidebar">
-                        <span>Expand</span>
-                        <i class='bx bx-log-in'></i>
-                    </div>
-                    <div class="bottom collapse_sidebar">
-                        <span>Collapse</span>
-                        <i class='bx bx-log-out'></i>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        <div class="container my-4">
+    <div class="main-content flex-grow-1 p-4">
+        <div class="container my-4"></div>
             <h1 class="text-center">Post Announcement</h1>
             <form id="postForm">
                 <div class="mb-3">
@@ -136,6 +139,7 @@
                 </div>
             </div>
         </div>
+    </div>
 
     <!-- Scripts -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>

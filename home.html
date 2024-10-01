@@ -28,94 +28,35 @@
             </div>
         </nav>
         <div class="main-content">
-            <!-- Sidebar -->
-            <nav class="sidebar">
-                <div class="menu_content">
-                    <ul class="menu_items">
-                        <div class="menu_title menu_dashboard"></div>
-                        <!-- Sidebar Links -->
-                        <li class="item">
-                            <a href="home.html" class="nav_link">
-                                <span class="navlink_icon"><i class="bx bx-home-alt"></i></span>
-                                <span class="navlink">Home</span>
-                            </a>
-                        </li>
-                        <li class="item">
-                            <a href="viewUploads.html" class="nav_link">
-                                <span class="navlink_icon"><i class="bx bx-flag"></i></span>
-                                <span class="navlink">Announcement</span>
-                            </a>
-                        </li>
-                        <li class="item">
-                            <a href="schedule.html" class="nav_link">
-                                <span class="navlink_icon"><i class="bx bxs-school"></i></span>
-                                <span class="navlink">Room Schedules</span>
-                            </a>
-                        </li>
-                        <li class="item">
-                            <a href="#" class="nav_link">
-                                <span class="navlink_icon"><i class="bx bx-user"></i></span>
-                                <span class="navlink">Prof Schedules</span>
-                            </a>
-                        </li>
-                        <li class="item">
-                            <a href="#" class="nav_link">
-                                <span class="navlink_icon"><i class="bx bx-cog"></i></span>
-                                <span class="navlink">Admins</span>
-                            </a>
-                        </li>
-                    </ul>
-
-                    <!-- Sidebar Open/Close -->
-                    <div class="bottom_content">
-                        <div class="bottom expand_sidebar">
-                            <span>Expand</span>
-                            <i class='bx bx-log-in'></i>
-                        </div>
-                        <div class="bottom collapse_sidebar">
-                            <span>Collapse</span>
-                            <i class='bx bx-log-out'></i>
-                        </div>
+            <div class="analytics container-fluid p-4 w-75 p-3">
+                <h1>User Engagement Overview</h1>
+                <!-- Create a container for both chart and calendar -->
+                <div id="chart-calendar-container">
+                    <div class="chart-container">
+                      <div id="chart"></div> <!-- Chart container -->
                     </div>
-                </div>
-            </nav>
-
-            <h3>Uploaded Announcements</h3>
-            <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-indicators"></div>
-                <div class="carousel-inner" id="carouselItems"></div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-            
-            <!-- calendar -->
-            <div class="wrapper">
-                <header class="head">
-                  <p class="current-date"></p>
-                  <div class="icons">
-                    <span id="prev" class="material-symbols-rounded"><</span>
-                    <span id="next" class="material-symbols-rounded">></span>
+                    <div class="calendar-wrapper">
+                      <header class="head">
+                        <p class="current-date"></p>
+                        <div class="icons">
+                          <span id="prev" class="material-symbols-rounded"><</span>
+                          <span id="next" class="material-symbols-rounded">></span>
+                        </div>
+                      </header>
+                      <div class="calendar">
+                        <ul class="weeks">
+                          <li>Sun</li>
+                          <li>Mon</li>
+                          <li>Tue</li>
+                          <li>Wed</li>
+                          <li>Thu</li>
+                          <li>Fri</li>
+                          <li>Sat</li>
+                        </ul>
+                        <ul class="days"></ul>
+                      </div>
+                    </div>
                   </div>
-                </header>
-                <div class="calendar">
-                  <ul class="weeks">
-                    <li>Sun</li>
-                    <li>Mon</li>
-                    <li>Tue</li>
-                    <li>Wed</li>
-                    <li>Thu</li>
-                    <li>Fri</li>
-                    <li>Sat</li>
-                  </ul>
-                  <ul class="days"></ul>
-                </div>
-              </div>
 
             <!-- Logging Out Modal -->
             <div class="modal fade" id="loggingOutModal" tabindex="-1" aria-labelledby="loggingOutModalLabel" aria-hidden="true">
@@ -130,9 +71,13 @@
                     </div>
                 </div>
             </div>
+
+            <!-- remove THis -->
+            <a href="viewUploads.html">a</a>
     </div>
 
             <!-- Scripts -->
+            <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
             <script type="module" src="scripts/home.js"></script>
             <script type="module" defer src="scripts/logout.js"></script>
             <script type="module" defer src="/scripts/user.js"></script>

@@ -141,12 +141,12 @@ import { getStorage, ref as storageRef, deleteObject } from "https://www.gstatic
             
                     const editBtn = document.createElement('button');
                     editBtn.classList.add('btn', 'btn-warning', 'me-2'); // Margin-end class for spacing
-                    editBtn.innerHTML = '<i class="fa-solid fa-edit"></i> Edit';
+                    editBtn.innerHTML = '<i class="fa-solid fa-edit card-button"></i> Edit';
                     editBtn.onclick = () => editPost(postId);
             
                     const deleteBtn = document.createElement('button');
                     deleteBtn.classList.add('btn', 'btn-danger');
-                    deleteBtn.innerHTML = '<i class="fa-solid fa-trash"></i> Delete';
+                    deleteBtn.innerHTML = '<i class="fa-solid fa-trash card-button"></i> Delete';
                     deleteBtn.onclick = () => deletePost(postId);
             
                     btnContainer.appendChild(editBtn);
