@@ -29,26 +29,24 @@
         </nav>
         <div class="main-content">
             <div class="analytics container-fluid p-4 w-75 p-3">
-                <div class="header-container">
-                    <h1>User Engagement</h1>
-                    <h1>Calendar</h1>
-                </div>
                 <div id="chart-calendar-container">
                     <div class="chart-container">
-                      <div id="chart"></div> <!-- Chart container -->
-                    </div>
+                        <h4 class="Title">User Engagement</h4>
+                    <div id="chart"></div> <!-- Chart container -->
+                </div>
 
-                    <!--Calendar-->
-                    <div class="calendar-wrapper">
-                      <header class="head">
+                <!--Calendar-->
+                <div class="calendar-wrapper">
+                    <h4 class="Title">Calendar</h4>
+                    <header class="head">
                         <div class="icons">
                             <p class="current-date"></p>
                             <span id="prev" class="material-symbols-rounded"><</span>
                             <span id="next" class="material-symbols-rounded">></span>
                         </div>
-                      </header>
-                        <div class="calendar">
-                            <ul class="weeks">
+                    </header>
+                    <div class="calendar">
+                        <ul class="weeks">
                             <li>Sun</li>
                             <li>Mon</li>
                             <li>Tue</li>
@@ -56,14 +54,45 @@
                             <li>Thu</li>
                             <li>Fri</li>
                             <li>Sat</li>
-                            </ul>
-                            <ul class="days"></ul>
+                        </ul>
+                        <ul class="days"></ul>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="announcementDiv">
-                <h5>Announcement</h5>
+            <div class="navigation">
+                <div class="announcementDiv">
+                    <h6 class="announcementTitle">Announcement</h6>
+                    <img src="assets/school-solid-156.png"><br>
+                    <a href="viewUploads.html" class="btn btn-info"><i class="bx bx-flag"></i>View</a>
+                    <a href="viewUploads.html" class="btn btn-info"><i class="bx bx-edit-alt"></i>Edit</a>
+                    <a href="post.html" class="btn btn-info"><i class='bx bx-message-alt-add'></i>Post</a>
+                </div>
+
+                <div class="scheduleDiv">
+                    <h6 class="scheduleTitle">Schedule</h6>
+                    <img src="assets/clipboard-regular-156.png"><br>
+                    <a href="schedule.html" class="btn btn-light"><i class="bx bx-flag"></i>View</a>
+                    <a href="schedule.html" class="btn btn-light"><i class="bx bx-edit-alt"></i>Edit</a>
+                    <a href="schedule.html" class="btn btn-light"><i class='bx bx-message-alt-add'></i>Post</a>
+                </div>
+
+                <div class="profDiv">
+                    <h6 class="announcementTitle">Professors</h6>
+                    <img src="assets/user-regular-156.png"><br>
+                    <a href="" class="btn btn-warning"><i class="bx bx-flag"></i>View</a>
+                    <a href="" class="btn btn-warning"><i class="bx bx-edit-alt"></i>Edit</a>
+                    <a href="" class="btn btn-warning"><i class='bx bx-message-alt-add'></i>Post</a>
+                </div>
+
+                <div class="adminDiv">
+                    <h6 class="announcementTitle">admin</h6>
+                    <img src="assets/cog-regular-156.png"><br>
+                    <a href="" class="btn btn-primary"><i class="bx bx-flag"></i>View</a>
+                    <a href="" class="btn btn-primary"><i class="bx bx-edit-alt"></i>Edit</a>
+                    <a href="" class="btn btn-primary"><i class='bx bx-message-alt-add'></i>Post</a>
+                </div>
             </div>
 
             <!-- Logging Out Modal -->
@@ -79,9 +108,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- remove THis -->
-            <a href="viewUploads.html">a</a>
     </div>
 
             <!-- Scripts -->
