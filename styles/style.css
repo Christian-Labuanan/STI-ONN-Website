@@ -794,7 +794,7 @@ body {
     padding-top: 70px;
     justify-content: center; /* Center horizontally */
     flex: 1;
-    width: 100%; /* Full width */
+    width: auto;
 }
 
 .main-content.collapsed {
@@ -1064,12 +1064,12 @@ body {
 
 #chart {
   flex: 2;                        /* Flex to occupy 2/3 of the space */
-  min-width: 300px;               /* Ensure it doesn't shrink too much */
+  min-width: 100%;               /* Ensure it doesn't shrink too much */
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
   padding: 20px;
-  max-width: 100%;  
+  max-width: 200%;  
 }
 
 canvas {
@@ -1086,7 +1086,7 @@ canvas {
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
-  width: 125%;                  /* Take up the full width of the screen */
+  width: 150%;                  /* Take up the full width of the screen */
   padding: 20px;                /* Ensure padding around the edges */
   flex-wrap: nowrap;            /* Prevent items from wrapping on larger screens */
 }
@@ -1113,7 +1113,7 @@ canvas {
 
 /* Ensure flex elements take the entire width of the page */
 .analytics {
-  width: 100%;
+  width: auto;
   margin-left: -10%;
 }
 
@@ -1210,6 +1210,6 @@ button{
   padding: 15px;
   margin-left: -5.5%;
   border-radius: 10px;
-  width: 80%;
+  width: 100%;
   display: flex;
 }
