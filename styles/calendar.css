@@ -6,18 +6,22 @@
   border-radius: 10px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
   padding: 20px;
+  transition: all 0.3s ease;     /* Smooth transition for responsiveness */
 }
-.wrapper header{
+
+.wrapper header {
   display: flex;
   align-items: center;
   padding: 25px 30px 10px;
   justify-content: space-between;
   border-radius: 3%;
 }
-header .icons{
+
+header .icons {
   display: flex;
 }
-header .icons span{
+
+header .icons span {
   height: 38px;
   width: 38px;
   margin: 0 1px;
@@ -29,50 +33,63 @@ header .icons span{
   user-select: none;
   border-radius: 50%;
 }
-.icons span:last-child{
+
+.icons span:last-child {
   margin-right: -10px;
 }
-header .icons span:hover{
+
+header .icons span:hover {
   background: #f2f2f2;
 }
-header .current-date{
+
+header .current-date {
   font-size: 1.45rem;
   font-weight: 500;
 }
-.calendar{
+
+.calendar {
   padding: 15px;
 }
-.calendar ul{
+
+.calendar ul {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
   text-align: center;
 }
-.calendar .days{
+
+.calendar .days {
   margin-bottom: 20px;
 }
-.calendar li{
+
+.calendar li {
   color: #333;
-  width: calc(100% / 7);
+  width: calc(100% / 7);        /* Each day occupies 1/7 of the available width */
   font-size: 1.07rem;
+  padding: 5px;                  /* Added padding for touch targets */
 }
-.calendar .weeks li{
+
+.calendar .weeks li {
   font-weight: 500;
   cursor: default;
 }
-.calendar .days li{
+
+.calendar .days li {
   z-index: 1;
   cursor: pointer;
   position: relative;
   margin-top: 30px;
 }
-.days li.inactive{
+
+.days li.inactive {
   color: #aaa;
 }
-.days li.active{
+
+.days li.active {
   color: #fff;
 }
-.days li::before{
+
+.days li::before {
   position: absolute;
   content: "";
   left: 50%;
@@ -83,22 +100,44 @@ header .current-date{
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
-.days li.active::before{
+
+.days li.active::before {
   background: #9B59B6;
 }
-.days li:not(.active):hover::before{
+
+.days li:not(.active):hover::before {
   background: #f2f2f2;
 }
 
-.head{
-    background: white;
-    padding-top: 6%;
-    border-radius: 5%;
+.head {
+  background: white;
+  padding-top: 6%;
+  border-radius: 5%;
 }
 
 @media (max-width: 768px) {
-  .wrapper{
+  .wrapper {
     max-width: 100%;             /* Ensure full width for both on small screens */
     margin-bottom: 20px;         /* Adds space between chart and calendar when stacked */
+    padding: 15px;               /* Reduce padding on small screens */
+  }
+
+  .calendar li {
+    width: calc(100% / 3);       /* 3 days per row for better visibility */
+    margin-top: 15px;            /* Reduced margin to fit better */
+  }
+
+  .calendar .weeks li {
+    width: calc(100% / 3);       /* Align week labels with the day cells */
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar li {
+    width: calc(100% / 2);       /* 2 days per row on very small screens */
+  }
+
+  .calendar .weeks li {
+    width: calc(100% / 2);       /* Align week labels with the day cells */
   }
 }
