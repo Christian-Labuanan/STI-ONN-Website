@@ -71,7 +71,7 @@ function drawChart(trafficData) {
     const options = {
         chart: {
             type: 'line',
-            height: 350,
+            height: 480,
             toolbar: {
                 show: false // Hide the toolbar
             }

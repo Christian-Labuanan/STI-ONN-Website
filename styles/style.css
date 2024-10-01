@@ -1129,3 +1129,15 @@ canvas {
     margin-bottom: 20px;        /* Space between stacked elements */
   }
 }
+
+.container1{
+  background-color: white;
+  padding: 40px;
+  border-radius: 15px;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between; /* Distributes space between the headings */
+  gap: 10px; /* Sets a small gap between the headings */
+}
