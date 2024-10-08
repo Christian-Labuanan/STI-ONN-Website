@@ -1213,3 +1213,40 @@ button{
   width: 100%;
   display: flex;
 }
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.table td {
+  height: auto; /* Fixed height for table cells */
+  text-align: center; /* Center text horizontally */
+  vertical-align: middle; /* Center text vertically */
+  padding: 3px;
+}
+
+.cell-textarea {
+  width: 105%; /* Make textarea fill the cell */
+  border: 1px solid #ced4da; /* Border similar to Bootstrap's */
+  border-radius: 4px; /* Slightly rounded corners */
+  box-shadow: none; /* Remove default shadow */
+  padding: 5px; /* Padding for better spacing */
+  overflow: hidden; /* Hide overflow */
+}
+
+.cell-textarea:focus {
+  border-color: #80bdff; /* Change border color on focus */
+  outline: none; /* Remove default outline */
+  transition: border-color 0.2s;
+}
+
