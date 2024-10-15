@@ -1,48 +1,50 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Home Page</title>
-        <meta charset="UTF-8">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet"/>
-        <link rel="stylesheet" href="styles/style.css">
-        <link rel="stylesheet" href="styles/calendar.css">
-    </head>
-    <body class="home-page"> <!-- Add a page-specific class here -->
-        <!-- Navbar -->
-        <nav class="navbar">
-            <div class="logo_item">
-                <i class="bx bx-menu" id="sidebarOpen"></i>
-                <img src="assets/STI ONN Logo transparent 3.png" alt=""> STI ONN | Over New Navigation Admin
+    <meta name="description" content="Home Page for STI ONN Navigation Admin">
+    <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/calendar.css">
+</head>
+<body class="home-page">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo_item">
+            <i class="bx bx-menu" id="sidebarOpen" aria-label="Open Sidebar"></i>
+            <img src="assets/STI ONN Logo transparent 3.png" alt="STI ONN Logo"> STI ONN | Over New Navigation Admin
+        </div>
+        <div class="navbar_content">
+            <i class="bi bi-grid" aria-label="Grid Menu"></i>
+            <div id="user-info" class="user" aria-label="User Info"></div>
+            <div class="dropdown">
+                <i class="bx bx-user" id="userIcon" data-bs-toggle="dropdown" aria-expanded="false" aria-label="User Menu"></i>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userIcon">
+                    <li><a class="dropdown-item nav-link" id="logout" data-bs-toggle="modal" href="#logoutConfirmationModal">Logout</a></li>
+                </ul>
             </div>
-            <div class="navbar_content">
-                <i class="bi bi-grid"></i>
-                <div id="user-info" class="user"></div>
-                <div class="dropdown">
-                    <i class="bx bx-user" id="userIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userIcon">
-                        <li><a class="dropdown-item nav-link" id="logout" data-bs-toggle="modal" data-bs-target="#loggingOutModal">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <div class="main-content">
-            <div class="analytics container-fluid p-4 w-75 p-3">
-                <div id="chart-calendar-container">
-                    <div class="chart-container">
-                        <h4 class="Title">User Engagement</h4>
-                    <div id="chart"></div> <!-- Chart container -->
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="analytics container-fluid p-4 w-75 p-3">
+            <div id="chart-calendar-container">
+                <div class="chart-container">
+                    <h4 class="Title">User Engagement</h4>
+                    <div id="chart"></div>
                 </div>
 
-                <!--Calendar-->
+                <!-- Calendar -->
                 <div class="calendar-wrapper">
                     <h4 class="Title">Calendar</h4>
                     <header class="head">
                         <div class="icons">
                             <p class="current-date"></p>
-                            <span id="prev" class="material-symbols-rounded"><i class='bx bxs-left-arrow' style='color:#000000' ></i></span>
-                            <span id="next" class="material-symbols-rounded"><i class='bx bxs-right-arrow' style='color:#000000' ></i></span>
+                            <span id="prev" class="material-symbols-rounded"><i class='bx bxs-left-arrow' style='color:#000000'></i></span>
+                            <span id="next" class="material-symbols-rounded"><i class='bx bxs-right-arrow' style='color:#000000'></i></span>
                         </div>
                     </header>
                     <div class="calendar">
@@ -61,65 +63,84 @@
             </div>
         </div>
 
-            <div class="navigation">
-                <div class="announcementDiv">
-                    <h6 class="announcementTitle">Announcement</h6>
-                    <img src="assets/school-solid-156.png"><br>
-                    <a href="viewUploads.html" class="btn btn-light"><i class="bx bx-flag"></i>View</a>
-                    <a href="viewUploads.html" class="btn btn-light"><i class="bx bx-edit-alt"></i>Edit</a>
-                    <a href="post.html" class="btn btn-light"><i class='bx bx-message-alt-add'></i>Post</a>
-                </div>
-
-                <div class="scheduleDiv">
-                    <h6 class="scheduleTitle">Schedule</h6>
-                    <img src="assets/clipboard-regular-156.png"><br>
-                    <a href="schedule.html" class="btn btn-light"><i class="bx bx-flag"></i>View</a>
-                    <a href="schedule.html" class="btn btn-light"><i class="bx bx-edit-alt"></i>Edit</a>
-                    <a href="schedule.html" class="btn btn-light"><i class='bx bx-message-alt-add'></i>Post</a>
-                </div>
-
-                <div class="profDiv">
-                    <h6 class="announcementTitle">Professors</h6>
-                    <img src="assets/user-regular-156.png"><br>
-                    <a href="" class="btn btn-light"><i class="bx bx-flag"></i>View</a>
-                    <a href="" class="btn btn-light"><i class="bx bx-edit-alt"></i>Edit</a>
-                    <a href="" class="btn btn-light"><i class='bx bx-message-alt-add'></i>Post</a>
-                </div>
-
-                <div class="adminDiv">
-                    <h6 class="announcementTitle">admin</h6>
-                    <img src="assets/cog-regular-156.png"><br>
-                    <a href="" class="btn btn-light"><i class="bx bx-flag"></i>View</a>
-                    <a href="" class="btn btn-light"><i class="bx bx-edit-alt"></i>Edit</a>
-                    <a href="" class="btn btn-light"><i class='bx bx-message-alt-add'></i>Post</a>
-                </div>
+        <div class="navigation">
+            <div class="announcementDiv">
+                <h6 class="announcementTitle">Announcement</h6>
+                <img src="assets/school-solid-156.png" alt="Announcement Icon"><br>
+                <a href="viewUploads.html" class="btn btn-light"><i class="bx bx-flag"></i> View</a>
+                <a href="viewUploads.html" class="btn btn-light"><i class="bx bx-edit-alt"></i> Edit</a>
+                <a href="post.html" class="btn btn-light"><i class='bx bx-message-alt-add'></i> Post</a>
             </div>
 
-            <!-- Logging Out Modal -->
-            <div class="modal fade" id="loggingOutModal" tabindex="-1" aria-labelledby="loggingOutModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="loggingOutModalLabel">Please wait</h5>
-                        </div>
-                        <div class="modal-body">
-                            Logging Out...
-                        </div>
+            <div class="scheduleDiv">
+                <h6 class="scheduleTitle">Schedule</h6>
+                <img src="assets/clipboard-regular-156.png" alt="Schedule Icon"><br>
+                <a href="schedule.html" class="btn btn-light"><i class="bx bx-flag"></i> View</a>
+                <a href="schedule.html" class="btn btn-light"><i class="bx bx-edit-alt"></i> Edit</a>
+                <a href="postSchedule.html" class="btn btn-light"><i class='bx bx-message-alt-add'></i> Post</a>
+            </div>
+
+            <div class="profDiv">
+                <h6 class="announcementTitle">Professors</h6>
+                <img src="assets/user-regular-156.png" alt="Professors Icon"><br>
+                <a href="" class="btn btn-light"><i class="bx bx-flag"></i> View</a>
+                <a href="" class="btn btn-light"><i class="bx bx-edit-alt"></i> Edit</a>
+                <a href="" class="btn btn-light"><i class='bx bx-message-alt-add'></i> Post</a>
+            </div>
+
+            <div class="adminDiv">
+                <h6 class="announcementTitle">Admin</h6>
+                <img src="assets/cog-regular-156.png" alt="Admin Icon"><br>
+                <a href="" class="btn btn-light"><i class="bx bx-flag"></i> View</a>
+                <a href="" class="btn btn-light"><i class="bx bx-edit-alt"></i> Edit</a>
+                <a href="" class="btn btn-light"><i class='bx bx-message-alt-add'></i> Post</a>
+            </div>
+        </div>
+
+        <!-- Logout Confirmation Modal -->
+        <div class="modal fade" id="logoutConfirmationModal" tabindex="-1" aria-labelledby="logoutConfirmationModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutConfirmationModalLabel">Logout Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to log out?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" data-bs-target="#loggingOutModal" data-bs-toggle="modal" data-bs-dismiss="modal" id="confirmLogout">Logout</button>
                     </div>
                 </div>
             </div>
-    </div>
+        </div>
 
-            <!-- Scripts -->
-            <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-            <script type="module" src="scripts/home.js"></script>
-            <script type="module" defer src="scripts/logout.js"></script>
-            <script type="module" defer src="/scripts/user.js"></script>
-            <script src="scripts/script.js"></script>
-            <!-- Firebase SDK -->
-            <script src="https://www.gstatic.com/firebasejs/9.x/firebase-app.js"></script>
-            <script src="https://www.gstatic.com/firebasejs/9.x/firebase-storage.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-        </body>
+        <!-- Logging Out Modal -->
+        <div class="modal fade" id="loggingOutModal" tabindex="-1" aria-labelledby="loggingOutModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loggingOutModalLabel">Logging Out</h5>
+                    </div>
+                    <div class="modal-body">
+                        Logging Out...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script type="module" src="scripts/home.js"></script>
+    <script type="module" defer src="scripts/logout.js"></script>
+    <script type="module" defer src="/scripts/user.js"></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.x/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x/firebase-storage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</body>
 </html>

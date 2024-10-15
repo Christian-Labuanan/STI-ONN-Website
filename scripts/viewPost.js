@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 import { getDatabase, ref, get, child, remove } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 import { getStorage, ref as storageRef, deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
             const firebaseConfig = {
                 apiKey: "AIzaSyBfZyTFzkgn8hbaPnqNEdslEglKjBkrPPs",
@@ -15,6 +16,7 @@ import { getStorage, ref as storageRef, deleteObject } from "https://www.gstatic
             const app = initializeApp(firebaseConfig);
             const database = getDatabase(app);
             const storage = getStorage(app);
+            const auth = getAuth();
 
             const postsContainer = document.getElementById('postsContainer');
             const modalBackdrop = document.getElementById('modalBackdrop');
@@ -190,9 +192,15 @@ import { getStorage, ref as storageRef, deleteObject } from "https://www.gstatic
             }
 
             async function deletePost(postId) {
-                postIdToDelete = postId; // Store the postId for later use
+                const user = auth.currentUser;
+                if (user) {
+                    // User is authenticated, proceed with deletion
+                    postIdToDelete = postId; // Store the postId for later use
                 const deleteConfirmationModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
                 deleteConfirmationModal.show();
+                  } else {
+                    console.error("User is not authenticated.");
+                  }
             }
             
             document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {

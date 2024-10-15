@@ -34,7 +34,7 @@ body {
   position: relative;
   margin-right: 10px;
   padding-left: 8%;
-  width: 100%; /* Adjusted for responsiveness */
+  width: 30%; /* Adjusted for responsiveness */
   max-width: 600px; /* Optional: limit the max width */
   height: auto; /* Maintain aspect ratio */
 }
@@ -48,6 +48,10 @@ body {
   align-items: center; /* Vertically center items */
   justify-content: space-between; /* Space between logo and title */
   padding: 0 20px; /* Padding for better spacing */
+}
+
+.container{
+  padding: 100px;
 }
 
 /* Responsive Adjustments */

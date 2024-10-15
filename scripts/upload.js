@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
 import { getDatabase, ref as dbRef, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,6 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const storage = getStorage(app);
+const auth = getAuth();
 
 // Initialize Quill editor
 const quill = new Quill('#editor', {
@@ -40,6 +42,13 @@ const cancelButton = document.getElementById('cancelButton');
 const postTitle = document.getElementById('postTitle');
 
 postForm.addEventListener('submit', async (e) => {
+    const user = auth.currentUser;
+
+   if(!user){
+    alert('You must be logged in to post announcements.');
+        return;
+   }
+   else{
     e.preventDefault();
 
     const title = postTitle.value; // Get the title from the form
@@ -84,7 +93,7 @@ postForm.addEventListener('submit', async (e) => {
     document.getElementById('redirectButton').addEventListener('click', () => {
         window.location.href = 'viewUploads.html';
     });
-
+   }
 });
 
 // Handle the cancel button click
