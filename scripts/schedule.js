@@ -34,6 +34,7 @@ async function loadFloorFiles(floor) {
     const user = auth.currentUser;
     if (!user) {
         alert('You must be logged in to access files.');
+        window.location("login.html");
         return;
     }
 
