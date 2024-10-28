@@ -112,6 +112,5 @@ cancelButton.addEventListener('click', () => {
     window.location.href = 'viewUploads.html'; // Redirect to the view uploads page or another page
 });
 
-
 // Load the post data when the page loads
 window.addEventListener('DOMContentLoaded', loadPostData);

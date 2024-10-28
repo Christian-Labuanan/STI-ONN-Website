@@ -1,7 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getStorage, ref, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+import { getStorage, ref, uploadBytes, deleteObject  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyBfZyTFzkgn8hbaPnqNEdslEglKjBkrPPs",
@@ -15,7 +16,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
-const firestore = getFirestore(app);
 const auth = getAuth(app);
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -39,9 +39,13 @@ async function loadFloorFiles(floor) {
 
     const storageRef = ref(storage, `schedules/${floor}/`);
     const fileListDiv = document.getElementById('fileList');
+    const sheetListDiv = document.getElementById('sheetList');
+    const sheetDataDiv = document.getElementById('sheetData');
 
     // Clear previous data
     fileListDiv.innerHTML = '';
+    sheetListDiv.innerHTML = '';
+    sheetDataDiv.innerHTML = '';
 
     // Show loading indicator
     showLoading(`Loading files for ${floor}...`);
@@ -57,12 +61,29 @@ async function loadFloorFiles(floor) {
         }
 
         result.items.forEach((itemRef) => {
+            const fileContainer = document.createElement('div');
+            fileContainer.classList.add('file-container', 'd-flex', 'align-items-center', 'mb-2');
+
+            // File button
             const fileButton = document.createElement('button');
             fileButton.textContent = itemRef.name;
-            fileButton.classList.add('btn', 'btn-secondary', 'mb-2', 'me-2');
+            fileButton.classList.add('btn', 'btn-secondary', 'me-2');
             fileButton.setAttribute('aria-label', `Load file ${itemRef.name}`);
             fileButton.addEventListener('click', () => loadFileContent(itemRef, floor));
-            fileListDiv.appendChild(fileButton);
+
+            // Delete icon
+            const deleteIcon = document.createElement('span');
+            deleteIcon.classList.add('delete-icon', 'ms-2');
+            deleteIcon.innerHTML = '&#128465;'; // Trash icon using HTML code
+            deleteIcon.style.cursor = 'pointer';
+            deleteIcon.style.fontSize = '1.5em'; // Larger size
+            deleteIcon.setAttribute('aria-label', `Delete file ${itemRef.name}`);
+            deleteIcon.addEventListener('click', () => deleteFile(itemRef, floor));
+
+            // Append file button and delete icon to container
+            fileContainer.appendChild(fileButton);
+            fileContainer.appendChild(deleteIcon);
+            fileListDiv.appendChild(fileContainer);
         });
     } catch (error) {
         console.error("Error listing files:", error);
@@ -70,6 +91,45 @@ async function loadFloorFiles(floor) {
         fileListDiv.innerHTML = `<p>Error loading files for ${floor}. Please try again later.</p>`;
     }
 }
+
+// Function to delete a file
+let filePathToDelete; // Variable to store the file path for deletion
+let floorToReload; // Variable to store the floor to reload after deletion
+
+async function deleteFile(filePath, floor) {
+    filePathToDelete = filePath; // Store the file path
+    floorToReload = floor; // Store the floor
+
+    // Show the confirmation modal
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+    deleteModal.show();
+
+    // Add event listener for the confirm delete button
+    document.getElementById("confirmDeleteButton").addEventListener("click", async () => {
+        const storage = getStorage(); // Get the storage instance
+        const itemRef = ref(storage, filePathToDelete); // Create a reference to the file
+
+        try {
+            await deleteObject(itemRef); // Delete the file
+            deleteModal.hide(); // Hide the delete confirmation modal
+            
+            // Show the success modal
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+
+            loadFloorFiles(floorToReload); // Reload the file list to reflect the deletion
+        } catch (error) {
+            console.error("Error deleting file:", error);
+            
+            if (error.code === 'storage/object-not-found') {
+                alert('File not found. It may have already been deleted.');
+            } else {
+                alert('Error deleting file. Please try again later.');
+            }
+        }
+    });
+}
+
 
 //load the content of the schedules
 async function loadFileContent(itemRef, floor) {
@@ -176,61 +236,41 @@ function displaySheetData(sheetName, data, floor, fileName) {
 
 async function saveSheetData(sheetName, form, floor, fileName) {
     const formData = new FormData(form);
-    const data = {};
+    const updatedData = [];
 
-    // Constructing the data object from form inputs
+    // Reconstruct the data from the form inputs to match Excel format
     formData.forEach((value, key) => {
-        const [row, col] = key.split('_');
-        if (!data[row]) data[row] = {};
-        data[row][col] = value;
+        const [row, col] = key.split('_').map(Number);
+        if (!updatedData[row]) updatedData[row] = [];
+        updatedData[row][col] = value;
     });
 
-    // Flatten the data structure
-    const sheetData = flattenData(data);
-    console.log("Data to save:", sheetData); // Log data for debugging
+    // Create a new workbook and worksheet
+    const newWorkbook = XLSX.utils.book_new();
+    const newWorksheet = XLSX.utils.aoa_to_sheet(updatedData);
+
+    // Append the new worksheet to the workbook
+    XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, sheetName);
+
+    // Convert workbook to binary data
+    const workbookBinary = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
 
     try {
         showLoading('Saving changes...');
 
-        const sanitizedFileName = sanitizeName(fileName);
-        const sanitizedSheetName = sanitizeName(sheetName);
-        console.log("Sanitized File Name:", sanitizedFileName); // Log sanitized names
-        console.log("Sanitized Sheet Name:", sanitizedSheetName);
+        const storageRef = ref(storage, `schedules/${floor}/${fileName}`);
+        const blob = new Blob([workbookBinary], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
-        const sheetRef = doc(firestore, `schedules/${floor}/sheets/${sanitizedFileName}_${sanitizedSheetName}`);
-
-        // Validate that the sheetData is in the correct format
-        if (Object.keys(sheetData).length === 0) {
-            throw new Error('No data to save');
-        }
-
-        // Save the data in Firestore
-        await setDoc(sheetRef, { data: sheetData }, { merge: true });
+        // Upload the new Excel file to Firebase Storage
+        await uploadBytes(storageRef, blob);
 
         hideLoading();
-        alert('Changes saved successfully!');
+        showModal('successModal');
     } catch (error) {
-        console.error("Error saving changes:", error);
+        console.error("Error saving changes to Firebase Storage:", error);
         hideLoading();
-        alert('Error saving changes. Please try again. Error details: ' + error.message);
+        showModal('errorModal');
     }
-}
-
-// Function to flatten the nested data structure
-function flattenData(data) {
-    const flattened = {};
-    for (const rowKey in data) {
-        for (const colKey in data[rowKey]) {
-            flattened[`${rowKey}_${colKey}`] = data[rowKey][colKey];
-        }
-    }
-    return flattened;
-}
-
-// Function to sanitize document names
-function sanitizeName(name) {
-    // Replace any characters that are not allowed in Firestore document names
-    return name.replace(/[^a-zA-Z0-9_]/g, '_'); // Replace with underscores
 }
 
 function showLoading(message = 'Loading...') {
@@ -258,4 +298,37 @@ function hideLoading() {
     if (loadingDiv) {
         loadingDiv.style.display = 'none';
     }
+}
+
+window.uploadFile = function(floor) {
+    const fileInput = document.getElementById('file-input');
+    const file = fileInput.files[0];
+    
+    if (!file) {
+        document.getElementById('upload-status').innerText = 'Please select a file to upload.';
+        return;
+    }
+
+    const fileRef = ref(storage, `schedules/${floor}/${file.name}`);
+
+    uploadBytes(fileRef, file)
+        .then(() => {
+            document.getElementById('upload-status').innerText = 'File uploaded successfully!';
+        })
+        .catch(error => {
+            console.error('Error uploading file:', error);
+            document.getElementById('upload-status').innerText = 'Error uploading file.';
+        });
+};
+
+function showModal(modalId) {
+    const modalElement = document.getElementById(modalId);
+
+    if (!modalElement) {
+        console.error(`Modal with ID "${modalId}" not found in the DOM.`);
+        return;
+    }
+
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
 }

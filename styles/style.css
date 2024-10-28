@@ -227,125 +227,6 @@ body {
   transition: all 0.5s ease;
 }
 
-/* Responsive Styles */
-@media (max-width: 1024px) {
-  .navbar {
-    padding: 15px 20px;
-  }
-
-  .navbar img {
-    width: 90px;
-    height: 45px;
-  }
-
-  .search_bar {
-    max-width: 300px;
-  }
-
-  .sidebar {
-    width: 220px;
-    padding: 60px 15px;
-  }
-
-  .sidebar.close {
-    width: 60px;
-  }
-
-  .menu_title {
-    font-size: 16px;
-  }
-
-  .navlink_icon {
-    font-size: 20px;
-  }
-
-  .nav_link {
-    padding: 4px 10px;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    padding: 10px 15px;
-  }
-
-  .navbar_content {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .search_bar {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  .sidebar {
-    width: 200px;
-    padding: 50px 10px;
-  }
-
-  .sidebar.close {
-    width: 50px;
-  }
-
-  .menu_title {
-    font-size: 14px;
-  }
-
-  .navlink_icon {
-    font-size: 18px;
-  }
-
-  .nav_link {
-    padding: 4px 5px;
-  }
-
-  .bottom_content {
-    width: 200px;
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar {
-    padding: 10px 5px;
-  }
-
-  .navbar img {
-    width: 70px;
-    height: 35px;
-  }
-
-  .search_bar {
-    max-width: 100%;
-  }
-
-  .sidebar {
-    width: 100%;
-    height: auto;
-    padding: 40px 5px;
-  }
-
-  .sidebar.close {
-    width: 50px;
-  }
-
-  .menu_title {
-    font-size: 12px;
-  }
-
-  .navlink_icon {
-    font-size: 16px;
-  }
-
-  .nav_link {
-    padding: 4px 2px;
-  }
-
-  .bottom_content {
-    width: 100%;
-  }
-}
 .bottom {
     position: absolute;
     display: flex;
@@ -383,28 +264,6 @@ body {
 
 #sidebarOpen {
     display: none;
-}
-
-@media screen and (max-width: 768px) {
-    #sidebarOpen {
-        font-size: 5vw; /* Responsive font size */
-        display: block;
-        margin-right: 10px;
-        cursor: pointer;
-        color: var(--grey-color);
-    }
-
-    .sidebar.close {
-        left: -100%;
-    }
-
-    .search_bar {
-        display: none;
-    }
-
-    .sidebar.close .bottom_content {
-        left: -100%;
-    }
 }
 
 .square, header {
@@ -549,22 +408,6 @@ body {
     border-color: transparent; /* Remove highlight on hover */
 }
 
-/* Additional Responsive Styles */
-@media screen and (max-width: 768px) {
-    .btn-announce {
-        min-width: 90%; /* Full width on smaller screens */
-        font-size: 5vw; /* Larger font size on smaller screens */
-    }
-
-    .card-img-top, .card-body img {
-        max-height: 150px; /* Reduce height for smaller screens */
-    }
-
-    .title {
-        font-size: 5vw; /* Responsive font size for title */
-    }
-}
-
 .bottom {
     position: absolute;
     display: flex;
@@ -596,24 +439,6 @@ body {
 }
 #sidebarOpen {
     display: none;
-}
-@media screen and (max-width: 768px) {
-    #sidebarOpen {
-        font-size: 25px;
-        display: block;
-        margin-right: 10px;
-        cursor: pointer;
-        color: var(--grey-color);
-    }
-    .sidebar.close {
-        left: -100%;
-    }
-    .search_bar {
-        display: none;
-    }
-    .sidebar.close .bottom_content {
-        left: -100%;
-    }
 }
 
 .square, header {
@@ -679,6 +504,7 @@ body {
   flex-direction: column; /* Stack items vertically */
   justify-content: space-between; /* Space out items */
   transition: transform 0.2s; /* Smooth transform effect */
+  height: 100%;
 }
 
 .card:hover {
@@ -837,37 +663,6 @@ body {
     margin-top: 10px;
 }
 
-/* Media queries */
-@media (max-width: 768px) {
-    .body1 {
-        margin-top: 10px;
-    }
-    .form1 {
-        width: 100%;
-        padding: 0 10px;
-    }
-    .buttons {
-        font-size: 14px;
-    }
-    .quill-container {
-        min-height: 200px;
-    }
-    .btn-announce {
-        min-width: 100%; /* Full width on small screens */
-        padding: 16px; /* Adjust padding */
-        font-size: 20px; /* Adjust font size */
-    }
-}
-
-@media (max-width: 480px) {
-    .buttons {
-        font-size: 12px;
-    }
-    .title {
-        font-size: 110%; /* Adjust font size */
-    }
-}
-
 .hh1 {
     margin-bottom: 20px;
 }
@@ -1010,43 +805,6 @@ body {
   border-radius: 5px;
 }
 
-/* Large screens */
-@media (max-width: 1200px) {
-  .carousel-item {
-      height: 350px; /* Slightly smaller for large screens */
-  }
-}
-
-/* Tablets */
-@media (max-width: 768px) {
-  .carousel-item {
-      height: 300px; /* Reduce height for tablet-sized screens */
-  }
-
-  .text-only-overlay {
-      font-size: 16px; /* Adjust text size */
-      padding: 15px;
-  }
-}
-
-/* Mobile phones */
-@media (max-width: 480px) {
-  .carousel-item {
-      height: 250px; /* Reduce height further for mobile devices */
-  }
-
-  .text-only-overlay {
-      font-size: 14px; /* Smaller text for mobile */
-      padding: 10px;
-  }
-}
-.carousel-caption {
-  background-color: rgba(0, 0, 0, 0.5); /* Black background with 50% transparency */
-  color: white; /* White text color for contrast */
-  padding: 10px; /* Add some padding */
-  border-radius: 5px; /* Rounded corners for the background */
-}
-
 .card-button {
   color: rgb(255, 255, 255); /* Button text color */
   padding: 10px 15px; /* Button padding */
@@ -1103,7 +861,7 @@ canvas {
 
 /* Calendar wrapper styles */
 .calendar-wrapper {
-  flex: 1;                      /* Calendar takes up less space than the chart */
+  flex: 2;                      /* Calendar takes up less space than the chart */
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
@@ -1114,20 +872,7 @@ canvas {
 /* Ensure flex elements take the entire width of the page */
 .analytics {
   width: auto;
-  margin-left: -10%;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  #chart-calendar-container {
-    flex-direction: column;     /* Stacks chart and calendar on smaller screens */
-    align-items: center;
-  }
-
-  .chart-container, .calendar-wrapper {
-    max-width: 100%;            /* Full width for both elements when stacked */
-    margin-bottom: 20px;        /* Space between stacked elements */
-  }
+  margin-left: -15%;
 }
 
 .container1{
@@ -1208,9 +953,9 @@ button{
 .navigation{
   background-color: white;
   padding: 15px;
-  margin-left: -5.5%;
+  margin-left: -10%;
   border-radius: 10px;
-  width: 100%;
+  width: 101%;
   display: flex;
 }
 
@@ -1250,3 +995,94 @@ button{
   transition: border-color 0.2s;
 }
 
+
+.fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(43, 43, 43, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.fullscreen-content {
+  width: 60%;
+  height: 80%;
+  background: white;
+  padding: 20px;
+  overflow: auto;
+  position: relative;
+  border-radius: 20px;
+  margin-top: 5%;
+}
+
+/* Apply Quill's default styling within fullscreen content */
+.fullscreen-content p, 
+.fullscreen-content h1, .fullscreen-content h2, .fullscreen-content h3, 
+.fullscreen-content ul, .fullscreen-content ol, 
+.fullscreen-content img {
+  margin: 0; /* Keep original margins from Quill */
+  line-height: 1.5; /* Ensure readable line spacing */
+  font-size: inherit; /* Keep the original font size */
+}
+
+.fullscreen-content img {
+  width: 100%; /* Fit image within content */
+  height: 70%;
+  object-fit:contain;
+}
+
+/* Minimal Scrollbar Style */
+.fullscreen-content::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 10px;
+}
+
+.fullscreen-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 20px;
+}
+
+.fullscreen-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 20px;
+}
+
+.fullscreen-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Firefox Scrollbar */
+.fullscreen-content {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.fullscreen-thumbnail {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 20px; /* Space between the thumbnail and Quill content */
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between; /* Space between buttons */
+  margin-top: 20px; /* Space above the button container */
+}

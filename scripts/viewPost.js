@@ -74,30 +74,27 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth
                 return diffInHours <= 3;  //highlights the new post for 3 hours
             }
 
+            // Function to display posts
             function displayPosts(posts) {
                 postsContainer.innerHTML = '<div class="row"></div>';
                 const row = postsContainer.querySelector('.row');
-                posts.forEach(([postId, post], index) => {
+            
+                posts.forEach(([postId, post]) => {
                     const col = document.createElement('div');
-                    col.classList.add('col-md-4', 'mb-4'); // Adjust column classes as needed
+                    col.classList.add('col-12', 'col-md-6', 'col-lg-4', 'mb-4'); 
             
                     const card = document.createElement('div');
-                    card.classList.add('card', 'shadow-sm');
+                    card.classList.add('card', 'shadow-sm', 'd-flex', 'flex-column', 'h-100');
             
-                    // Add 'new-post' class to highlight the newest posts if they are within the last 3 hours
+                    // Add 'new-post' class to highlight recent posts
                     if (isRecent(post.timestamp)) {
                         card.classList.add('new-post');
-            
-                        // Create and add the "new" icon
                         const newIcon = document.createElement('span');
                         newIcon.classList.add('new-icon');
-            
-                        // Add mouse hover event listener to remove the highlight and icon permanently
+                        card.appendChild(newIcon);
                         card.addEventListener('mouseover', () => {
-                            card.classList.remove('new-post'); // Remove the highlight
-                            if (newIcon) {
-                                newIcon.remove(); // Remove the "new" icon
-                            }
+                            card.classList.remove('new-post');
+                            newIcon.remove();
                         });
                     }
             
@@ -107,67 +104,75 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth
                     cardHeader.innerHTML = `<h5 class="card-title">${post.title}</h5>`;
                     card.appendChild(cardHeader);
             
-                    // Check for a thumbnail image
-                    if (post.imageUrl) {
-                        const img = document.createElement('img');
-                        img.classList.add('card-img-top');
-                        img.src = post.imageUrl;
-                        img.alt = 'Posted Image';
-                        card.appendChild(img);
-                    } else {
-                        // If no thumbnail, check for an image in the text area content
-                        const textImage = extractImageFromText(post.text);
-                        if (textImage) {
-                            const img = document.createElement('img');
-                            img.classList.add('card-img-top');
-                            img.src = textImage;
-                            img.alt = 'Posted Image';
-                            card.appendChild(img);
-                        } else {
-                            const placeholder = document.createElement('div');
-                            placeholder.classList.add('card-img-top', 'd-flex', 'align-items-center', 'justify-content-center');
-                            placeholder.innerText = '';
-                            card.appendChild(placeholder);
-                        }
-                    }
+                    // Add image or placeholder
+                    const img = document.createElement('img');
+                    img.classList.add('card-img-top');
+                    img.src = post.imageUrl || extractImageFromText(post.text) || 'placeholder.jpg';
+                    img.alt = 'Posted Image';
+                    card.appendChild(img);
             
                     const cardBody = document.createElement('div');
-                    cardBody.classList.add('card-body');
-            
+                    cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'flex-grow-1');
+                    
                     const text = document.createElement('p');
                     text.classList.add('card-text');
-                    text.innerHTML = getGist(post.text); // Get the gist of the text
-            
+                    text.innerHTML = getGist(post.text);
+                    
                     const btnContainer = document.createElement('div');
-                    btnContainer.classList.add('d-flex', 'align-items-center', 'mb-2'); // Flexbox container for buttons
+                    btnContainer.classList.add('d-flex', 'align-items-center', 'mb-2', 'mt-auto');
             
                     const editBtn = document.createElement('button');
-                    editBtn.classList.add('btn', 'btn-warning', 'me-2'); // Margin-end class for spacing
+                    editBtn.classList.add('btn', 'btn-warning', 'me-2');
                     editBtn.innerHTML = '<i class="fa-solid fa-edit card-button"></i> Edit';
                     editBtn.onclick = () => editPost(postId);
             
                     const deleteBtn = document.createElement('button');
                     deleteBtn.classList.add('btn', 'btn-danger');
                     deleteBtn.innerHTML = '<i class="fa-solid fa-trash card-button"></i> Delete';
-                    deleteBtn.onclick = () => deletePost(postId);
+                    deleteBtn.onclick = (event) => {
+                        event.stopPropagation(); // Prevent the click event from bubbling up to the card
+                        deletePost(postId);
+                    };
             
                     btnContainer.appendChild(editBtn);
                     btnContainer.appendChild(deleteBtn);
             
-                    const zoomBtn = document.createElement('button');
-                    zoomBtn.classList.add('zoom-btn');
-                    zoomBtn.innerHTML = '<i class="fas fa-expand"></i>';
-                    zoomBtn.onclick = () => zoomPost(index);
-            
                     cardBody.appendChild(text);
                     cardBody.appendChild(btnContainer);
-                    cardBody.appendChild(zoomBtn);
                     card.appendChild(cardBody);
+            
+                    // Add click event listener to open the card in fullscreen mode
+                    card.addEventListener('click', () => showFullscreen(post));
             
                     col.appendChild(card);
                     row.appendChild(col);
                 });
             }
+            
+
+function showFullscreen(post) {
+    const fullscreenOverlay = document.createElement('div');
+    fullscreenOverlay.classList.add('fullscreen-overlay');
+
+    // Create HTML structure for the overlay
+    fullscreenOverlay.innerHTML = `
+        <div class="fullscreen-content">
+            <button class="close-btn" onclick="this.parentElement.parentElement.remove()">✕</button>
+            <h5>${post.title}</h5>
+            ${post.imageUrl ? `<img src="${post.imageUrl}" alt="Thumbnail" class="fullscreen-thumbnail">` : ''}
+            ${post.text} <!-- Directly inject Quill content to preserve formatting -->
+        </div>
+    `;
+
+    // Close overlay if clicking outside the content
+    fullscreenOverlay.addEventListener('click', (event) => {
+        if (event.target === fullscreenOverlay) {
+            fullscreenOverlay.remove();
+        }
+    });
+
+    document.body.appendChild(fullscreenOverlay);
+}
 
 
             // Function to get the gist of the text (e.g., first 100 characters)
