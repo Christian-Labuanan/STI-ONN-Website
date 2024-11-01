@@ -3,152 +3,152 @@ import { getDatabase, ref, get, child, remove } from "https://www.gstatic.com/fi
 import { getStorage, ref as storageRef, deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
-            const firebaseConfig = {
-                apiKey: "AIzaSyBfZyTFzkgn8hbaPnqNEdslEglKjBkrPPs",
-                authDomain: "sti-onn-d0161.firebaseapp.com",
-                databaseURL: "https://sti-onn-d0161-default-rtdb.asia-southeast1.firebasedatabase.app",
-                projectId: "sti-onn-d0161",
-                storageBucket: "sti-onn-d0161.appspot.com",
-                messagingSenderId: "538337032363",
-                appId: "1:538337032363:web:7e17df22799b2bad85dfee"
-            };
+const firebaseConfig = {
+    apiKey: "AIzaSyBfZyTFzkgn8hbaPnqNEdslEglKjBkrPPs",
+    authDomain: "sti-onn-d0161.firebaseapp.com",
+    databaseURL: "https://sti-onn-d0161-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "sti-onn-d0161",
+    storageBucket: "sti-onn-d0161.appspot.com",
+    messagingSenderId: "538337032363",
+    appId: "1:538337032363:web:7e17df22799b2bad85dfee"
+};
 
-            const app = initializeApp(firebaseConfig);
-            const database = getDatabase(app);
-            const storage = getStorage(app);
-            const auth = getAuth();
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const storage = getStorage(app);
+const auth = getAuth();
 
-            const postsContainer = document.getElementById('postsContainer');
-            const modalBackdrop = document.getElementById('modalBackdrop');
-            const modalContent = document.getElementById('modalContent');
-            const modalText = document.getElementById('modalText');
-            const modalCloseBtn = document.getElementById('modalCloseBtn');
-            const modalNavigation = document.getElementById('modalNavigation');
+const postsContainer = document.getElementById('postsContainer');
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalContent = document.getElementById('modalContent');
+const modalText = document.getElementById('modalText');
+const modalCloseBtn = document.getElementById('modalCloseBtn');
+const modalNavigation = document.getElementById('modalNavigation');
 
-            let postsArray = [];
-            let currentIndex = 0;
-            let postIdToDelete = null;
+let postsArray = [];
+let currentIndex = 0;
+let postIdToDelete = null;
 
-            async function loadPosts() {
+async function loadPosts() {
 
-                try {
-                    // Show loading spinner
-                    document.getElementById('loadingSpinner').style.display = 'block';
-            
-                    const dbRef = ref(database);
-                    const snapshot = await get(child(dbRef, 'posts'));
-                    // Hide loading spinner
-                    document.getElementById('loadingSpinner').style.display = 'none';
-            
-                    // Rest of your code...
-                } catch (error) {
-                    // Handle error
-                    console.error("Error loading posts:", error);
-                    // Hide loading spinner in case of error
-                    document.getElementById('loadingSpinner').style.display = 'none';
-                }
-                try {
-                    const dbRef = ref(database);
-                    const snapshot = await get(child(dbRef, 'posts'));
-                    if (snapshot.exists()) {
-                        const posts = snapshot.val();
-                        postsArray = Object.entries(posts).reverse(); // Reverse the order to show new posts first
-                        if (postsArray.length > 0) {
-                            displayPosts(postsArray);
-                        } else {
-                            postsContainer.innerHTML = '<p>No posts yet</p>';
-                        }
-                    } else {
-                        postsContainer.innerHTML = '<p>No posts yet</p>';
-                    }
-                } catch (error) {
-                    console.error("Error loading posts:", error);
-                }
+    try {
+        // Show loading spinner
+        document.getElementById('loadingSpinner').style.display = 'block';
+
+        const dbRef = ref(database);
+        const snapshot = await get(child(dbRef, 'posts'));
+        // Hide loading spinner
+        document.getElementById('loadingSpinner').style.display = 'none';
+
+        // Rest of your code...
+    } catch (error) {
+        // Handle error
+        console.error("Error loading posts:", error);
+        // Hide loading spinner in case of error
+        document.getElementById('loadingSpinner').style.display = 'none';
+    }
+    try {
+        const dbRef = ref(database);
+        const snapshot = await get(child(dbRef, 'posts'));
+        if (snapshot.exists()) {
+            const posts = snapshot.val();
+            postsArray = Object.entries(posts).reverse(); // Reverse the order to show new posts first
+            if (postsArray.length > 0) {
+                displayPosts(postsArray);
+            } else {
+                postsContainer.innerHTML = '<p>No posts yet</p>';
             }
-            
-            // Helper function to check if a post is within the last 3 hours
-            function isRecent(postTimestamp) {
-                const now = new Date();
-                const postDate = new Date(postTimestamp);
-                const diffInHours = (now - postDate) / (1000 * 60 * 60); // Difference in hours
-                return diffInHours <= 3;  //highlights the new post for 3 hours
-            }
+        } else {
+            postsContainer.innerHTML = '<p>No posts yet</p>';
+        }
+    } catch (error) {
+        console.error("Error loading posts:", error);
+    }
+}
 
-            // Function to display posts
-            function displayPosts(posts) {
-                postsContainer.innerHTML = '<div class="row"></div>';
-                const row = postsContainer.querySelector('.row');
-            
-                posts.forEach(([postId, post]) => {
-                    const col = document.createElement('div');
-                    col.classList.add('col-12', 'col-md-6', 'col-lg-4', 'mb-4'); 
-            
-                    const card = document.createElement('div');
-                    card.classList.add('card', 'shadow-sm', 'd-flex', 'flex-column', 'h-100');
-            
-                    // Add 'new-post' class to highlight recent posts
-                    if (isRecent(post.timestamp)) {
-                        card.classList.add('new-post');
-                        const newIcon = document.createElement('span');
-                        newIcon.classList.add('new-icon');
-                        card.appendChild(newIcon);
-                        card.addEventListener('mouseover', () => {
-                            card.classList.remove('new-post');
-                            newIcon.remove();
-                        });
-                    }
-            
-                    // Add the post title above the image
-                    const cardHeader = document.createElement('div');
-                    cardHeader.classList.add('card-header');
-                    cardHeader.innerHTML = `<h5 class="card-title">${post.title}</h5>`;
-                    card.appendChild(cardHeader);
-            
-                    // Add image or placeholder
-                    const img = document.createElement('img');
-                    img.classList.add('card-img-top');
-                    img.src = post.imageUrl || extractImageFromText(post.text) || 'placeholder.jpg';
-                    img.alt = 'Posted Image';
-                    card.appendChild(img);
-            
-                    const cardBody = document.createElement('div');
-                    cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'flex-grow-1');
-                    
-                    const text = document.createElement('p');
-                    text.classList.add('card-text');
-                    text.innerHTML = getGist(post.text);
-                    
-                    const btnContainer = document.createElement('div');
-                    btnContainer.classList.add('d-flex', 'align-items-center', 'mb-2', 'mt-auto');
-            
-                    const editBtn = document.createElement('button');
-                    editBtn.classList.add('btn', 'btn-warning', 'me-2');
-                    editBtn.innerHTML = '<i class="fa-solid fa-edit card-button"></i> Edit';
-                    editBtn.onclick = () => editPost(postId);
-            
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.classList.add('btn', 'btn-danger');
-                    deleteBtn.innerHTML = '<i class="fa-solid fa-trash card-button"></i> Delete';
-                    deleteBtn.onclick = (event) => {
-                        event.stopPropagation(); // Prevent the click event from bubbling up to the card
-                        deletePost(postId);
-                    };
-            
-                    btnContainer.appendChild(editBtn);
-                    btnContainer.appendChild(deleteBtn);
-            
-                    cardBody.appendChild(text);
-                    cardBody.appendChild(btnContainer);
-                    card.appendChild(cardBody);
-            
-                    // Add click event listener to open the card in fullscreen mode
-                    card.addEventListener('click', () => showFullscreen(post));
-            
-                    col.appendChild(card);
-                    row.appendChild(col);
-                });
-            }
-            
+// Helper function to check if a post is within the last 3 hours
+function isRecent(postTimestamp) {
+    const now = new Date();
+    const postDate = new Date(postTimestamp);
+    const diffInHours = (now - postDate) / (1000 * 60 * 60); // Difference in hours
+    return diffInHours <= 3;  //highlights the new post for 3 hours
+}
+
+// Function to display posts
+function displayPosts(posts) {
+    postsContainer.innerHTML = '<div class="row"></div>';
+    const row = postsContainer.querySelector('.row');
+
+    posts.forEach(([postId, post]) => {
+        const col = document.createElement('div');
+        col.classList.add('col-12', 'col-md-6', 'col-lg-4', 'mb-4'); 
+
+        const card = document.createElement('div');
+        card.classList.add('card', 'shadow-sm', 'd-flex', 'flex-column', 'h-100');
+
+        // Add 'new-post' class to highlight recent posts
+        if (isRecent(post.timestamp)) {
+            card.classList.add('new-post');
+            const newIcon = document.createElement('span');
+            newIcon.classList.add('new-icon');
+            card.appendChild(newIcon);
+            card.addEventListener('mouseover', () => {
+                card.classList.remove('new-post');
+                newIcon.remove();
+            });
+        }
+
+        // Add the post title above the image
+        const cardHeader = document.createElement('div');
+        cardHeader.classList.add('card-header');
+        cardHeader.innerHTML = `<h5 class="card-title">${post.title}</h5>`;
+        card.appendChild(cardHeader);
+
+        // Add image or placeholder
+        const img = document.createElement('img');
+        img.classList.add('card-img-top');
+        img.src = post.imageUrl || extractImageFromText(post.text) || 'placeholder.jpg';
+        img.alt = 'Posted Image';
+        card.appendChild(img);
+
+        const cardBody = document.createElement('div');
+        cardBody.classList.add('card-body', 'd-flex', 'flex-column', 'flex-grow-1');
+        
+        const text = document.createElement('p');
+        text.classList.add('card-text');
+        text.innerHTML = getGist(post.text);
+        
+        const btnContainer = document.createElement('div');
+        btnContainer.classList.add('d-flex', 'align-items-center', 'mb-2', 'mt-auto');
+
+        const editBtn = document.createElement('button');
+        editBtn.classList.add('btn', 'btn-warning', 'me-2');
+        editBtn.innerHTML = '<i class="fa-solid fa-edit card-button"></i> Edit';
+        editBtn.onclick = () => editPost(postId);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.classList.add('btn', 'btn-danger');
+        deleteBtn.innerHTML = '<i class="fa-solid fa-trash card-button"></i> Delete';
+        deleteBtn.onclick = (event) => {
+            event.stopPropagation(); // Prevent the click event from bubbling up to the card
+            deletePost(postId);
+        };
+
+        btnContainer.appendChild(editBtn);
+        btnContainer.appendChild(deleteBtn);
+
+        cardBody.appendChild(text);
+        cardBody.appendChild(btnContainer);
+        card.appendChild(cardBody);
+
+        // Add click event listener to open the card in fullscreen mode
+        card.addEventListener('click', () => showFullscreen(post));
+
+        col.appendChild(card);
+        row.appendChild(col);
+    });
+}
+
 
 function showFullscreen(post) {
     const fullscreenOverlay = document.createElement('div');

@@ -131,7 +131,6 @@ async function deleteFile(filePath, floor) {
     });
 }
 
-
 //load the content of the schedules
 async function loadFileContent(itemRef, floor) {
     const sheetListDiv = document.getElementById('sheetList');

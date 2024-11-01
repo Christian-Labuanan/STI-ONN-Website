@@ -1086,3 +1086,169 @@ button{
   justify-content: space-between; /* Space between buttons */
   margin-top: 20px; /* Space above the button container */
 }
+
+
+/* Container */
+.form-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-top: 50px;
+}
+
+/* Heading */
+.form-container h2 {
+  color: #333;
+  font-family: Arial, sans-serif;
+  margin-bottom: 20px;
+}
+
+/* Avatar Upload */
+.avatar-upload {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.avatar-label {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #e0e0e0;
+  border: 2px solid #ccc;
+}
+
+.avatar-label img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #555;
+  font-family: Arial, sans-serif;
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Button */
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
+
+/* Upload Status */
+#uploadStatus {
+  margin-top: 15px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Avatar Upload */
+.avatar-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.avatar-label {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #e0e0e0;
+  border: 2px solid #ccc;
+}
+
+.avatar-label img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* "Add Avatar" Text */
+.avatar-text {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+/* Custom styles for Excel content */
+#excelContent {
+  margin-top: 20px;
+}
+
+#excelContent table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#excelContent th,
+#excelContent td {
+  padding: 10px;
+  border: 1px solid #dddddd;
+  text-align: left;
+}
+
+#excelContent th {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+#excelContent tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#excelContent tr:hover {
+  background-color: #e9ecef; /* Change the background color on hover */
+}
+
+#excelContent caption {
+  font-size: 1.5em;
+  margin: 10px;
+  font-weight: bold;
+}
