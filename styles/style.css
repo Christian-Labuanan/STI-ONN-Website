@@ -1252,3 +1252,73 @@ button{
   margin: 10px;
   font-weight: bold;
 }
+
+body.modal-open {
+  overflow: auto !important;
+  padding-right: 0 !important;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}
+
+/* Ensure modal is above backdrop */
+.modal {
+  z-index: 1050;
+}
+
+/* Make sure body has proper modal open state */
+body.modal-open {
+  overflow: hidden;
+  padding-right: 0 !important;
+}
+
+/* Ensure modal content is visible */
+.modal-content {
+  background-color: #fff;
+  position: relative;
+}
+
+/* Fix multiple backdrop issue */
+.modal-backdrop + .modal-backdrop {
+  display: none;
+}
+
+/* Custom styles for the instructor detail modal */
+.instructor-modal .modal-dialog {
+  max-width: 1200px; /* Set maximum width for the instructor detail modal */
+  width: 100%; /* Ensure it uses full width available */
+}
+
+.instructor-modal .modal-content {
+  height: auto; /* Let the content dictate the height */
+}
+
+/* Optional: Limit the height and add scroll if needed */
+.instructor-modal .modal-body {
+  max-height: 600px; /* Set a max height for the modal body */
+  overflow-y: auto; /* Allow scrolling if content exceeds height */
+}
+
+
+/* Style for the instructor avatar image */
+#detailAvatar {
+  width: 100%; /* Make the image take full width of its container */
+  height: auto; /* Maintain the aspect ratio */
+  max-width: 250px; /* Limit the maximum width */
+  max-height: 250px; /* Limit the maximum height */
+  border-radius: 50%; /* Make it circular */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+  object-fit: cover; /* Ensure the image covers the container without stretching */
+}
+
+/* Hover effect */
+#detailAvatar:hover {
+  transform: scale(1.05); /* Slightly enlarge the image on hover */
+}

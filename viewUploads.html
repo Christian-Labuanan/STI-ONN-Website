@@ -27,7 +27,7 @@
         <div class="dropdown">
             <i class="bx bx-user" id="userIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userIcon">
-                <li><a class="dropdown-item nav-link" id="logout" data-bs-toggle="modal" data-bs-target="#loggingOutModal">Logout</a></li>
+                <li><a class="dropdown-item nav-link" id="logout" data-bs-toggle="modal" data-bs-target="#logoutConfirmationModal">Logout</a></li>
             </ul>
         </div>
     </div>
@@ -126,19 +126,38 @@
             </button>
         </div>
 
-        <!-- Logging Out Modal -->
-        <div class="modal fade" id="loggingOutModal" tabindex="-1" aria-labelledby="loggingOutModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="loggingOutModalLabel">Please wait</h5>
-                    </div>
-                    <div class="modal-body">
-                        Logging Out...
-                    </div>
+        <!-- Logout Confirmation Modal -->
+    <div class="modal fade" id="logoutConfirmationModal" tabindex="-1" aria-labelledby="logoutConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutConfirmationModalLabel">Logout Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to log out?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" data-bs-target="#loggingOutModal" data-bs-toggle="modal" data-bs-dismiss="modal" id="confirmLogout">Logout</button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Logging Out Modal -->
+    <div class="modal fade" id="loggingOutModal" tabindex="-1" aria-labelledby="loggingOutModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loggingOutModalLabel">Logging Out</h5>
+                </div>
+                <div class="modal-body">
+                    Logging Out...
+                </div>
+            </div>
+        </div>
+    </div>
 
         <!-- Delete Confirmation Modal -->
         <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
