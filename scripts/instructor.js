@@ -1,7 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
-import { getDatabase, ref as databaseRef, set, onValue, remove } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+import { getStorage, ref as storageRef } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+import { getDatabase, ref as databaseRef, onValue, remove } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+import { deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -61,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteConfirmationModal.addEventListener('hidden.bs.modal', cleanupModal);
     successModal.addEventListener('hidden.bs.modal', cleanupModal);
 
-    // Function to create instructor card
+    // Function to create instructor card with Delete and Edit buttons
     function createInstructorCard(instructor, key) {
         const card = document.createElement('div');
         card.classList.add('col-md-4', 'mb-4');
@@ -73,27 +75,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         card.innerHTML = `
-            <div class="card" data-instructor-id="${key}"
-                data-name="${instructor.name}" 
-                data-avatar="${instructor.avatarURL}" 
-                data-schedule="${instructor.scheduleURL || ''}">
-                <img src="${instructor.avatarURL}" class="card-img-top" alt="${instructor.name}" 
-                    onerror="this.src='assets/default-avatar.png'">
-                <div class="card-body">
-                    <h5 class="card-title">${instructor.name}</h5>
-                    <button class="delete-icon btn btn-sm" data-instructor-id="${key}" title="Delete Instructor">
-                        <i class="fas fa-trash-alt delete-icon" data-instructor-id="${key}" style="cursor: pointer;"></i>
-                    </button>
-                </div>
+        <div class="card" data-instructor-id="${key}"
+            data-name="${instructor.name}" 
+            data-avatar="${instructor.avatarURL}" 
+            data-schedule="${instructor.scheduleURL || ''}">
+            <img src="${instructor.avatarURL}" class="card-img-top" alt="${instructor.name}" 
+                onerror="this.src='assets/default-avatar.png'">
+            <div class="card-body d-flex flex-column">
+            <h5 class="card-title">${instructor.name}</h5>
+            <p class="card-text">${instructor.description || ''}</p>
+            <div class="mt-auto text-center"> <!-- Centered and positioned at the bottom -->
+                <button class="btn btn-edit me-2" data-instructor-id="${key}">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn btn-delete" data-instructor-id="${key}">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
             </div>
-        `;
+            </div>
+        </div>
+    `;
+
+
+    const deleteButton = card.querySelector('.btn-delete');
+    deleteButton.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent event bubbling to the card click listener
+        instructorToDelete = key; // Set the instructor to delete
+        showModal(deleteConfirmationModal); // Show the delete confirmation modal
+    });
         return card;
     }
 
     // Load and display instructor cards
     function loadInstructors() {
         const instructorsRef = databaseRef(database, 'instructors');
-        
+    
         onValue(instructorsRef, (snapshot) => {
             console.log('Fetching instructors data...'); // Debug log
             instructorCardsContainer.innerHTML = '';
@@ -103,20 +119,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 instructorCardsContainer.innerHTML = '<div class="col-12"><p>No instructors found.</p></div>';
                 return;
             }
-
+    
+            // Create an array to hold instructor data for sorting
+            const instructorsArray = [];
+            
             snapshot.forEach((childSnapshot) => {
                 const instructorData = childSnapshot.val();
                 const instructorKey = childSnapshot.key;
                 console.log('Instructor data:', instructorData); // Debug log
                 
-                const card = createInstructorCard(instructorData, instructorKey);
-                instructorCardsContainer.appendChild(card);
+                // Add the instructor data along with its key to the array
+                instructorsArray.push({ key: instructorKey, ...instructorData });
+            });
+    
+            // Sort instructors by timestamp (assumes `timestamp` is present in the data)
+            instructorsArray.sort((a, b) => b.timestamp - a.timestamp); // Newest first
+    
+            // Create cards for each instructor and prepend them to the container
+            instructorsArray.forEach(instructor => {
+                const card = createInstructorCard(instructor, instructor.key);
+                instructorCardsContainer.appendChild(card); // Append to the end, which will show the newest at the front
             });
         }, (error) => {
             console.error('Error loading instructors:', error);
             instructorCardsContainer.innerHTML = '<div class="col-12"><p>Error loading instructors.</p></div>';
         });
     }
+    
 
     // Handle card clicks
     instructorCardsContainer.addEventListener('click', (event) => {
@@ -184,22 +213,67 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Function to delete instructor
-    function deleteInstructor(instructorId) {
-        const instructorRef = databaseRef(database, `instructors/${instructorId}`);
-        remove(instructorRef)
-            .then(() => {
-                console.log('Instructor deleted successfully');
-                showModal(successModal); // Show success modal
-                loadInstructors(); // Reload instructors after deletion
-                // Hide delete confirmation modal
-                const deleteModalInstance = bootstrap.Modal.getInstance(deleteConfirmationModal);
-                if (deleteModalInstance) deleteModalInstance.hide();
-            })
-            .catch((error) => {
-                console.error('Error deleting instructor:', error);
-            });
-    }
+// Function to delete instructor
+function deleteInstructor(instructorId) {
+    const instructorRef = databaseRef(database, `instructors/${instructorId}`);
+    
+    // Retrieve instructor data to confirm it exists
+    onValue(instructorRef, (snapshot) => {
+        if (snapshot.exists()) {
+            const instructorData = snapshot.val();
+
+            // Get the URLs for the avatar and schedule file
+            const avatarURL = instructorData.avatarURL;
+            const scheduleURL = instructorData.scheduleURL;
+
+            // Delete the avatar image from Firebase Storage
+            if (avatarURL) {
+                const avatarRef = storageRef(storage, decodeURIComponent(avatarURL.split('/o/')[1].split('?')[0])); // Extract the path
+                deleteObject(avatarRef)
+                    .then(() => {
+                        console.log("Avatar image deleted successfully.");
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting avatar image:", error);
+                    });
+            } else {
+                console.warn("No avatar URL found for instructor:", instructorId);
+            }
+
+            // Delete the schedule file from Firebase Storage
+            if (scheduleURL) {
+                const scheduleRef = storageRef(storage, decodeURIComponent(scheduleURL.split('/o/')[1].split('?')[0])); // Extract the path
+                deleteObject(scheduleRef)
+                    .then(() => {
+                        console.log("Schedule file deleted successfully.");
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting schedule file:", error);
+                    });
+            } else {
+                console.warn("No schedule URL found for instructor:", instructorId);
+            }
+
+            // Finally, delete the instructor data from Realtime Database
+            remove(instructorRef)
+                .then(() => {
+                    console.log('Instructor deleted successfully from database');
+                    showModal(successModal); // Show success modal
+                    loadInstructors(); // Reload instructors after deletion
+                    
+                    // Hide delete confirmation modal
+                    const deleteModalInstance = bootstrap.Modal.getInstance(deleteConfirmationModal);
+                    if (deleteModalInstance) deleteModalInstance.hide();
+                })
+                .catch((error) => {
+                    console.error('Error deleting instructor from database:', error);
+                });
+        } else {
+            console.warn('Instructor not found in database:', instructorId);
+        }
+    }, { onlyOnce: true });
+}
+
 
     // Handle authentication state
     onAuthStateChanged(auth, (user) => {

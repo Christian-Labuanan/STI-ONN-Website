@@ -1322,3 +1322,39 @@ body.modal-open {
 #detailAvatar:hover {
   transform: scale(1.05); /* Slightly enlarge the image on hover */
 }
+
+/* Card styling */
+.card {
+  height: 100%; /* Ensures uniform card height */
+}
+
+/* Button styling */
+.btn-edit {
+  background-color: #ffc107; /* Yellow color */
+  color: white;
+  border: none;
+  width: 80px; /* Uniform width for consistency */
+  height: 60px;
+}
+
+.btn-delete {
+  background-color: #dc3545; /* Red color */
+  color: white;
+  border: none;
+  width: 80px; /* Uniform width for consistency */
+  height: 60px;
+}
+
+.btn-edit:hover {
+  background-color: #e0a800; /* Darker yellow on hover */
+}
+
+.btn-delete:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
+
+.btn {
+  padding: 0.5rem 0; /* Adjust padding to make the buttons taller */
+  font-size: 0.875rem;
+  border-radius: 0.25rem;
+}

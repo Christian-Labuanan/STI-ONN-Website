@@ -69,7 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
         await set(instructorRef, {
             name: name,
             avatarURL: avatarURL,
-            scheduleURL: scheduleURL
+            scheduleURL: scheduleURL,
+            timestamp: Date.now() // Add timestamp here
         });
     }
 
