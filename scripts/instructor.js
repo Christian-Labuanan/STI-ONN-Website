@@ -85,9 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <h5 class="card-title">${instructor.name}</h5>
             <p class="card-text">${instructor.description || ''}</p>
             <div class="mt-auto text-center"> <!-- Centered and positioned at the bottom -->
-                <button class="btn btn-edit me-2" data-instructor-id="${key}">
-                    <i class="fas fa-edit"></i> Edit
-                </button>
                 <button class="btn btn-delete" data-instructor-id="${key}">
                     <i class="fas fa-trash"></i> Delete
                 </button>
