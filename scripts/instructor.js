@@ -27,6 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const instructorDetailModal = document.getElementById('instructorDetailModal');
     const deleteConfirmationModal = document.getElementById('deleteConfirmationModal');
     const successModal = document.getElementById('successModal'); // Success modal for deletion
+    const departmentFilter = document.getElementById('departmentFilter');
+
+    // Add event listener to the department filter dropdown
+    departmentFilter.addEventListener('change', (event) => {
+        const selectedDepartment = event.target.value;
+        loadInstructors(selectedDepartment);  // Reload instructors based on department
+    });
 
     // Initialize all modals
     const modals = document.querySelectorAll('.modal');
@@ -42,10 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to show modal properly
     function showModal(modalElement) {
         const modalInstance = bootstrap.Modal.getInstance(modalElement) || 
-                            new bootstrap.Modal(modalElement, {
-                                backdrop: true,
-                                keyboard: true
-                            });
+            new bootstrap.Modal(modalElement, {
+                backdrop: true,
+                keyboard: true
+            });
         modalInstance.show();
     }
 
@@ -63,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteConfirmationModal.addEventListener('hidden.bs.modal', cleanupModal);
     successModal.addEventListener('hidden.bs.modal', cleanupModal);
 
-    // Function to create instructor card with Delete and Edit buttons
+    // Function to create instructor card with Delete, Edit buttons, and Department
     function createInstructorCard(instructor, key) {
         const card = document.createElement('div');
         card.classList.add('col-md-4', 'mb-4');
@@ -74,75 +81,80 @@ document.addEventListener('DOMContentLoaded', () => {
             return card;
         }
 
+        // Default department to 'N/A' if not available
+        const department = instructor.department || 'N/A';
+
         card.innerHTML = `
-        <div class="card" data-instructor-id="${key}"
+        <div class="card" data-instructor-id="${key}" 
             data-name="${instructor.name}" 
             data-avatar="${instructor.avatarURL}" 
             data-schedule="${instructor.scheduleURL || ''}">
             <img src="${instructor.avatarURL}" class="card-img-top" alt="${instructor.name}" 
                 onerror="this.src='assets/default-avatar.png'">
             <div class="card-body d-flex flex-column">
-            <h5 class="card-title">${instructor.name}</h5>
+            <h5 class="card-title"><strong>${instructor.name}</strong></h5>
             <p class="card-text">${instructor.description || ''}</p>
-            <div class="mt-auto text-center"> <!-- Centered and positioned at the bottom -->
+            <p class="card-text">Department: ${department}</p>
+            <div class="mt-auto text-center">
                 <button class="btn btn-delete" data-instructor-id="${key}">
                     <i class="fas fa-trash"></i> Delete
                 </button>
             </div>
             </div>
         </div>
-    `;
+        `;
 
-
-    const deleteButton = card.querySelector('.btn-delete');
-    deleteButton.addEventListener('click', (event) => {
-        event.stopPropagation(); // Prevent event bubbling to the card click listener
-        instructorToDelete = key; // Set the instructor to delete
-        showModal(deleteConfirmationModal); // Show the delete confirmation modal
-    });
+        const deleteButton = card.querySelector('.btn-delete');
+        deleteButton.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent event bubbling to the card click listener
+            instructorToDelete = key; // Set the instructor to delete
+            showModal(deleteConfirmationModal); // Show the delete confirmation modal
+        });
         return card;
     }
 
-    // Load and display instructor cards
-    function loadInstructors() {
+    // Function to load instructors based on the selected department
+    function loadInstructors(departmentFilter = 'All') {
         const instructorsRef = databaseRef(database, 'instructors');
-    
+
         onValue(instructorsRef, (snapshot) => {
             console.log('Fetching instructors data...'); // Debug log
             instructorCardsContainer.innerHTML = '';
-            
+
             if (!snapshot.exists()) {
                 console.log('No instructors data found');
                 instructorCardsContainer.innerHTML = '<div class="col-12"><p>No instructors found.</p></div>';
                 return;
             }
-    
-            // Create an array to hold instructor data for sorting
+
             const instructorsArray = [];
-            
+
             snapshot.forEach((childSnapshot) => {
                 const instructorData = childSnapshot.val();
                 const instructorKey = childSnapshot.key;
                 console.log('Instructor data:', instructorData); // Debug log
-                
-                // Add the instructor data along with its key to the array
+
+                // If a department filter is set, only include instructors from that department
+                if (departmentFilter !== 'All' && instructorData.department !== departmentFilter) {
+                    return;  // Skip this instructor if the department doesn't match the filter
+                }
+
                 instructorsArray.push({ key: instructorKey, ...instructorData });
             });
-    
+
             // Sort instructors by timestamp (assumes `timestamp` is present in the data)
             instructorsArray.sort((a, b) => b.timestamp - a.timestamp); // Newest first
-    
+
             // Create cards for each instructor and prepend them to the container
             instructorsArray.forEach(instructor => {
                 const card = createInstructorCard(instructor, instructor.key);
-                instructorCardsContainer.appendChild(card); // Append to the end, which will show the newest at the front
+                instructorCardsContainer.appendChild(card);
             });
         }, (error) => {
             console.error('Error loading instructors:', error);
             instructorCardsContainer.innerHTML = '<div class="col-12"><p>Error loading instructors.</p></div>';
         });
     }
-    
 
     // Handle card clicks
     instructorCardsContainer.addEventListener('click', (event) => {

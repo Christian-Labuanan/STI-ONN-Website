@@ -97,6 +97,14 @@
 
         <div class="container mt-5">
             <h1>Instructors</h1>
+            <select id="departmentFilter" class="form-select">
+                <option value="All" selected>All Departments</option>
+                <option value="IT">IT - Information Technology</option>
+                <option value="SHS">SHS - Senior High School</option>
+                <option value="GE">GE - General Education</option>
+                <option value="THM">THM - Tourism and Hospitality Management</option>
+                <option value="AMT">AMT - Academic Management Team (Head)</option>
+            </select>
             <div class="row" id="instructorCards"></div>
         </div>
     </div>
@@ -177,7 +185,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this instructor?
+                    Are you sure you want to delete this Instructor Schedule?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -196,7 +204,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    The instructor has been successfully deleted.
+                    The Instructor Schedule has been successfully removed.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
