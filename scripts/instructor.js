@@ -4,8 +4,7 @@ import { getDatabase, ref as databaseRef, onValue, remove } from "https://www.gs
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 import { deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
 
-
-// Initialize Firebase
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBfZyTFzkgn8hbaPnqNEdslEglKjBkrPPs",
     authDomain: "sti-onn-d0161.firebaseapp.com",
@@ -23,40 +22,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const auth = getAuth(app);
     const storage = getStorage(app);
     
+    // DOM elements
     const instructorCardsContainer = document.getElementById('instructorCards');
     const instructorDetailModal = document.getElementById('instructorDetailModal');
     const deleteConfirmationModal = document.getElementById('deleteConfirmationModal');
-    const successModal = document.getElementById('successModal'); // Success modal for deletion
+    const successModal = document.getElementById('successModal');
     const departmentFilter = document.getElementById('departmentFilter');
 
-    // Add event listener to the department filter dropdown
-    departmentFilter.addEventListener('change', (event) => {
-        const selectedDepartment = event.target.value;
-        loadInstructors(selectedDepartment);  // Reload instructors based on department
-    });
+    // Add Mass Delete Controls
+    const massDeleteControl = document.createElement('div');
+    massDeleteControl.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <button id="massDeleteToggle" class="btn btn-secondary">Delete</button>
+        </div>
+        <div id="bulkActionControls" class="d-none">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <span id="selectedCount" class="me-2">0 selected</span>
+                    <button id="bulkDeleteBtn" class="btn btn-danger" disabled>
+                        <i class="fas fa-trash"></i> Delete Selected
+                    </button>
+                </div>
+                <div>
+                    <button id="selectAllBtn" class="btn btn-secondary">Select All</button>
+                </div>
+            </div>
+        </div>
+    `;
+    instructorCardsContainer.parentNode.insertBefore(massDeleteControl, instructorCardsContainer);
+
+    // Set for tracking selected instructors
+    const selectedInstructors = new Set();
 
     // Initialize all modals
     const modals = document.querySelectorAll('.modal');
     modals.forEach(modal => {
-        new bootstrap.Modal(modal, {
-            backdrop: true,
-            keyboard: true
-        });
+        new bootstrap.Modal(modal);
     });
 
-    let instructorToDelete = null;
-
-    // Function to show modal properly
+    // Modal utility functions
     function showModal(modalElement) {
         const modalInstance = bootstrap.Modal.getInstance(modalElement) || 
-            new bootstrap.Modal(modalElement, {
-                backdrop: true,
-                keyboard: true
-            });
+            new bootstrap.Modal(modalElement);
         modalInstance.show();
     }
 
-    // Function to clean up modal
     function cleanupModal() {
         document.body.classList.remove('modal-open');
         const backdrops = document.querySelectorAll('.modal-backdrop');
@@ -70,18 +80,52 @@ document.addEventListener('DOMContentLoaded', () => {
     deleteConfirmationModal.addEventListener('hidden.bs.modal', cleanupModal);
     successModal.addEventListener('hidden.bs.modal', cleanupModal);
 
-    // Function to create instructor card with Delete, Edit buttons, and Department
+    // Update selected count and button state
+    function updateSelectedCount() {
+        const count = selectedInstructors.size;
+        document.getElementById('selectedCount').textContent = `${count} selected`;
+        document.getElementById('bulkDeleteBtn').disabled = count === 0;
+    }
+
+    // Mass Delete Toggle Functionality
+    const massDeleteToggle = document.getElementById('massDeleteToggle');
+    const bulkActionControls = document.getElementById('bulkActionControls');
+
+    massDeleteToggle.addEventListener('click', () => {
+        const isActive = bulkActionControls.classList.contains('d-none');
+        
+        // Toggle controls visibility
+        bulkActionControls.classList.toggle('d-none');
+        massDeleteToggle.textContent = isActive ? 'Cancel Delete' : 'Mass Delete';
+        massDeleteToggle.classList.toggle('btn-secondary');
+        massDeleteToggle.classList.toggle('btn-danger');
+        
+        // Show/hide checkboxes
+        document.querySelectorAll('.card-header').forEach(header => {
+            header.style.display = isActive ? 'block' : 'none';
+        });
+        
+        // Clear selections when canceling
+        if (!isActive) {
+            selectedInstructors.clear();
+            updateSelectedCount();
+            document.querySelectorAll('.select-instructor').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            document.getElementById('selectAllBtn').textContent = 'Select All';
+        }
+    });
+
+    // Create instructor card function
     function createInstructorCard(instructor, key) {
         const card = document.createElement('div');
         card.classList.add('col-md-4', 'mb-4');
-
-        // Check if instructor data exists and has required properties
+        
         if (!instructor || !instructor.name || !instructor.avatarURL) {
             console.error('Invalid instructor data:', instructor);
             return card;
         }
 
-        // Default department to 'N/A' if not available
         const department = instructor.department || 'N/A';
 
         card.innerHTML = `
@@ -89,105 +133,73 @@ document.addEventListener('DOMContentLoaded', () => {
             data-name="${instructor.name}" 
             data-avatar="${instructor.avatarURL}" 
             data-schedule="${instructor.scheduleURL || ''}">
+            <div class="card-header p-2" style="display: none;">
+                <div class="form-check">
+                    <input class="form-check-input select-instructor" type="checkbox" value="${key}" id="check_${key}">
+                    <label class="form-check-label" for="check_${key}">Select</label>
+                </div>
+            </div>
             <img src="${instructor.avatarURL}" class="card-img-top" alt="${instructor.name}" 
                 onerror="this.src='assets/default-avatar.png'">
             <div class="card-body d-flex flex-column">
-            <h5 class="card-title"><strong>${instructor.name}</strong></h5>
-            <p class="card-text">${instructor.description || ''}</p>
-            <p class="card-text">Department: ${department}</p>
-            <div class="mt-auto text-center">
-                <button class="btn btn-delete" data-instructor-id="${key}">
-                    <i class="fas fa-trash"></i> Delete
-                </button>
-            </div>
+                <h5 class="card-title"><strong>${instructor.name}</strong></h5>
+                <p class="card-text">${instructor.description || ''}</p>
+                <p class="card-text">Department: ${department}</p>
+                <div class="mt-auto">
+                    <a href="instructorEdit.html?id=${key}" class="btn btn-primary">
+                        <i class="bx bx-edit"></i> Edit
+                    </a>
+                </div>
             </div>
         </div>
         `;
 
-        const deleteButton = card.querySelector('.btn-delete');
-        deleteButton.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent event bubbling to the card click listener
-            instructorToDelete = key; // Set the instructor to delete
-            showModal(deleteConfirmationModal); // Show the delete confirmation modal
+        // Add checkbox event listener
+        const checkbox = card.querySelector('.select-instructor');
+        checkbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                selectedInstructors.add(key);
+            } else {
+                selectedInstructors.delete(key);
+            }
+            updateSelectedCount();
         });
+
+        // Add card click event (for viewing details)
+        card.addEventListener('click', (e) => {
+            // Don't trigger details view when clicking checkbox or in mass delete mode
+            if (!e.target.classList.contains('form-check-input') && 
+                bulkActionControls.classList.contains('d-none')) {
+                const cardElement = e.currentTarget.querySelector('.card');
+                showInstructorDetails(cardElement);
+            }
+        });
+
         return card;
     }
 
-    // Function to load instructors based on the selected department
-    function loadInstructors(departmentFilter = 'All') {
-        const instructorsRef = databaseRef(database, 'instructors');
+    // Show instructor details
+    function showInstructorDetails(cardElement) {
+        const name = cardElement.getAttribute('data-name');
+        const avatar = cardElement.getAttribute('data-avatar');
+        const schedule = cardElement.getAttribute('data-schedule');
 
-        onValue(instructorsRef, (snapshot) => {
-            console.log('Fetching instructors data...'); // Debug log
-            instructorCardsContainer.innerHTML = '';
+        const modalTitle = document.getElementById('instructorDetailModalLabel');
+        const modalAvatar = document.getElementById('detailAvatar');
+        const excelContent = document.getElementById('excelContent');
 
-            if (!snapshot.exists()) {
-                console.log('No instructors data found');
-                instructorCardsContainer.innerHTML = '<div class="col-12"><p>No instructors found.</p></div>';
-                return;
-            }
+        modalTitle.textContent = name;
+        modalAvatar.src = avatar;
+        excelContent.innerHTML = '';
 
-            const instructorsArray = [];
+        showModal(instructorDetailModal);
 
-            snapshot.forEach((childSnapshot) => {
-                const instructorData = childSnapshot.val();
-                const instructorKey = childSnapshot.key;
-                console.log('Instructor data:', instructorData); // Debug log
-
-                // If a department filter is set, only include instructors from that department
-                if (departmentFilter !== 'All' && instructorData.department !== departmentFilter) {
-                    return;  // Skip this instructor if the department doesn't match the filter
-                }
-
-                instructorsArray.push({ key: instructorKey, ...instructorData });
-            });
-
-            // Sort instructors by timestamp (assumes `timestamp` is present in the data)
-            instructorsArray.sort((a, b) => b.timestamp - a.timestamp); // Newest first
-
-            // Create cards for each instructor and prepend them to the container
-            instructorsArray.forEach(instructor => {
-                const card = createInstructorCard(instructor, instructor.key);
-                instructorCardsContainer.appendChild(card);
-            });
-        }, (error) => {
-            console.error('Error loading instructors:', error);
-            instructorCardsContainer.innerHTML = '<div class="col-12"><p>Error loading instructors.</p></div>';
-        });
+        if (schedule) {
+            displayExcelContent(schedule);
+        }
     }
 
-    // Handle card clicks
-    instructorCardsContainer.addEventListener('click', (event) => {
-        if (event.target.matches('.delete-icon')) {
-            instructorToDelete = event.target.getAttribute('data-instructor-id');
-            showModal(deleteConfirmationModal); // Show the confirmation modal
-        } else {
-            const card = event.target.closest('.card');
-            if (!card) return;
-
-            const name = card.getAttribute('data-name');
-            const avatar = card.getAttribute('data-avatar');
-            const schedule = card.getAttribute('data-schedule');
-
-            // Update modal content
-            const modalTitle = document.getElementById('instructorDetailModalLabel');
-            const modalAvatar = document.getElementById('detailAvatar');
-            const excelContent = document.getElementById('excelContent');
-
-            if (modalTitle) modalTitle.textContent = name;
-            if (modalAvatar) modalAvatar.src = avatar;
-            if (excelContent) excelContent.innerHTML = '';
-
-            // Show modal with updated content
-            showModal(instructorDetailModal);
-
-            if (schedule) {
-                displayExcelContent(schedule);
-            }
-        }
-    });
-
-    // Display Excel content function
+    // Display Excel content
     async function displayExcelContent(url) {
         if (!url) {
             document.getElementById('excelContent').innerHTML = '<p>No schedule available.</p>';
@@ -213,91 +225,159 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Handle delete confirmation
-    document.getElementById('confirmDeleteButton').addEventListener('click', () => {
-        if (instructorToDelete) {
-            deleteInstructor(instructorToDelete); // Call your delete function
-            instructorToDelete = null; // Reset the variable
-            cleanupModal(); // Clean up the modal
+    // Load instructors function
+    function loadInstructors(departmentFilter = 'All') {
+        const instructorsRef = databaseRef(database, 'instructors');
+
+        onValue(instructorsRef, (snapshot) => {
+            console.log('Fetching instructors data...');
+            instructorCardsContainer.innerHTML = '';
+            selectedInstructors.clear();
+            updateSelectedCount();
+
+            if (!snapshot.exists()) {
+                console.log('No instructors data found');
+                instructorCardsContainer.innerHTML = '<div class="col-12"><p>No instructors found.</p></div>';
+                return;
+            }
+
+            const instructorsArray = [];
+
+            snapshot.forEach((childSnapshot) => {
+                const instructorData = childSnapshot.val();
+                const instructorKey = childSnapshot.key;
+
+                if (departmentFilter === 'All' || instructorData.department === departmentFilter) {
+                    instructorsArray.push({ key: instructorKey, ...instructorData });
+                }
+            });
+
+            instructorsArray.sort((a, b) => b.timestamp - a.timestamp);
+
+            instructorsArray.forEach(instructor => {
+                const card = createInstructorCard(instructor, instructor.key);
+                instructorCardsContainer.appendChild(card);
+            });
+        }, (error) => {
+            console.error('Error loading instructors:', error);
+            instructorCardsContainer.innerHTML = '<div class="col-12"><p>Error loading instructors.</p></div>';
+        });
+    }
+
+    // Delete multiple instructors function
+    async function deleteMultipleInstructors(instructorIds) {
+        const deletePromises = Array.from(instructorIds).map(async (id) => {
+            const instructorRef = databaseRef(database, `instructors/${id}`);
+            
+            try {
+                const snapshot = await new Promise((resolve, reject) => {
+                    onValue(instructorRef, resolve, { onlyOnce: true });
+                });
+
+                if (snapshot.exists()) {
+                    const instructorData = snapshot.val();
+                    const deletePromises = [];
+
+                    // Delete avatar
+                    if (instructorData.avatarURL) {
+                        const avatarPath = decodeURIComponent(instructorData.avatarURL.split('/o/')[1].split('?')[0]);
+                        const avatarRef = storageRef(storage, avatarPath);
+                        deletePromises.push(deleteObject(avatarRef));
+                    }
+
+                    // Delete schedule
+                    if (instructorData.scheduleURL) {
+                        const schedulePath = decodeURIComponent(instructorData.scheduleURL.split('/o/')[1].split('?')[0]);
+                        const scheduleRef = storageRef(storage, schedulePath);
+                        deletePromises.push(deleteObject(scheduleRef));
+                    }
+
+                    // Delete database entry
+                    deletePromises.push(remove(instructorRef));
+
+                    await Promise.all(deletePromises);
+                    return true;
+                }
+            } catch (error) {
+                console.error(`Error deleting instructor ${id}:`, error);
+                return false;
+            }
+        });
+
+        const results = await Promise.all(deletePromises);
+        const successCount = results.filter(result => result).length;
+        
+        const successModalBody = successModal.querySelector('.modal-body');
+        successModalBody.textContent = `Successfully deleted ${successCount} instructor${successCount !== 1 ? 's' : ''}.`;
+        
+        showModal(successModal);
+        selectedInstructors.clear();
+        updateSelectedCount();
+        
+        // Reset mass delete mode
+        massDeleteToggle.click();
+        
+        loadInstructors(departmentFilter.value);
+    }
+
+    // Event Listeners
+    departmentFilter.addEventListener('change', (event) => {
+        loadInstructors(event.target.value);
+    });
+
+    document.getElementById('bulkDeleteBtn').addEventListener('click', () => {
+        if (selectedInstructors.size > 0) {
+            const modalBody = deleteConfirmationModal.querySelector('.modal-body');
+            modalBody.textContent = `Are you sure you want to delete ${selectedInstructors.size} selected instructor${selectedInstructors.size !== 1 ? 's' : ''}?`;
+            
+            const confirmDeleteBtn = document.getElementById('confirmDeleteButton');
+            confirmDeleteBtn.onclick = () => {
+                deleteMultipleInstructors(selectedInstructors);
+                bootstrap.Modal.getInstance(deleteConfirmationModal).hide();
+            };
+            
+            showModal(deleteConfirmationModal);
         }
     });
 
-// Function to delete instructor
-function deleteInstructor(instructorId) {
-    const instructorRef = databaseRef(database, `instructors/${instructorId}`);
-    
-    // Retrieve instructor data to confirm it exists
-    onValue(instructorRef, (snapshot) => {
-        if (snapshot.exists()) {
-            const instructorData = snapshot.val();
-
-            // Get the URLs for the avatar and schedule file
-            const avatarURL = instructorData.avatarURL;
-            const scheduleURL = instructorData.scheduleURL;
-
-            // Delete the avatar image from Firebase Storage
-            if (avatarURL) {
-                const avatarRef = storageRef(storage, decodeURIComponent(avatarURL.split('/o/')[1].split('?')[0])); // Extract the path
-                deleteObject(avatarRef)
-                    .then(() => {
-                        console.log("Avatar image deleted successfully.");
-                    })
-                    .catch((error) => {
-                        console.error("Error deleting avatar image:", error);
-                    });
+    document.getElementById('selectAllBtn').addEventListener('click', function() {
+        const checkboxes = document.querySelectorAll('.select-instructor');
+        const isSelectAll = this.textContent === 'Select All';
+        
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = isSelectAll;
+            if (isSelectAll) {
+                selectedInstructors.add(checkbox.value);
             } else {
-                console.warn("No avatar URL found for instructor:", instructorId);
+                selectedInstructors.delete(checkbox.value);
             }
+        });
+        
+        this.textContent = isSelectAll ? 'Deselect All' : 'Select All';
+        updateSelectedCount();
+    });
 
-            // Delete the schedule file from Firebase Storage
-            if (scheduleURL) {
-                const scheduleRef = storageRef(storage, decodeURIComponent(scheduleURL.split('/o/')[1].split('?')[0])); // Extract the path
-                deleteObject(scheduleRef)
-                    .then(() => {
-                        console.log("Schedule file deleted successfully.");
-                    })
-                    .catch((error) => {
-                        console.error("Error deleting schedule file:", error);
-                    });
-            } else {
-                console.warn("No schedule URL found for instructor:", instructorId);
-            }
-
-            // Finally, delete the instructor data from Realtime Database
-            remove(instructorRef)
-                .then(() => {
-                    console.log('Instructor deleted successfully from database');
-                    showModal(successModal); // Show success modal
-                    loadInstructors(); // Reload instructors after deletion
-                    
-                    // Hide delete confirmation modal
-                    const deleteModalInstance = bootstrap.Modal.getInstance(deleteConfirmationModal);
-                    if (deleteModalInstance) deleteModalInstance.hide();
-                })
-                .catch((error) => {
-                    console.error('Error deleting instructor from database:', error);
-                });
-        } else {
-            console.warn('Instructor not found in database:', instructorId);
-        }
-    }, { onlyOnce: true });
-}
-
+    // Initialize tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 
     // Handle authentication state
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            // User is signed in, load instructors
             loadInstructors();
         } else {
-            // User is signed out, redirect to login
             window.location.href = 'login.html';
         }
     });
+});
 
-    // Initialize tooltips if you're using them
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
+// Handle edit button click
+document.querySelectorAll('.card .btn-primary').forEach(button => {
+    button.addEventListener('click', (e) => {
+        const card = e.target.closest('.card');
+        const instructorId = card.getAttribute('data-instructor-id');
+        window.location.href = `editInstructor.html?id=${instructorId}`;
     });
 });

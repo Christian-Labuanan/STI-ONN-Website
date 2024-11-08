@@ -15,14 +15,161 @@ const firebaseConfig = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Add loading overlay to the document
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.innerHTML = `
+        <div class="loading-content">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="loading-message mt-3">Uploading instructor details, please wait...</div>
+        </div>
+    `;
+    document.body.appendChild(loadingOverlay);
+
+    // Add styles for loading overlay
+    const overlayStyle = document.createElement('style');
+    overlayStyle.textContent = `
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-overlay.active {
+            display: flex;
+        }
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+        .loading-message {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+        #cropModal .modal-body {
+            max-height: 80vh;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #cropperImage {
+            max-height: 70vh;
+            max-width: 100%;
+            display: block;
+        }
+        .cropper-container {
+            max-height: 70vh !important;
+        }
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+            min-height: calc(100% - 1rem);
+    `;
+    document.head.appendChild(overlayStyle);
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth();
     const storage = getStorage(app);
     const database = getDatabase(app);
 
     const form = document.getElementById('uploadForm');
-    let croppedFile = null;  // Variable to hold cropped image file
+    const pictureFileInput = document.getElementById('pictureFile');
+    const cropButton = document.getElementById('cropButton');
+    const cropModal = document.getElementById('cropModal');
+    let cropper;
+    let croppedFile = null;
 
+    // Function to show loading overlay
+    function showLoadingOverlay() {
+        loadingOverlay.classList.add('active');
+    }
+
+    // Function to hide loading overlay
+    function hideLoadingOverlay() {
+        loadingOverlay.classList.remove('active');
+    }
+
+    // Function to initialize cropper with proper sizing
+    function initializeCropper(image) {
+        if (cropper) {
+            cropper.destroy();
+        }
+        
+        cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 2,
+            autoCropArea: 1,
+            background: false,
+            center: true,
+            responsive: true,
+            scalable: true,
+            ready() {
+                this.cropper.resize();
+            },
+            crop(event) {
+                console.log('Crop box data:', event.detail);
+            }
+        });
+    }
+
+    // Handle file selection for avatar
+    pictureFileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            if (!file.type.startsWith('image/')) {
+                showErrorModal('Please select an image file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                const image = document.getElementById('cropperImage');
+                image.src = reader.result;
+
+                const cropModalInstance = new bootstrap.Modal(cropModal);
+                cropModalInstance.show();
+
+                cropModal.addEventListener('shown.bs.modal', function modalShownHandler() {
+                    initializeCropper(image);
+                    cropModal.removeEventListener('shown.bs.modal', modalShownHandler);
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Handle crop button click
+    cropButton.addEventListener('click', () => {
+        if (cropper) {
+            const canvas = cropper.getCroppedCanvas({
+                width: 500,
+                height: 500
+            });
+    
+            canvas.toBlob((blob) => {
+                croppedFile = new File([blob], 'cropped-avatar.jpg', { type: 'image/jpeg' });
+    
+                const avatarPreview = document.getElementById('avatarPreview');
+                avatarPreview.src = URL.createObjectURL(croppedFile);
+                avatarPreview.style.display = 'block';
+    
+                cropper.destroy();
+                const cropModalInstance = bootstrap.Modal.getInstance(cropModal);
+                cropModalInstance.hide();
+            }, 'image/jpeg', 0.9);
+        }
+    });
+
+    // Handle form submission
     onAuthStateChanged(auth, (user) => {
         if (user) {
             console.log("Authenticated as:", user.uid);
@@ -38,20 +185,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     showErrorModal("Please complete all fields and crop the avatar.");
                     return;
                 }
+
+                if (!scheduleFile.name.endsWith('.xlsx')) {
+                    showErrorModal("Please upload an Excel file (.xlsx) for the schedule.");
+                    return;
+                }
             
                 try {
-                    const avatarURL = await uploadFile(croppedFile, `instructor image/${instructorName}-avatar.jpg`);
-                    const scheduleURL = await uploadFile(scheduleFile, `instructor schedule/${instructorName}-schedule.xlsx`);
+                    form.querySelector('button[type="submit"]').disabled = true;
+                    showLoadingOverlay(); // Show loading overlay before starting upload
+                    
+                    const avatarURL = await uploadFile(croppedFile, `instructor_images/${instructorName}-${Date.now()}-avatar.jpg`);
+                    const scheduleURL = await uploadFile(scheduleFile, `instructor_schedules/${instructorName}-${Date.now()}-schedule.xlsx`);
             
                     await saveInstructorData(instructorName, department, avatarURL, scheduleURL);
+                    hideLoadingOverlay(); // Hide loading overlay before showing success modal
                     showSuccessModal();
                 } catch (error) {
                     console.error("Error uploading data:", error);
+                    hideLoadingOverlay(); // Hide loading overlay if there's an error
                     showErrorModal("Failed to upload instructor details. Please try again.");
+                } finally {
+                    form.querySelector('button[type="submit"]').disabled = false;
                 }
             });
         } else {
             console.log("User is not signed in.");
+            window.location.href = 'login.html';
         }
     });
 
@@ -64,13 +224,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to save instructor data to Firebase Database
     async function saveInstructorData(name, department, avatarURL, scheduleURL) {
-        const instructorRef = databaseRef(database, `instructors/${name}`);
+        const instructorRef = databaseRef(database, `instructors/${name.replace(/\s+/g, '_').toLowerCase()}`);
         await set(instructorRef, {
             name: name,
-            department: department,  // Add department to the data
+            department: department,
             avatarURL: avatarURL,
             scheduleURL: scheduleURL,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            updatedBy: auth.currentUser.uid
         });
     }
 
@@ -81,67 +242,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             window.location.href = 'instructor.html';
-        }, 3000);
+        }, 2000);
     }
 
     // Function to show error modal
     function showErrorModal(message) {
-        document.getElementById('errorMessage').textContent = message;
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.textContent = message;
         const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
         errorModal.show();
     }
 
-    // Avatar image preview and cropping
-    const pictureFileInput = document.getElementById('pictureFile');
-    const cropButton = document.getElementById('cropButton');
-    let cropper;
-
-    pictureFileInput.addEventListener('change', (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const image = document.getElementById('cropperImage');
-                image.src = reader.result;
-
-                // Show cropper modal
-                const cropModal = new bootstrap.Modal(document.getElementById('cropModal'));
-                cropModal.show();
-
-                // Initialize Cropper.js
-                cropper = new Cropper(image, {
-                    aspectRatio: 1,
-                    viewMode: 2, // Ensures the image stays within the boundaries
-                    autoCropArea: 1,
-                    background: false,
-                    center: true
-                });
-            };
-            reader.readAsDataURL(file);
+    // Clean up on page unload
+    window.addEventListener('unload', () => {
+        if (cropper) {
+            cropper.destroy();
         }
     });
 
-    cropButton.addEventListener('click', async () => {
+    // Handle modal close
+    cropModal.addEventListener('hidden.bs.modal', () => {
         if (cropper) {
-            const canvas = cropper.getCroppedCanvas({
-                width: 500,
-                height: 500
-            });
-
-            // Convert canvas to Blob
-            canvas.toBlob((blob) => {
-                croppedFile = new File([blob], 'cropped-avatar.jpg', { type: 'image/jpeg' });
-
-                // Preview the cropped image
-                const avatarPreview = document.getElementById('avatarPreview');
-                avatarPreview.src = URL.createObjectURL(croppedFile);
-                avatarPreview.style.display = 'block';
-
-                // Destroy the cropper instance and hide modal
-                cropper.destroy();
-                const cropModal = bootstrap.Modal.getInstance(document.getElementById('cropModal'));
-                cropModal.hide();
-            }, 'image/jpeg', 1.0);
+            cropper.destroy();
         }
     });
 });
