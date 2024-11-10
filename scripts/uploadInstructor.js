@@ -195,8 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     form.querySelector('button[type="submit"]').disabled = true;
                     showLoadingOverlay(); // Show loading overlay before starting upload
                     
-                    const avatarURL = await uploadFile(croppedFile, `instructor_images/${instructorName}-${Date.now()}-avatar.jpg`);
-                    const scheduleURL = await uploadFile(scheduleFile, `instructor_schedules/${instructorName}-${Date.now()}-schedule.xlsx`);
+                    const avatarURL = await uploadFile(croppedFile, `instructor image/${instructorName}-${Date.now()}-avatar.jpg`);
+                    const scheduleURL = await uploadFile(scheduleFile, `instructor schedule/${instructorName}-${Date.now()}-schedule.xlsx`);
             
                     await saveInstructorData(instructorName, department, avatarURL, scheduleURL);
                     hideLoadingOverlay(); // Hide loading overlay before showing success modal

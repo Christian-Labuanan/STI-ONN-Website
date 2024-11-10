@@ -1,9 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-import { getDatabase, ref, update, onValue } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+import { getDatabase, ref as databaseRef, set, onValue, update } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
-// Firebase configuration
+// Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyBfZyTFzkgn8hbaPnqNEdslEglKjBkrPPs",
     authDomain: "sti-onn-d0161.firebaseapp.com",
@@ -14,111 +14,334 @@ const firebaseConfig = {
     appId: "1:538337032363:web:7e17df22799b2bad85dfee"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase();
-const storage = getStorage();
-const auth = getAuth();
+document.addEventListener('DOMContentLoaded', () => {
+    // Add loading overlay to the document
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.innerHTML = `
+        <div class="loading-content">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="loading-message mt-3">Updating instructor details, please wait...</div>
+        </div>
+    `;
+    document.body.appendChild(loadingOverlay);
 
-// Get URL parameter
-const urlParams = new URLSearchParams(window.location.search);
-const instructorId = urlParams.get('id');
+    // Add styles for loading overlay
+    const overlayStyle = document.createElement('style');
+    overlayStyle.textContent = `
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-overlay.active {
+            display: flex;
+        }
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+        .loading-message {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+        #cropModal .modal-body {
+            max-height: 80vh;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #cropperImage {
+            max-height: 70vh;
+            max-width: 100%;
+            display: block;
+        }
+        .cropper-container {
+            max-height: 70vh !important;
+        }
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+            min-height: calc(100% - 1rem);
+        }
+    `;
+    document.head.appendChild(overlayStyle);
 
-// Get form elements
-const uploadForm = document.getElementById('uploadForm');
-const instructorNameInput = document.getElementById('instructorName');
-const departmentSelect = document.getElementById('department');
-const pictureFileInput = document.getElementById('pictureFile');
-const scheduleFileInput = document.getElementById('scheduleFile');
-const avatarPreview = document.getElementById('avatarPreview');
-const uploadStatusDiv = document.getElementById('uploadStatus');
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const storage = getStorage(app);
+    const database = getDatabase(app);
 
-// Fetch and display instructor data
-const instructorRef = ref(database, `instructors/${instructorId}`);
-onValue(instructorRef, (snapshot) => {
-    if (snapshot.exists()) {
-        const instructorData = snapshot.val();
+    let currentAvatarPath = null;
+    let currentSchedulePath = null;
 
-        // Populate fields with existing data
-        instructorNameInput.value = instructorData.name || '';
-        departmentSelect.value = instructorData.department || '';
-        avatarPreview.src = instructorData.avatarURL || 'https://via.placeholder.com/100';
+    // Get URL parameter for instructor ID
+    const urlParams = new URLSearchParams(window.location.search);
+    const instructorId = urlParams.get('id');
 
-        // Display only the filename for the schedule
-        if (instructorData.scheduleURL) {
-            // Decode the URL to handle URL-encoded characters
-            const decodedURL = decodeURIComponent(instructorData.scheduleURL);
-            // Extract the file name from the decoded URL
-            const scheduleFileName = decodedURL.split('/').pop().split('?')[0];
-            const scheduleFileNameDisplay = document.getElementById('scheduleFileNameDisplay');
-            scheduleFileNameDisplay.textContent = scheduleFileName || "No schedule uploaded.";
+    const form = document.getElementById('uploadForm');
+    const pictureFileInput = document.getElementById('pictureFile');
+    const cropButton = document.getElementById('cropButton');
+    const cropModal = document.getElementById('cropModal');
+
+    let cropper;
+    let croppedFile = null;
+
+    // Function to show/hide loading overlay
+    function showLoadingOverlay() {
+        loadingOverlay.classList.add('active');
+    }
+
+    function hideLoadingOverlay() {
+        loadingOverlay.classList.remove('active');
+    }
+
+    // Initialize cropper
+    function initializeCropper(image) {
+        if (cropper) {
+            cropper.destroy();
+        }
+        
+        cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 2,
+            autoCropArea: 1,
+            background: false,
+            center: true,
+            responsive: true,
+            scalable: true,
+            ready() {
+                this.cropper.resize();
+            }
+        });
+    }
+
+    // Fetch and display existing instructor data
+    if (instructorId) {
+        const instructorRef = databaseRef(database, `instructors/${instructorId}`);
+        onValue(instructorRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const instructorData = snapshot.val();
+                
+                // Store the current avatar URL and extract the path
+                if (instructorData.avatarURL) {
+                    const avatarURL = new URL(instructorData.avatarURL);
+                    const decodedPath = decodeURIComponent(avatarURL.pathname);
+                    const pathStartIndex = decodedPath.indexOf('/o/') + 3;
+                    currentAvatarPath = decodedPath.substring(pathStartIndex);
+                }
+                
+                // Store the current schedule URL and extract the path
+                if (instructorData.scheduleURL) {
+                    const scheduleURL = new URL(instructorData.scheduleURL);
+                    const decodedPath = decodeURIComponent(scheduleURL.pathname);
+                    const pathStartIndex = decodedPath.indexOf('/o/') + 3;
+                    currentSchedulePath = decodedPath.substring(pathStartIndex);
+                }
+    
+                // Populate fields with existing data
+                document.getElementById('instructorName').value = instructorData.name || '';
+                document.getElementById('department').value = instructorData.department || '';
+                document.getElementById('avatarPreview').src = instructorData.avatarURL || 'https://via.placeholder.com/100';
+            }
+        });
+    }
+
+    // Function to delete the previous schedule
+    async function deletePreviousSchedule() {
+        if (currentSchedulePath) {
+            try {
+                const previousScheduleRef = storageRef(storage, currentSchedulePath);
+                await deleteObject(previousScheduleRef);
+                console.log('Previous schedule deleted successfully');
+            } catch (error) {
+                console.error('Error deleting previous schedule:', error);
+            }
+        }
+    }
+
+    // Function to delete the previous avatar
+    async function deletePreviousAvatar() {
+        if (currentAvatarPath) {
+            try {
+                const previousAvatarRef = storageRef(storage, currentAvatarPath);
+                await deleteObject(previousAvatarRef);
+                console.log('Previous avatar deleted successfully');
+            } catch (error) {
+                console.error('Error deleting previous avatar:', error);
+                // Continue with the update even if deletion fails
+            }
+        }
+    }
+
+    // Handle file selection for avatar
+    pictureFileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            if (!file.type.startsWith('image/')) {
+                showErrorModal('Please select an image file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                const image = document.getElementById('cropperImage');
+                image.src = reader.result;
+
+                const cropModalInstance = new bootstrap.Modal(cropModal);
+                cropModalInstance.show();
+
+                cropModal.addEventListener('shown.bs.modal', function modalShownHandler() {
+                    initializeCropper(image);
+                    cropModal.removeEventListener('shown.bs.modal', modalShownHandler);
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Handle crop button click
+    cropButton.addEventListener('click', () => {
+        if (cropper) {
+            const canvas = cropper.getCroppedCanvas({
+                width: 500,
+                height: 500
+            });
+    
+            canvas.toBlob((blob) => {
+                croppedFile = new File([blob], 'cropped-avatar.jpg', { type: 'image/jpeg' });
+                const avatarPreview = document.getElementById('avatarPreview');
+                avatarPreview.src = URL.createObjectURL(croppedFile);
+                avatarPreview.style.display = 'block';
+    
+                cropper.destroy();
+                const cropModalInstance = bootstrap.Modal.getInstance(cropModal);
+                cropModalInstance.hide();
+            }, 'image/jpeg', 0.9);
+        }
+    });
+
+    // Handle form submission
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+            
+                const instructorName = document.getElementById('instructorName').value.trim();
+                const department = document.getElementById('department').value;
+                const scheduleFile = document.getElementById('scheduleFile').files[0];
+            
+                if (!instructorName || !department) {
+                    showErrorModal("Please complete all required fields.");
+                    return;
+                }
+    
+                if (scheduleFile && !scheduleFile.name.endsWith('.xlsx')) {
+                    showErrorModal("Please upload an Excel file (.xlsx) for the schedule.");
+                    return;
+                }
+            
+                try {
+                    form.querySelector('button[type="submit"]').disabled = true;
+                    showLoadingOverlay();
+                    
+                    const updates = {
+                        name: instructorName,
+                        department: department,
+                        updatedBy: user.uid,
+                        timestamp: Date.now()
+                    };
+    
+                    // Upload new avatar if provided
+                    if (croppedFile) {
+                        const avatarURL = await uploadFile(
+                            croppedFile, 
+                            `instructor image/${instructorId}-${Date.now()}-avatar.jpg`,
+                            true // Mark this as an avatar upload
+                        );
+                        updates.avatarURL = avatarURL;
+                    }
+    
+                    // Upload new schedule if provided
+                    if (scheduleFile) {
+                        await deletePreviousSchedule(); // Delete previous schedule if exists
+                        const scheduleURL = await uploadFile(
+                            scheduleFile, 
+                            `instructor schedule/${instructorId}-${Date.now()}-schedule.xlsx`
+                        );
+                        updates.scheduleURL = scheduleURL;
+                    }
+            
+                    await updateInstructorData(instructorId, updates);
+                    hideLoadingOverlay();
+                    showSuccessModal();
+                } catch (error) {
+                    console.error("Error updating data:", error);
+                    hideLoadingOverlay();
+                    showErrorModal("Failed to update instructor details. Please try again.");
+                } finally {
+                    form.querySelector('button[type="submit"]').disabled = false;
+                }
+            });
         } else {
-            const scheduleFileNameDisplay = document.getElementById('scheduleFileNameDisplay');
-            scheduleFileNameDisplay.textContent = "No schedule uploaded.";
+            window.location.href = 'login.html';
         }
-    } else {
-        console.error('No instructor data found for ID:', instructorId);
-    }
-});
+    });
 
-// Handle form submission
-uploadForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    const name = instructorNameInput.value;
-    const department = departmentSelect.value;
-    const pictureFile = pictureFileInput.files[0];
-    const scheduleFile = scheduleFileInput.files[0];
-
-    // Check if the user is authenticated
-    const user = auth.currentUser;
-    if (!user) {
-        alert('Please log in first.');
-        return;
-    }
-
-    try {
-        await updateInstructor(instructorId, name, department, pictureFile, scheduleFile);
-        uploadStatusDiv.textContent = 'Instructor details updated successfully.';
-    } catch (error) {
-        console.error('Error updating instructor:', error);
-        uploadStatusDiv.textContent = 'Error updating instructor details.';
-    }
-});
-
-// Update instructor data
-async function updateInstructor(instructorId, name, department, pictureFile, scheduleFile) {
-    const user = auth.currentUser;
-    if (!user) {
-        alert('Please log in first.');
-        return;
-    }
-
-    const instructorRef = ref(database, `instructors/${instructorId}`);
-    const updates = { name: name, department: department };
-
-    try {
-        // Update profile picture if a new file is selected
-        if (pictureFile) {
-            const avatarRef = storageRef(storage, `instructors/${instructorId}/avatar.jpg`);
-            await uploadBytes(avatarRef, pictureFile);
-            const avatarURL = await getDownloadURL(avatarRef);
-            updates.avatarURL = avatarURL;
+    // Function to upload files to Firebase Storage
+    async function uploadFile(file, path, isAvatar = false) {
+        if (isAvatar) {
+            await deletePreviousAvatar();
         }
+        const fileRef = storageRef(storage, path);
+        await uploadBytes(fileRef, file);
+        return await getDownloadURL(fileRef);
+    }
 
-        // Update schedule file if a new file is selected
-        if (scheduleFile) {
-            const scheduleRef = storageRef(storage, `instructors/${instructorId}/schedule.xlsx`);
-            await uploadBytes(scheduleRef, scheduleFile);
-            const scheduleURL = await getDownloadURL(scheduleRef);
-            updates.scheduleURL = scheduleURL;
-        }
-
-        // Apply updates to Firebase Realtime Database
+    // Function to update instructor data
+    async function updateInstructorData(instructorId, updates) {
+        const instructorRef = databaseRef(database, `instructors/${instructorId}`);
         await update(instructorRef, updates);
-    } catch (error) {
-        console.error('Error updating instructor:', error);
-        throw new Error('Error updating instructor details');
     }
-}
 
+    // Function to show success modal
+    function showSuccessModal() {
+        const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+        successModal.show();
+
+        setTimeout(() => {
+            window.location.href = 'instructor.html';
+        }, 2000);
+    }
+
+    // Function to show error modal
+    function showErrorModal(message) {
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.textContent = message;
+        const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+        errorModal.show();
+    }
+
+    // Clean up
+    window.addEventListener('unload', () => {
+        if (cropper) {
+            cropper.destroy();
+        }
+    });
+
+    cropModal.addEventListener('hidden.bs.modal', () => {
+        if (cropper) {
+            cropper.destroy();
+        }
+    });
+});
