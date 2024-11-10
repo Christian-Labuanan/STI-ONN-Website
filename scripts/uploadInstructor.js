@@ -267,3 +267,63 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const fileInput = document.getElementById('scheduleFile');
+    const selectedFileName = document.getElementById('selectedFileName');
+    const fileUpload = document.querySelector('.file-upload1');
+    const initialState = document.getElementById('initialUploadState');
+    const selectedState = document.getElementById('selectedFileState');
+
+    // Prevent default drag behaviors
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        fileUploadArea.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+    });
+
+    // Handle dropped files
+    fileUploadArea.addEventListener('drop', handleDrop, false);
+
+    // Handle selected files
+    fileInput.addEventListener('change', handleFiles, false);
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles({ target: { files: files } });
+    }
+
+    function handleFiles(e) {
+        const files = e.target.files;
+        if (files.length) {
+            const file = files[0];
+            // Check if file is an Excel file
+            if (file.name.match(/\.(xlsx|xls)$/)) {
+                updateFileInfo(file);
+            } else {
+                alert('Please upload an Excel file (.xlsx or .xls)');
+                fileInput.value = '';
+                resetFileUpload();
+            }
+        }
+    }
+
+    function updateFileInfo(file) {
+        selectedFileName.textContent = file.name1;
+        fileUpload.classList.add('has-file');
+        initialState.style.display = 'none';
+        selectedState.style.display = 'flex';
+    }
+
+    function resetFileUpload() {
+        fileUpload.classList.remove('has-file');
+        initialState.style.display = 'flex';
+        selectedState.style.display = 'none';
+    }
+});

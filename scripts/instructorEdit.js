@@ -126,35 +126,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Fetch and display existing instructor data
-    if (instructorId) {
-        const instructorRef = databaseRef(database, `instructors/${instructorId}`);
-        onValue(instructorRef, (snapshot) => {
-            if (snapshot.exists()) {
-                const instructorData = snapshot.val();
-                
-                // Store the current avatar URL and extract the path
-                if (instructorData.avatarURL) {
-                    const avatarURL = new URL(instructorData.avatarURL);
-                    const decodedPath = decodeURIComponent(avatarURL.pathname);
-                    const pathStartIndex = decodedPath.indexOf('/o/') + 3;
-                    currentAvatarPath = decodedPath.substring(pathStartIndex);
-                }
-                
-                // Store the current schedule URL and extract the path
-                if (instructorData.scheduleURL) {
-                    const scheduleURL = new URL(instructorData.scheduleURL);
-                    const decodedPath = decodeURIComponent(scheduleURL.pathname);
-                    const pathStartIndex = decodedPath.indexOf('/o/') + 3;
-                    currentSchedulePath = decodedPath.substring(pathStartIndex);
-                }
+    const fileUpload = document.querySelector('.file-upload1');
+    const initialState = document.getElementById('initialUploadState');
+    const selectedState = document.getElementById('selectedFileState');
     
-                // Populate fields with existing data
-                document.getElementById('instructorName').value = instructorData.name || '';
-                document.getElementById('department').value = instructorData.department || '';
-                document.getElementById('avatarPreview').src = instructorData.avatarURL || 'https://via.placeholder.com/100';
-            }
-        });
+    // Ensure these elements exist before using them in other functions
+    if (fileUpload && initialState && selectedState) {
+        // Fetch and display existing instructor data
+        if (instructorId) {
+            const instructorRef = databaseRef(database, `instructors/${instructorId}`);
+            onValue(instructorRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const instructorData = snapshot.val();
+    
+                    // Store the current schedule URL and extract the path
+                    if (instructorData.scheduleURL) {
+                        const scheduleURL = new URL(instructorData.scheduleURL);
+                        const decodedPath = decodeURIComponent(scheduleURL.pathname);
+                        const pathStartIndex = decodedPath.indexOf('/o/') + 3;
+                        currentSchedulePath = decodedPath.substring(pathStartIndex);
+    
+                        // Extract and display file name in selectedFileState
+                        const fileName = currentSchedulePath.split('/').pop();
+                        document.getElementById('scheduleFileNameDisplay').textContent = fileName;
+                        fileUpload.classList.add('has-file');
+                        initialState.style.display = 'none';
+                        selectedState.style.display = 'flex';
+                    }
+    
+                    // Populate other fields with existing data as before
+                    document.getElementById('instructorName').value = instructorData.name || '';
+                    document.getElementById('department').value = instructorData.department || '';
+                    document.getElementById('avatarPreview').src = instructorData.avatarURL || 'https://via.placeholder.com/100';
+                }
+            });
+        }
     }
 
     // Function to delete the previous schedule
@@ -344,4 +350,65 @@ document.addEventListener('DOMContentLoaded', () => {
             cropper.destroy();
         }
     });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const fileInput = document.getElementById('scheduleFile');
+    const fileNameDisplay = document.getElementById('scheduleFileNameDisplay');
+    const fileUpload = document.querySelector('.file-upload1');
+    const initialState = document.getElementById('initialUploadState');
+    const selectedState = document.getElementById('selectedFileState');
+
+    // Prevent default drag behaviors
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        fileUploadArea.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+    });
+
+    // Handle dropped files
+    fileUploadArea.addEventListener('drop', handleDrop, false);
+
+    // Handle selected files
+    fileInput.addEventListener('change', handleFiles, false);
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles({ target: { files: files } });
+    }
+
+    function handleFiles(e) {
+        const files = e.target.files;
+        if (files.length) {
+            const file = files[0];
+            // Check if file is an Excel file
+            if (file.name.match(/\.xlsx$/)) {
+                updateFileInfo(file);
+            } else {
+                alert('Please upload an Excel file (.xlsx)');
+                fileInput.value = '';
+                resetFileUpload();
+            }
+        }
+    }
+
+    function updateFileInfo(file) {
+        fileNameDisplay.textContent = file.name;
+        fileUpload.classList.add('has-file');
+        initialState.style.display = 'none';
+        selectedState.style.display = 'flex';
+    }
+
+    function resetFileUpload() {
+        fileNameDisplay.textContent = 'No schedule uploaded.';
+        fileUpload.classList.remove('has-file');
+        initialState.style.display = 'flex';
+        selectedState.style.display = 'none';
+    }
 });

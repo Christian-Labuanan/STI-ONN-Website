@@ -883,7 +883,7 @@ canvas {
 
 .announcementDiv {
   background-color: #3B71CA;
-  width: 30%;
+  width: 40%;
   height: 300px;
   align-items: center;
   padding: 15px;
@@ -893,11 +893,12 @@ canvas {
   text-align: center;
   color: white;
   margin-top: 15px;
+  margin-left: -.01px;
 }
 
 .scheduleDiv{
   background-color: #E4A11B;
-  width: 30%;
+  width: 40%;
   height: 300px;
   align-items: center;
   padding: 15px;
@@ -911,7 +912,7 @@ canvas {
 
 .profDiv{
   background-color: #14A44D;
-  width: 30%;
+  width: 40%;
   height: 300px;
   align-items: center;
   padding: 15px;
@@ -1351,4 +1352,155 @@ body.modal-open {
 #bulkDeleteBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Readonly state */
+.readonly-textarea {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  cursor: default;
+  color: #495057;
+}
+
+/* Editable state */
+.editable-textarea {
+  background-color: #fff;
+  border: 1px solid #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+  cursor: text;
+}
+
+#saveButton {
+  transition: all 0.3s ease;
+}
+
+/* Hover effects for editable textareas */
+.editable-textarea:hover, 
+.editable-textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Disabled appearance for readonly textareas */
+.readonly-textarea:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.main-content.expanded {
+  margin-left: var(--sidebar-collapsed-width);
+}
+
+.upload-section {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.file-upload {
+  border: 2px dashed #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.file-upload:hover {
+  border-color: var(--primary-color);
+  background-color: #f8fafc;
+}
+
+.floor-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.btn-floor {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-floor:hover {
+  transform: translateY(-2px);
+}
+
+.upload-status {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #f8fafc;
+}
+
+#selected-filename {
+  font-size: 0.9rem;
+  margin-top: 8px;
+  word-break: break-word;
+}
+
+.file-upload-container1 {
+  width: 100%;
+  padding: 1rem;
+}
+
+.file-upload1 {
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.upload-content1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Initial Upload State */
+.upload-icon1 {
+  font-size: 2.5rem;
+  color: #0d6efd;
+  margin-bottom: 0.5rem;
+}
+
+/* Selected File State */
+.upload-content1.selected-state1 {
+  display: none;
+}
+
+.check-icon1 {
+  font-size: 2.5rem;
+  color: #198754;
+  margin-bottom: 0.5rem;
+}
+
+.filename1 {
+  color: #198754;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+.change-text1 {
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* File Selected State Styles */
+.file-upload.has-file1 {
+  border-style: dashed;
+  border-color: #ddd;
+  background-color: #fff;
 }

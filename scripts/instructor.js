@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Toggle controls visibility
         bulkActionControls.classList.toggle('d-none');
-        massDeleteToggle.textContent = isActive ? 'Cancel Delete' : 'Mass Delete';
+        massDeleteToggle.textContent = isActive ? 'Cancel Delete' : 'Delete';
         massDeleteToggle.classList.toggle('btn-secondary');
         massDeleteToggle.classList.toggle('btn-danger');
         

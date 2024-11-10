@@ -132,6 +132,8 @@ async function deleteFile(filePath, floor) {
 }
 
 //load the content of the schedules
+let currentWorkbook = null;
+
 async function loadFileContent(itemRef, floor) {
     const sheetListDiv = document.getElementById('sheetList');
     const sheetDataDiv = document.getElementById('sheetData');
@@ -147,15 +149,15 @@ async function loadFileContent(itemRef, floor) {
         const downloadURL = await getDownloadURL(itemRef);
         const response = await fetch(downloadURL);
         const data = await response.arrayBuffer();
-        const workbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+        currentWorkbook = XLSX.read(new Uint8Array(data), { type: 'array' });
         hideLoading();
 
-        if (workbook.SheetNames.length === 0) {
+        if (currentWorkbook.SheetNames.length === 0) {
             sheetListDiv.innerHTML = '<p>No sheets found in this file.</p>';
             return;
         }
 
-        displaySheetList(workbook.SheetNames, workbook, floor, itemRef.name);
+        displaySheetList(currentWorkbook.SheetNames, currentWorkbook, floor, itemRef.name);
     } catch (error) {
         console.error("Error loading file content:", error);
         hideLoading();
@@ -174,25 +176,53 @@ function displaySheetList(sheetNames, workbook, floor, fileName) {
         button.textContent = sheetName;
         button.classList.add('btn', 'btn-info', 'mb-2', 'me-2');
         button.setAttribute('aria-label', `View sheet ${sheetName}`);
-        button.addEventListener('click', () => {
-            const sheet = workbook.Sheets[sheetName];
-            const schedule = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-            displaySheetData(sheetName, schedule, floor, fileName);
+        button.addEventListener('click', async () => {
+            // Reload the latest workbook data before displaying the sheet
+            try {
+                showLoading('Loading latest sheet data...');
+                const storageRef = ref(storage, `schedules/${floor}/${fileName}`);
+                const downloadURL = await getDownloadURL(storageRef);
+                const response = await fetch(downloadURL);
+                const data = await response.arrayBuffer();
+                currentWorkbook = XLSX.read(new Uint8Array(data), { type: 'array' });
+                
+                const sheet = currentWorkbook.Sheets[sheetName];
+                const schedule = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                hideLoading();
+                displaySheetData(sheetName, schedule, floor, fileName);
+            } catch (error) {
+                console.error("Error reloading workbook:", error);
+                hideLoading();
+                showModal('errorModal');
+            }
         });
         sheetList.appendChild(button);
     });
 }
 
-function displaySheetData(sheetName, data, floor, fileName) {
+async function displaySheetData(sheetName, data, floor, fileName) {
     const sheetDataDiv = document.getElementById('sheetData');
-    sheetDataDiv.innerHTML = `<h3>Editing: ${sheetName} (${fileName})</h3>`;
+    sheetDataDiv.innerHTML = `
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3>Viewing: ${sheetName} (${fileName})</h3>
+            <div class="btn-group" role="group">
+                <button id="editToggleBtn" class="btn btn-warning">
+                    <i class="fas fa-edit me-2"></i>Edit
+                </button>
+            </div>
+        </div>
+    `;
 
     const form = document.createElement('form');
     form.setAttribute('id', 'sheetForm');
 
     const table = document.createElement('table');
-    table.classList.add('table', 'table-bordered');
+    table.classList.add('table', 'table-bordered', 'table-striped');
 
+    // Store the original data for reference
+    const originalData = JSON.parse(JSON.stringify(data));
+
+    const tbody = document.createElement('tbody');
     const maxRows = data.length;
     const maxCols = Math.max(...data.map(row => row.length));
 
@@ -200,77 +230,146 @@ function displaySheetData(sheetName, data, floor, fileName) {
         const tr = document.createElement('tr');
         for (let colIndex = 0; colIndex < maxCols; colIndex++) {
             const td = document.createElement('td');
-
-            // Create a textarea for each cell
+            
             const textarea = document.createElement('textarea');
             textarea.value = (data[rowIndex] && data[rowIndex][colIndex]) !== undefined ? data[rowIndex][colIndex] : '';
-            textarea.name = `${rowIndex}_${colIndex}`;
-            textarea.classList.add('form-control', 'cell-textarea');
-            textarea.style.height = '128px'; // Set height for multi-line content
-            textarea.style.resize = 'none'; // Prevent resizing
+            textarea.name = `cell_${rowIndex}_${colIndex}`;
+            textarea.dataset.row = rowIndex;
+            textarea.dataset.col = colIndex;
+            textarea.classList.add('form-control', 'cell-textarea', 'readonly-textarea');
+            
+            // Always make first row and first column readonly
+            const isHeaderCell = rowIndex === 0 || colIndex === 0;
+            if (isHeaderCell) {
+                textarea.classList.add('header-cell');
+                textarea.style.backgroundColor = '#f8f9fa';
+                textarea.style.fontWeight = 'bold';
+            }
+            
+            textarea.readOnly = true;
+            textarea.rows = 4;
+            textarea.style.resize = 'none';
 
-            // Append the textarea to the table cell
             td.appendChild(textarea);
             tr.appendChild(td);
         }
-        table.appendChild(tr);
+        tbody.appendChild(tr);
     }
-
+    
+    table.appendChild(tbody);
     form.appendChild(table);
 
     const saveButton = document.createElement('button');
     saveButton.textContent = 'Save Changes';
-    saveButton.classList.add('btn', 'btn-primary', 'mt-3');
+    saveButton.classList.add('btn', 'btn-primary', 'mt-3', 'd-none');
     saveButton.setAttribute('type', 'submit');
-    saveButton.setAttribute('aria-label', 'Save changes to the schedule');
+    saveButton.id = 'saveButton';
 
     form.appendChild(saveButton);
     sheetDataDiv.appendChild(form);
 
-    // Handle form submission
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        saveSheetData(sheetName, form, floor, fileName);
-    });
-}
+    let isEditMode = false;
+    const editToggleBtn = document.getElementById('editToggleBtn');
+    const allTextareas = form.querySelectorAll('textarea');
+    const saveBtn = document.getElementById('saveButton');
 
-async function saveSheetData(sheetName, form, floor, fileName) {
-    const formData = new FormData(form);
-    const updatedData = [];
+    function toggleEditMode(enable) {
+        isEditMode = enable;
+        
+        allTextareas.forEach(textarea => {
+            const row = parseInt(textarea.dataset.row);
+            const col = parseInt(textarea.dataset.col);
+            const isHeaderCell = row === 0 || col === 0;
+            
+            if (!isHeaderCell) {
+                textarea.readOnly = !enable;
+                if (enable) {
+                    textarea.classList.remove('readonly-textarea');
+                    textarea.classList.add('editable-textarea');
+                } else {
+                    textarea.classList.remove('editable-textarea');
+                    textarea.classList.add('readonly-textarea');
+                }
+            }
+        });
 
-    // Reconstruct the data from the form inputs to match Excel format
-    formData.forEach((value, key) => {
-        const [row, col] = key.split('_').map(Number);
-        if (!updatedData[row]) updatedData[row] = [];
-        updatedData[row][col] = value;
-    });
-
-    // Create a new workbook and worksheet
-    const newWorkbook = XLSX.utils.book_new();
-    const newWorksheet = XLSX.utils.aoa_to_sheet(updatedData);
-
-    // Append the new worksheet to the workbook
-    XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, sheetName);
-
-    // Convert workbook to binary data
-    const workbookBinary = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
-
-    try {
-        showLoading('Saving changes...');
-
-        const storageRef = ref(storage, `schedules/${floor}/${fileName}`);
-        const blob = new Blob([workbookBinary], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-        // Upload the new Excel file to Firebase Storage
-        await uploadBytes(storageRef, blob);
-
-        hideLoading();
-        showModal('successModal');
-    } catch (error) {
-        console.error("Error saving changes to Firebase Storage:", error);
-        hideLoading();
-        showModal('errorModal');
+        if (enable) {
+            editToggleBtn.innerHTML = '<i class="fas fa-times me-2"></i>Cancel';
+            editToggleBtn.classList.remove('btn-warning');
+            editToggleBtn.classList.add('btn-danger');
+            saveBtn.classList.remove('d-none');
+        } else {
+            editToggleBtn.innerHTML = '<i class="fas fa-edit me-2"></i>Edit';
+            editToggleBtn.classList.remove('btn-danger');
+            editToggleBtn.classList.add('btn-warning');
+            saveBtn.classList.add('d-none');
+        }
     }
+
+    editToggleBtn.addEventListener('click', () => {
+        if (isEditMode) {
+            if (confirm('Are you sure you want to cancel editing? All changes will be lost.')) {
+                toggleEditMode(false);
+                // Restore original values
+                allTextareas.forEach(textarea => {
+                    const row = parseInt(textarea.dataset.row);
+                    const col = parseInt(textarea.dataset.col);
+                    textarea.value = (originalData[row] && originalData[row][col]) !== undefined ? originalData[row][col] : '';
+                });
+            }
+        } else {
+            toggleEditMode(true);
+        }
+    });
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!isEditMode) return;
+
+        try {
+            showLoading('Saving changes...');
+
+            // Get the current file content first
+            const storageRef = ref(storage, `schedules/${floor}/${fileName}`);
+            const downloadURL = await getDownloadURL(storageRef);
+            const response = await fetch(downloadURL);
+            const fileData = await response.arrayBuffer();
+            const existingWorkbook = XLSX.read(new Uint8Array(fileData), { type: 'array' });
+
+            // Create updated data array from form
+            const updatedData = Array(maxRows).fill().map(() => Array(maxCols).fill(''));
+            allTextareas.forEach(textarea => {
+                const row = parseInt(textarea.dataset.row);
+                const col = parseInt(textarea.dataset.col);
+                updatedData[row][col] = textarea.value;
+            });
+
+            // Create a new worksheet for the edited sheet
+            const newWorksheet = XLSX.utils.aoa_to_sheet(updatedData);
+
+            // Update only the edited sheet in the existing workbook
+            existingWorkbook.Sheets[sheetName] = newWorksheet;
+
+            // Convert workbook to binary data
+            const workbookBinary = XLSX.write(existingWorkbook, { bookType: 'xlsx', type: 'array' });
+
+            // Upload to Firebase Storage
+            const blob = new Blob([workbookBinary], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            await uploadBytes(storageRef, blob);
+
+            hideLoading();
+            showModal('successModal');
+            toggleEditMode(false);
+
+            // Update the original data reference
+            Object.assign(originalData, updatedData);
+
+        } catch (error) {
+            console.error('Error saving changes:', error);
+            hideLoading();
+            showModal('errorModal');
+        }
+    });
 }
 
 function showLoading(message = 'Loading...') {
@@ -299,27 +398,6 @@ function hideLoading() {
         loadingDiv.style.display = 'none';
     }
 }
-
-window.uploadFile = function(floor) {
-    const fileInput = document.getElementById('file-input');
-    const file = fileInput.files[0];
-    
-    if (!file) {
-        document.getElementById('upload-status').innerText = 'Please select a file to upload.';
-        return;
-    }
-
-    const fileRef = ref(storage, `schedules/${floor}/${file.name}`);
-
-    uploadBytes(fileRef, file)
-        .then(() => {
-            document.getElementById('upload-status').innerText = 'File uploaded successfully!';
-        })
-        .catch(error => {
-            console.error('Error uploading file:', error);
-            document.getElementById('upload-status').innerText = 'Error uploading file.';
-        });
-};
 
 function showModal(modalId) {
     const modalElement = document.getElementById(modalId);

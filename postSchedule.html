@@ -63,12 +63,6 @@
                             <span class="navlink">instructor Schedules</span>
                         </a>
                     </li>
-                    <li class="item">
-                        <a href="#" class="nav_link">
-                            <span class="navlink_icon"><i class="bx bx-cog"></i></span>
-                            <span class="navlink">Admins</span>
-                        </a>
-                    </li>
                 </ul>
                 <!-- Sidebar Open/Close -->
                 <div class="bottom_content">
@@ -84,15 +78,54 @@
             </div>
         </nav>
 
-        <div class="main-content flex-grow-1 p-4">
-            <h1>Excel File Uploader</h1>
-            <input type="file" id="file-input" accept=".xlsx, .xls" aria-label="Upload Excel File">
-            <div id="floor-buttons" class="my-3">
-                <button class="btn btn-primary" onclick="uploadFile('Floor1')">Floor 1</button>
-                <button class="btn btn-primary" onclick="uploadFile('Floor2')">Floor 2</button>
-                <button class="btn btn-primary" onclick="uploadFile('Floor3')">Floor 3</button>
+        <div class="main-content">
+            <div class="container">
+                <div class="upload-section">
+                    <h2 class="mb-4 text-center">Schedule Management</h2>
+                    <div class="file-upload" onclick="document.getElementById('file-input').click()">
+                        <i class="bx bx-upload fs-1 text-primary mb-2"></i>
+                        <h5>Upload Excel File</h5>
+                        <p class="text-muted mb-0">Click to browse or drag and drop your file here</p>
+                        <input type="file" id="file-input" accept=".xlsx, .xls" class="d-none" aria-label="Upload Excel File">
+                    </div>
+                    <p class="text-muted mb-0 text-center">Choose which floor to upload the Schedule</p>
+                    <div class="floor-buttons">
+                        <button class="btn btn-primary btn-floor" onclick="uploadFile('Floor1')">
+                            <i class="bx bx-building-house me-2"></i>Floor 1
+                        </button>
+                        <button class="btn btn-primary btn-floor" onclick="uploadFile('Floor2')">
+                            <i class="bx bx-building-house me-2"></i>Floor 2
+                        </button>
+                        <button class="btn btn-primary btn-floor" onclick="uploadFile('Floor3')">
+                            <i class="bx bx-building-house me-2"></i>Floor 3
+                        </button>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="schedule.html" class="btn btn-secondary btn-floor btn-cancel">
+                            <i class="bx bx-x me-2"></i>Cancel
+                        </a>
+                    </div>
+                    <div id="upload-status" class="upload-status"></div>
+                </div>
             </div>
-            <div id="upload-status"></div>
+        </div>
+
+        <!-- Success Modal -->
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="successModalLabel">Upload Successful</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Your file has been uploaded successfully.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Logout Confirmation Modal -->
@@ -138,5 +171,6 @@
     <script type="module" defer src="scripts/logout.js"></script>
     <script type="module" defer src="scripts/user.js"></script>
     <script type="module" defer src="scripts/schedule.js"></script>
+    <script type="module" defer src="scripts/uploadSchedule.js"></script>
 </body>
 </html>

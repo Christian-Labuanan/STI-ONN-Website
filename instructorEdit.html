@@ -124,13 +124,33 @@
                 <!-- Schedule File -->
                 <div class="form-group mb-3">
                     <label for="scheduleFile">Schedule File</label>
-                    <input type="file" id="scheduleFile" class="form-control" accept=".xlsx">
-                    <label>Current Instructor Schedule uploaded: </label>
-                    <span id="scheduleFileNameDisplay" class="file-name-display">No schedule uploaded.</span>
+                    <div class="file-upload-container1" id="fileUploadArea">
+                        <!-- Initial/Selected File States Container -->
+                        <div class="file-upload1" onclick="document.getElementById('scheduleFile').click()">
+                            <!-- Initial Upload State -->
+                            <div class="upload-content1" id="initialUploadState">
+                                <i class="bx bx-upload upload-icon1"></i>
+                                <h5>Upload Excel File</h5>
+                                <p class="text-muted">Click to browse or drag and drop your file here</p>
+                            </div>
+                            
+                            <!-- Selected File State -->
+                            <div class="upload-content1 selected-state1" id="selectedFileState">
+                                <i class="bx bx-check-circle check-icon1"></i>
+                                <h5>File Selected</h5>
+                                <p class="filename" id="scheduleFileNameDisplay"></p>
+                                <p class="change-text">Click to change file</p>
+                            </div>
+                        </div>
+                        <input type="file" id="scheduleFile" class="d-none" accept=".xlsx" aria-label="Upload Excel File">
+                    </div>
                 </div>
         
                 <!-- Submit Button -->
-                <button type="submit" class="submit-btn">Update Instructor</button>
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="button" class="btn btn-secondary me-2" onclick="window.location.href='instructor.html'">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Instructor</button>
+                </div>
                 <div id="uploadStatus"></div>
             </form>
         </div>
@@ -178,7 +198,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Instructor details uploaded successfully!
+                    Edited Instructor Details Successfully!
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
@@ -237,24 +257,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="cropButton">Crop and Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Success Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Success</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    The file has been deleted successfully!
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
