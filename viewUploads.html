@@ -25,7 +25,7 @@
         <i class="bi bi-grid"></i>
         <div id="user-info" class="user"></div>
         <div class="dropdown">
-            <i class="bx bx-user" id="userIcon" data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <i class="bx bx-user" id="userIcon" data-bs-toggle="dropdown"></i>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userIcon">
                 <li><a class="dropdown-item nav-link" id="logout" data-bs-toggle="modal" data-bs-target="#logoutConfirmationModal">Logout</a></li>
             </ul>
@@ -100,24 +100,6 @@
             <div id="postsContainer" class="row">
                 <!-- Cards will be dynamically added here -->
             </div>
-        </div>
-
-        <!-- Modal for viewing posts -->
-        <div class="modal-backdrop1" id="modalBackdrop"></div>
-        <div class="modal-content1" id="modalContent">
-            <div class="modal-close-btn" id="modalCloseBtn">Close &times;</div>
-            <div class="modal-header1">
-                <!-- Title will be injected here by JavaScript -->
-            </div>
-            <div id="modalText"></div>
-        </div>
-        <div class="modal-navigation" id="modalNavigation">
-            <button id="modalBackBtn" class="btn btn-primary">
-                <i class="fa-solid fa-angle-left"></i>
-            </button>
-            <button id="modalNextBtn" class="btn btn-primary">
-                <i class="fa-solid fa-angle-right"></i>
-            </button>
         </div>
 
         <!-- Logout Confirmation Modal -->

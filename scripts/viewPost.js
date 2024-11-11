@@ -19,8 +19,6 @@ const storage = getStorage(app);
 const auth = getAuth();
 
 const postsContainer = document.getElementById('postsContainer');
-const modalBackdrop = document.getElementById('modalBackdrop');
-const modalContent = document.getElementById('modalContent');
 const modalText = document.getElementById('modalText');
 const modalCloseBtn = document.getElementById('modalCloseBtn');
 const modalNavigation = document.getElementById('modalNavigation');
@@ -242,15 +240,6 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', async () =
     }
 });
 
-function zoomPost(index) {
-    currentIndex = index;
-    const post = postsArray[index][1]; // Get the post object
-    updateModalContent(post);
-    modalBackdrop.style.display = 'block';
-    modalContent.style.display = 'block';
-    modalNavigation.style.display = 'flex';
-}
-
 function updateModalContent(post) {
     // Clear previous modal content
     modalText.innerHTML = '';
@@ -280,27 +269,6 @@ function updateModalContent(post) {
     }
 }
 
-function showNextPost() {
-    currentIndex = (currentIndex + 1) % postsArray.length;
-    updateModalContent(postsArray[currentIndex][1]);
-}
-
-function showPreviousPost() {
-    currentIndex = (currentIndex - 1 + postsArray.length) % postsArray.length;
-    updateModalContent(postsArray[currentIndex][1]);
-}
-
-function closeModal() {
-    modalBackdrop.style.display = 'none';
-    modalContent.style.display = 'none';
-    modalNavigation.style.display = 'none';
-}
-
-modalBackdrop.onclick = closeModal;
-document.getElementById('modalNextBtn').onclick = showNextPost;
-document.getElementById('modalBackBtn').onclick = showPreviousPost;
-modalCloseBtn.onclick = closeModal;
-
 document.addEventListener('DOMContentLoaded', () => {
     const postButton = document.getElementById('postButton');
     // Function to toggle dimmed class based on scroll position
@@ -324,5 +292,16 @@ document.addEventListener('DOMContentLoaded', function () {
         sidebar.classList.toggle('active');
     });
   });
+  
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebarOpen = document.getElementById('sidebarOpen');
+    const sidebar = document.querySelector('.sidebar');
+  
+    // Toggle sidebar visibility
+    sidebarOpen.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+    });
+  });
+
   
 loadPosts();
