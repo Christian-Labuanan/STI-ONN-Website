@@ -174,147 +174,146 @@ function showFullscreen(post) {
     document.body.appendChild(fullscreenOverlay);
 }
 
+// Function to get the gist of the text (e.g., first 100 characters)
+function getGist(text) {
+    const div = document.createElement('div');
+    div.innerHTML = text;
+    const plainText = div.innerText || div.textContent || "";
+    return plainText.length > 100 ? plainText.substring(0, 100) + '...' : plainText;
+}
 
-            // Function to get the gist of the text (e.g., first 100 characters)
-            function getGist(text) {
-                const div = document.createElement('div');
-                div.innerHTML = text;
-                const plainText = div.innerText || div.textContent || "";
-                return plainText.length > 100 ? plainText.substring(0, 100) + '...' : plainText;
+// Function to extract the first image source from the text area content
+function extractImageFromText(text) {
+    const div = document.createElement('div');
+    div.innerHTML = text;
+    const img = div.querySelector('img');
+    return img ? img.src : null;
+}
+
+function editPost(postId) {
+    // Navigate to the edit page with postId
+    window.location.href = `edit.html?postId=${postId}`;
+}
+
+async function deletePost(postId) {
+    const user = auth.currentUser;
+    if (user) {
+        // User is authenticated, proceed with deletion
+        postIdToDelete = postId; // Store the postId for later use
+    const deleteConfirmationModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
+    deleteConfirmationModal.show();
+        } else {
+        console.error("User is not authenticated.");
+        }
+}
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+    try {
+        const postRef = ref(database, 'posts/' + postIdToDelete);
+        const postSnapshot = await get(postRef);
+        if (postSnapshot.exists()) {
+            const post = postSnapshot.val();
+
+            // If there's an image associated with the post, delete it from Storage
+            if (post.imageUrl) {
+                const imageRef = storageRef(storage, post.imageUrl);
+                await deleteObject(imageRef);
+                console.log(`Image ${post.imageUrl} deleted successfully`);
             }
 
-            // Function to extract the first image source from the text area content
-            function extractImageFromText(text) {
-                const div = document.createElement('div');
-                div.innerHTML = text;
-                const img = div.querySelector('img');
-                return img ? img.src : null;
-            }
+            // Delete the post from the Realtime Database
+            await remove(postRef);
+            console.log(`Post ${postIdToDelete} deleted successfully`);
+        } else {
+            console.log(`Post ${postIdToDelete} does not exist`);
+        }
 
-            function editPost(postId) {
-                // Navigate to the edit page with postId
-                window.location.href = `edit.html?postId=${postId}`;
-            }
+        // Refresh the posts
+        loadPosts();
+    } catch (error) {
+        console.error("Error deleting post:", error.message);
+    }
 
-            async function deletePost(postId) {
-                const user = auth.currentUser;
-                if (user) {
-                    // User is authenticated, proceed with deletion
-                    postIdToDelete = postId; // Store the postId for later use
-                const deleteConfirmationModal = new bootstrap.Modal(document.getElementById('deleteConfirmationModal'));
-                deleteConfirmationModal.show();
-                  } else {
-                    console.error("User is not authenticated.");
-                  }
-            }
-            
-            document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
-                try {
-                    const postRef = ref(database, 'posts/' + postIdToDelete);
-                    const postSnapshot = await get(postRef);
-                    if (postSnapshot.exists()) {
-                        const post = postSnapshot.val();
-            
-                        // If there's an image associated with the post, delete it from Storage
-                        if (post.imageUrl) {
-                            const imageRef = storageRef(storage, post.imageUrl);
-                            await deleteObject(imageRef);
-                            console.log(`Image ${post.imageUrl} deleted successfully`);
-                        }
-            
-                        // Delete the post from the Realtime Database
-                        await remove(postRef);
-                        console.log(`Post ${postIdToDelete} deleted successfully`);
-                    } else {
-                        console.log(`Post ${postIdToDelete} does not exist`);
-                    }
-            
-                    // Refresh the posts
-                    loadPosts();
-                } catch (error) {
-                    console.error("Error deleting post:", error.message);
-                }
-            
-                // Close the modal after deletion
-                const deleteConfirmationModalElement = document.getElementById('deleteConfirmationModal');
-                const deleteConfirmationModalInstance = bootstrap.Modal.getInstance(deleteConfirmationModalElement);
-                if (deleteConfirmationModalInstance) {
-                    deleteConfirmationModalInstance.hide(); // Close the modal
-                }
-            });
+    // Close the modal after deletion
+    const deleteConfirmationModalElement = document.getElementById('deleteConfirmationModal');
+    const deleteConfirmationModalInstance = bootstrap.Modal.getInstance(deleteConfirmationModalElement);
+    if (deleteConfirmationModalInstance) {
+        deleteConfirmationModalInstance.hide(); // Close the modal
+    }
+});
 
-            function zoomPost(index) {
-                currentIndex = index;
-                const post = postsArray[index][1]; // Get the post object
-                updateModalContent(post);
-                modalBackdrop.style.display = 'block';
-                modalContent.style.display = 'block';
-                modalNavigation.style.display = 'flex';
-            }
+function zoomPost(index) {
+    currentIndex = index;
+    const post = postsArray[index][1]; // Get the post object
+    updateModalContent(post);
+    modalBackdrop.style.display = 'block';
+    modalContent.style.display = 'block';
+    modalNavigation.style.display = 'flex';
+}
 
-            function updateModalContent(post) {
-                // Clear previous modal content
-                modalText.innerHTML = '';
-                const existingImage = modalContent.querySelector('img');
-                if (existingImage) {
-                    existingImage.remove();
-                }
-                // Update modal title with post title
-                const modalTitle = modalContent.querySelector('.modal-title');
-                if (modalTitle) {
-                    modalTitle.textContent = post.title; // Set the title dynamically
-                } else {
-                    // Create and insert modal title if it does not exist
-                    const modalHeader = document.createElement('div');
-                    modalHeader.classList.add('modal-header');
-                    modalHeader.innerHTML = `<h5 class="modal-title">${post.title}</h5>`;
-                    modalContent.insertBefore(modalHeader, modalText);
-                }
-                // Set the content and image
-                modalText.innerHTML = post.text;
+function updateModalContent(post) {
+    // Clear previous modal content
+    modalText.innerHTML = '';
+    const existingImage = modalContent.querySelector('img');
+    if (existingImage) {
+        existingImage.remove();
+    }
+    // Update modal title with post title
+    const modalTitle = modalContent.querySelector('.modal-title');
+    if (modalTitle) {
+        modalTitle.textContent = post.title; // Set the title dynamically
+    } else {
+        // Create and insert modal title if it does not exist
+        const modalHeader = document.createElement('div');
+        modalHeader.classList.add('modal-header');
+        modalHeader.innerHTML = `<h5 class="modal-title">${post.title}</h5>`;
+        modalContent.insertBefore(modalHeader, modalText);
+    }
+    // Set the content and image
+    modalText.innerHTML = post.text;
 
-                if (post.imageUrl) {
-                    const modalImage = document.createElement('img');
-                    modalImage.src = post.imageUrl;
-                    modalImage.alt = 'Zoomed Image';
-                    modalContent.insertBefore(modalImage, modalText);
-                }
-            }
+    if (post.imageUrl) {
+        const modalImage = document.createElement('img');
+        modalImage.src = post.imageUrl;
+        modalImage.alt = 'Zoomed Image';
+        modalContent.insertBefore(modalImage, modalText);
+    }
+}
 
-            function showNextPost() {
-                currentIndex = (currentIndex + 1) % postsArray.length;
-                updateModalContent(postsArray[currentIndex][1]);
-            }
+function showNextPost() {
+    currentIndex = (currentIndex + 1) % postsArray.length;
+    updateModalContent(postsArray[currentIndex][1]);
+}
 
-            function showPreviousPost() {
-                currentIndex = (currentIndex - 1 + postsArray.length) % postsArray.length;
-                updateModalContent(postsArray[currentIndex][1]);
-            }
+function showPreviousPost() {
+    currentIndex = (currentIndex - 1 + postsArray.length) % postsArray.length;
+    updateModalContent(postsArray[currentIndex][1]);
+}
 
-            function closeModal() {
-                modalBackdrop.style.display = 'none';
-                modalContent.style.display = 'none';
-                modalNavigation.style.display = 'none';
-            }
+function closeModal() {
+    modalBackdrop.style.display = 'none';
+    modalContent.style.display = 'none';
+    modalNavigation.style.display = 'none';
+}
 
-            modalBackdrop.onclick = closeModal;
-            document.getElementById('modalNextBtn').onclick = showNextPost;
-            document.getElementById('modalBackBtn').onclick = showPreviousPost;
-            modalCloseBtn.onclick = closeModal;
+modalBackdrop.onclick = closeModal;
+document.getElementById('modalNextBtn').onclick = showNextPost;
+document.getElementById('modalBackBtn').onclick = showPreviousPost;
+modalCloseBtn.onclick = closeModal;
 
-            document.addEventListener('DOMContentLoaded', () => {
-                const postButton = document.getElementById('postButton');
-                // Function to toggle dimmed class based on scroll position
-                function handleScroll() {
-                    if (window.scrollY > 100) {
-                        postButton.classList.add('dimmed');
-                    } else {
-                        postButton.classList.remove('dimmed');
-                    }
-                }
-                window.addEventListener('scroll', handleScroll);
-                handleScroll();
-            });
+document.addEventListener('DOMContentLoaded', () => {
+    const postButton = document.getElementById('postButton');
+    // Function to toggle dimmed class based on scroll position
+    function handleScroll() {
+        if (window.scrollY > 100) {
+            postButton.classList.add('dimmed');
+        } else {
+            postButton.classList.remove('dimmed');
+        }
+    }
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+});
 
 
-            loadPosts();
+loadPosts();

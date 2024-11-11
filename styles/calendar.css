@@ -114,3 +114,51 @@ header .current-date {
   padding-top: 6%;
   border-radius: 5%;
 }
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .wrapper {
+    max-width: 100%; /* Take full width on medium screens */
+    padding: 15px;
+  }
+
+  header .current-date {
+    font-size: 1.2rem; /* Slightly smaller text */
+  }
+
+  .calendar li {
+    font-size: 1rem; /* Adjust font size of days for readability */
+  }
+  
+  .calendar .days li {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Reduced shadow for smaller screens */
+  }
+
+  header .current-date {
+    font-size: 1rem;
+  }
+
+  header .icons span {
+    height: 32px;
+    width: 32px;
+    line-height: 32px;
+    font-size: 1.5rem;
+  }
+
+  .calendar li {
+    font-size: 0.9rem; /* Further adjust for smaller screens */
+  }
+
+  .days li::before {
+    height: 35px;
+    width: 35px; /* Reduced size of the background circle */
+  }
+}

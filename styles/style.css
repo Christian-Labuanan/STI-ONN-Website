@@ -821,13 +821,12 @@ body {
 }
 
 #chart {
-  flex: 2;                        /* Flex to occupy 2/3 of the space */
-  min-width: 100%;               /* Ensure it doesn't shrink too much */
+  min-width: 100%;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
   padding: 20px;
-  max-width: 200%;  
+  max-width: 100%;
 }
 
 canvas {
@@ -839,14 +838,12 @@ canvas {
 }
 
 /* Full-screen container for chart and calendar */
-#chart-calendar-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-  width: 150%;                  /* Take up the full width of the screen */
-  padding: 20px;                /* Ensure padding around the edges */
-  flex-wrap: nowrap;            /* Prevent items from wrapping on larger screens */
+canvas {
+  width: 100%;
+  height: auto !important;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Chart styles */
@@ -856,7 +853,7 @@ canvas {
   border-radius: 10px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
   padding: 20px;
-  width: 100%;                  /* Allow the chart to expand to fill its container */
+  width: 130%;                  /* Allow the chart to expand to fill its container */
 }
 
 /* Calendar wrapper styles */
@@ -871,8 +868,8 @@ canvas {
 
 /* Ensure flex elements take the entire width of the page */
 .analytics {
-  width: auto;
-  margin-left: -15%;
+  width: 100%;
+  margin-left: 1%;
 }
 
 .container1{
@@ -881,61 +878,31 @@ canvas {
   border-radius: 15px;
 }
 
+.announcementDiv,
+.scheduleDiv,
+.profDiv {
+  width: 100%;
+  height: auto;
+  padding: 15px;
+  border-radius: 10px;
+  margin-left: 2% ;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  color: white;
+
+}
+
 .announcementDiv {
   background-color: #3B71CA;
-  width: 40%;
-  height: 300px;
-  align-items: center;
-  padding: 15px;
-  border-radius: 10px;
-  margin-left: 15px;
-  align-content: center;
-  text-align: center;
-  color: white;
-  margin-top: 15px;
-  margin-left: -.01px;
 }
 
-.scheduleDiv{
+.scheduleDiv {
   background-color: #E4A11B;
-  width: 40%;
-  height: 300px;
-  align-items: center;
-  padding: 15px;
-  border-radius: 10px;
-  margin-left: 15px;
-  align-content: center;
-  text-align: center;
-  color: white;
-  margin-top: 15px;
 }
 
-.profDiv{
+.profDiv {
   background-color: #14A44D;
-  width: 40%;
-  height: 300px;
-  align-items: center;
-  padding: 15px;
-  border-radius: 10px;
-  margin-left: 15px;
-  align-content: center;
-  text-align: center;
-  color: white;
-  margin-top: 15px;
-}
-
-.adminDiv{
-  background-color: #DC4C64;
-  width: 30%;
-  height: 300px;
-  align-items: center;
-  padding: 15px;
-  border-radius: 10px;
-  margin-left: 15px;
-  align-content: center;
-  text-align: center;
-  color: white;
-  margin-top: 15px;
 }
 
 .announcementTitle{
@@ -954,9 +921,9 @@ button{
 .navigation{
   background-color: white;
   padding: 15px;
-  margin-left: -10%;
+  margin-left: 3.3%;
   border-radius: 10px;
-  width: 101%;
+  width: 92.5%;
   display: flex;
 }
 
@@ -1035,6 +1002,7 @@ button{
   width: 100%; /* Fit image within content */
   height: 70%;
   object-fit:contain;
+  margin-bottom: 15px;
 }
 
 /* Minimal Scrollbar Style */
@@ -1504,3 +1472,420 @@ body.modal-open {
   border-color: #ddd;
   background-color: #fff;
 }
+
+/* announcement */
+ /* Image Upload Styles */
+ .image-upload-container {
+  border: 2px dashed var(--border-color);
+  padding: 2rem;
+  text-align: center;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: var(--background-color);
+  border-style: dashed;
+  border-color: #ddd;
+}
+
+.image-upload-container:hover {
+  border-color: var(--primary-color);
+  background-color: rgba(99, 102, 241, 0.05);
+}
+
+.upload-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: var(--secondary-color);
+}
+
+.file-info {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.image-preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  min-height: 100px;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 300px; /* Adjust this value based on your needs */
+  object-fit: contain;
+  margin-top: 15px;
+}
+
+.remove-image {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100px;
+  text-align: center;
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  /* Adjust card layout */
+  .postsContainer {
+    gap: 15px;
+  }
+
+  .card {
+    flex: 1 1 calc(33.33% - 15px);
+  }
+}
+
+@media (max-width: 992px) {
+  /* Sidebar adjustments */
+  .sidebar {
+    width: 220px;
+  }
+
+  .sidebar.close {
+    width: 70px;
+  }
+
+  .navbar img {
+    width: 70px;
+    height: 35px;
+  }
+
+  /* Adjust card layout */
+  .card {
+    flex: 1 1 calc(50% - 15px);
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar img {
+    width: 60px;
+    height: 30px;
+  }
+
+  /* Sidebar and navbar adjustments */
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar.close {
+    width: 60px;
+  }
+
+  .postsContainer {
+    padding: 15px;
+  }
+
+  /* Adjust card layout */
+  .card {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Navbar padding adjustment */
+  .navbar {
+    padding: 10px;
+  }
+
+  /* Sidebar adjustments */
+  .sidebar {
+    width: 180px;
+  }
+
+  .sidebar.close {
+    width: 60px;
+  }
+
+  .navbar_content i {
+    font-size: 16px;
+  }
+
+  /* Bottom content */
+  .bottom_content {
+    padding: 8px 0;
+  }
+
+  /* Card and text adjustments */
+  .card {
+    padding: 15px;
+  }
+
+  .menu_title,
+  .nav_link {
+    font-size: 14px;
+  }
+}
+
+
+/* For tablets and small laptops */
+@media (max-width: 991px) {
+  .fullscreen-content {
+    width: 80%;
+    height: 70%;
+  }
+
+  .navigation {
+    flex-direction: column;
+    margin-left: 0;
+  }
+
+  .form-container {
+    max-width: 90%;
+  }
+
+  .avatar-label {
+    width: 80px;
+    height: 80px;
+  }
+
+  .fullscreen-content img {
+    height: auto;
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 767px) {
+  .fullscreen-content {
+    width: 95%;
+    height: 70%;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navigation {
+    padding: 10px;
+    margin-left: 0;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .form-container {
+    max-width: 100%;
+  }
+
+  .avatar-label {
+    width: 70px;
+    height: 70px;
+  }
+
+  .fullscreen-content img {
+    height: auto;
+  }
+
+  /* Reduce font size for headings in the form */
+  .form-container h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Avatar */
+  #detailAvatar {
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  /* Adjust modal content width */
+  .instructor-modal .modal-dialog {
+    max-width: 90%;
+  }
+
+  .upload-section {
+    max-width: 100%;
+    padding: 1rem;
+  }
+}
+
+/* For extra-small devices */
+@media (max-width: 575px) {
+  .fullscreen-content {
+    width: 100%;
+    height: auto;
+  }
+
+  .avatar-upload {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Adjust card layout */
+  .card {
+    width: 100%;
+    margin: 0;
+  }
+
+  /* Make sure all elements fit comfortably */
+  .form-container,
+  .button-container {
+    width: 100%;
+  }
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+  .file-upload, .file-upload1, .image-upload-container {
+    padding: 1.5rem;
+  }
+  
+  .upload-icon, .upload-icon1,
+  .check-icon, .check-icon1 {
+    font-size: 2rem;
+  }
+
+  .floor-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .btn-floor {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .file-upload, .file-upload1, .image-upload-container {
+    padding: 1rem;
+  }
+  
+  .upload-icon, .upload-icon1,
+  .check-icon, .check-icon1 {
+    font-size: 1.5rem;
+  }
+  
+  .filename, .filename1 {
+    font-size: 0.8rem;
+  }
+
+  .btn-floor {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* For small devices (mobile) */
+@media (max-width: 576px) {
+  .announcementDiv,
+  .scheduleDiv,
+  .profDiv {
+    width: 100%;
+    height: auto;
+    margin-top: 15px;
+  }
+
+  #chart-calendar-container {
+    flex-direction: column;  /* Stack chart and calendar on small screens */
+    width: 100%;
+  }
+
+  .chart-container {
+    margin-bottom: 20px;
+  }
+
+  .navigation {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+/* For medium devices (tablets) */
+@media (min-width: 577px) and (max-width: 992px) {
+  .announcementDiv,
+  .scheduleDiv,
+  .profDiv {
+    width: 48%;  /* Slightly smaller on tablets */
+    margin-top: 15px;
+  }
+
+  #chart-calendar-container {
+    flex-wrap: wrap;
+  }
+
+  .navigation {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 15px;
+  }
+
+  .navigation > div {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+/* For larger screens (desktops) */
+@media (min-width: 993px) and (max-width: 1200px) {
+  .announcementDiv,
+  .scheduleDiv,
+  .profDiv {
+    width: 30%;  /* Adjust for larger screens */
+  }
+
+  #chart-calendar-container {
+    gap: 30px;
+  }
+}
+
+/* For very large screens (4k displays) */
+@media (min-width: 1201px) {
+  .announcementDiv,
+  .scheduleDiv,
+  .profDiv {
+    width: 30%;
+    margin-top: 30px;
+  }
+
+  #chart-calendar-container {
+    gap: 40px;
+    width: 100%;
+  }
+
+  .navigation {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+

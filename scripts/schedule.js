@@ -410,3 +410,17 @@ function showModal(modalId) {
     const modal = new bootstrap.Modal(modalElement);
     modal.show();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const postButton = document.getElementById('postButton');
+    // Function to toggle dimmed class based on scroll position
+    function handleScroll() {
+        if (window.scrollY > 100) {
+            postButton.classList.add('dimmed');
+        } else {
+            postButton.classList.remove('dimmed');
+        }
+    }
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+});

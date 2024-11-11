@@ -80,8 +80,8 @@
         </div>
     </nav>
 
-    <div class="main-content flex-grow-1 p-4">
-        <a href="postSchedule.html" id="postButton" class="btn btn-primary mt-4">
+    <div class="main-content">
+        <a href="postSchedule.html" id="postButton" class="btn">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" stroke-linecap="round" stroke-width="2" stroke="#fff" fill="none" stroke-linejoin="round">
                 <path d="M10 1.833v16.333"></path>
                 <path d="M1.833 10h16.333"></path>
@@ -90,13 +90,15 @@
         </a>
 
         <h1>Room Schedules</h1>
-        <div class="mb-4">
-            <button id="floor1Btn" class="btn btn-primary floor-btn" data-floor="Floor1">1st Floor Schedules</button>
-            <button id="floor2Btn" class="btn btn-primary floor-btn" data-floor="Floor2">2nd Floor Schedules</button>
-            <button id="floor3Btn" class="btn btn-primary floor-btn" data-floor="Floor3">3rd Floor Schedules</button>
+        
+        <div class="floor-buttons">
+            <button id="floor1Btn" class="btn floor-btn btn-primary" data-floor="Floor1">1st Floor Schedules</button>
+            <button id="floor2Btn" class="btn floor-btn btn-primary" data-floor="Floor2">2nd Floor Schedules</button>
+            <button id="floor3Btn" class="btn floor-btn btn-primary" data-floor="Floor3">3rd Floor Schedules</button>
         </div>
-        <div id="fileList" class="mb-4" aria-live="polite"></div>
-        <div id="sheetList" class="mb-4" aria-live="polite"></div>
+
+        <div id="fileList" aria-live="polite" style="margin-top: 15px;"></div>
+        <div id="sheetList" aria-live="polite"></div>
         <div id="sheetData" aria-live="polite"></div>
     </div>
 
