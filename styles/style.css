@@ -1889,3 +1889,93 @@ body.modal-open {
   }
 }
 
+@media (max-width: 767px) {
+  .navbar {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .sidebar {
+      width: 100%;
+      position: relative;
+      top: auto;
+      left: auto;
+  }
+
+  .main-content {
+      margin-left: 0;
+      padding: 10px;
+  }
+
+  /* Sidebar collapse and toggle */
+  .sidebar {
+      display: none;
+  }
+
+  .sidebar.show {
+      display: block;
+  }
+
+  .expand_sidebar {
+      display: block;
+  }
+
+  .collapse_sidebar {
+      display: block;
+  }
+
+  /* Adjust the button layout */
+  #postButton {
+      width: 100%;
+      margin-top: 10px;
+  }
+}
+
+/* For medium screens (tablets) */
+@media (max-width: 991px) {
+  .navbar .logo_item {
+      display: flex;
+      justify-content: center;
+  }
+
+  .sidebar {
+      width: 200px;
+  }
+
+  .main-content {
+      margin-left: 220px;
+  }
+
+  /* Adjust card layouts on smaller screens */
+  .col-md-3 {
+      width: 100%; /* Make cards full width on smaller screens */
+  }
+}
+
+/* Make the button smaller on medium and small screens */
+@media (max-width: 991px) {
+  #postButton {
+      height: 50px;
+      width: 50px;
+  }
+
+  #postButton svg {
+      height: 20px;
+      width: 17px;
+  }
+}
+
+/* Further adjust the button for small screens (phones) */
+@media (max-width: 767px) {
+  #postButton {
+      height: 45px;
+      width: 45px;
+      top: 80%; /* Adjust position */
+      right: 2%;
+  }
+
+  #postButton svg {
+      height: 18px;
+      width: 16px;
+  }
+}
