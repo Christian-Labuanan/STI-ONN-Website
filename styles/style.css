@@ -75,7 +75,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  height: 100%;
+  height: auto;
   padding: 80px 20px;
   z-index: 100;
   overflow-y: scroll;
@@ -97,7 +97,7 @@ body {
 }
 
 .menu_content {
-  position: relative;
+  position: fixed;
 }
 
 .menu_title {
@@ -615,7 +615,7 @@ body {
 /* Main Content Area */
 .main-content {
     transition: margin-left 0.3s ease; /* Smooth transition for sidebar collapse */
-    margin-left: 250px; /* Adjust this based on the width of your sidebar */
+    margin-left: 1%; /* Adjust this based on the width of your sidebar */
     padding: 20px; /* Adds some space between the content and the edges */
     padding-top: 70px;
     justify-content: center; /* Center horizontally */
@@ -1979,3 +1979,80 @@ body.modal-open {
       width: 16px;
   }
 }
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: -250px; /* Hide sidebar off-screen */
+        transition: left 0.3s ease;
+        width: 250px; /* Set width of sidebar */
+        height: 100vh; /* Full height */
+        background-color: #f8f9fa; /* Background color */
+        z-index: 1000; /* Ensure it's above other content */
+    }
+
+    .sidebar.active {
+        left: 0; /* Show sidebar */
+    }
+
+    .navbar .logo_item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navbar .navbar_content {
+        display: none; /* Hide navbar content on smaller screens */
+    }
+
+    #sidebarOpen {
+        display: block; /* Show burger icon */
+        cursor: pointer;
+    }
+
+    /* Hide sidebar toggle buttons */
+    .bottom_content {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0; /* Remove left margin on smaller screens */
+    }
+}
+
+@media (min-width: 769px) {
+    #sidebarOpen {
+        display: none; /* Hide burger icon on larger screens */
+    }
+
+    .sidebar {
+        position: static; /* Set sidebar to static */
+        left: 0; /* Reset left position */
+    }
+
+    .navbar .navbar_content {
+        display: flex; /* Show navbar content on larger screens */
+    }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+      width: 100%; /* Make sidebar full width */
+      height: auto; /* Auto height for content */
+      left: 0; /* Show sidebar fully */
+  }
+
+  .sidebar ul {
+      padding: 0;
+  }
+
+  .sidebar li {
+      padding: 10px;
+  }
+
+  .main-content {
+      margin-top: 50px; /* Add margin to main content for mobile */
+  }
+} 
