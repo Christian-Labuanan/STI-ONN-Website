@@ -816,6 +816,12 @@ canvas {
   width: 100%;                  /* Allow the calendar to expand to fill its container */
 }
 
+.const{
+  background-color: white;
+  border-radius: 25px;
+  padding: 50px;
+}
+
 /* Ensure flex elements take the entire width of the page */
 .analytics {
   width: 100%;

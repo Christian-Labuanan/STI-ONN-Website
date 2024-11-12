@@ -20,11 +20,8 @@ const auth = getAuth();
 
 const postsContainer = document.getElementById('postsContainer');
 const modalText = document.getElementById('modalText');
-const modalCloseBtn = document.getElementById('modalCloseBtn');
-const modalNavigation = document.getElementById('modalNavigation');
 
 let postsArray = [];
-let currentIndex = 0;
 let postIdToDelete = null;
 
 async function loadPosts() {
@@ -84,7 +81,6 @@ function displayPosts(posts) {
         const card = document.createElement('div');
         card.classList.add('card', 'shadow-sm', 'd-flex', 'flex-column', 'h-100');
 
-        // Add 'new-post' class to highlight recent posts
         if (isRecent(post.timestamp)) {
             card.classList.add('new-post');
             const newIcon = document.createElement('span');
@@ -96,13 +92,11 @@ function displayPosts(posts) {
             });
         }
 
-        // Add the post title above the image
         const cardHeader = document.createElement('div');
         cardHeader.classList.add('card-header');
         cardHeader.innerHTML = `<h5 class="card-title">${post.title}</h5>`;
         card.appendChild(cardHeader);
 
-        // Add image or placeholder
         const img = document.createElement('img');
         img.classList.add('card-img-top');
         img.src = post.imageUrl || extractImageFromText(post.text) || 'placeholder.jpg';
@@ -117,18 +111,22 @@ function displayPosts(posts) {
         text.innerHTML = getGist(post.text);
         
         const btnContainer = document.createElement('div');
-        btnContainer.classList.add('d-flex', 'align-items-center', 'mb-2', 'mt-auto');
+        btnContainer.classList.add('d-flex', 'justify-content-center', 'gap-2', 'mt-auto'); // Added justify-content-center to center the buttons and gap-2 for spacing
+
+        const buttonWidth = '120px'; // Define the desired button width
 
         const editBtn = document.createElement('button');
-        editBtn.classList.add('btn', 'btn-warning', 'me-2');
+        editBtn.classList.add('btn', 'btn-warning');
+        editBtn.style.width = buttonWidth; // Set width for Edit button
         editBtn.innerHTML = '<i class="fa-solid fa-edit card-button"></i> Edit';
         editBtn.onclick = () => editPost(postId);
 
         const deleteBtn = document.createElement('button');
         deleteBtn.classList.add('btn', 'btn-danger');
+        deleteBtn.style.width = buttonWidth; // Set width for Delete button
         deleteBtn.innerHTML = '<i class="fa-solid fa-trash card-button"></i> Delete';
         deleteBtn.onclick = (event) => {
-            event.stopPropagation(); // Prevent the click event from bubbling up to the card
+            event.stopPropagation();
             deletePost(postId);
         };
 
@@ -139,14 +137,12 @@ function displayPosts(posts) {
         cardBody.appendChild(btnContainer);
         card.appendChild(cardBody);
 
-        // Add click event listener to open the card in fullscreen mode
         card.addEventListener('click', () => showFullscreen(post));
 
         col.appendChild(card);
         row.appendChild(col);
     });
 }
-
 
 function showFullscreen(post) {
     const fullscreenOverlay = document.createElement('div');
