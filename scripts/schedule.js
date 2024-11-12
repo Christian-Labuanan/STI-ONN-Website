@@ -424,3 +424,34 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', handleScroll);
     handleScroll();
 });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebarOpen = document.getElementById('sidebarOpen');
+    const sidebar = document.querySelector('.sidebar');
+  
+    // Toggle sidebar visibility
+    sidebarOpen.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebarOpen = document.getElementById('sidebarOpen');
+    const sidebar = document.querySelector('.sidebar');
+  
+    // Toggle sidebar visibility
+    sidebarOpen.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+    });
+  });
+  
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebarOpen = document.getElementById('sidebarOpen');
+    const sidebar = document.querySelector('.sidebar');
+  
+    // Toggle sidebar visibility
+    sidebarOpen.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+    });
+  });

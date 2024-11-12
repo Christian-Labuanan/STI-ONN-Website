@@ -51,6 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Adjust sidebar on window resize
   window.addEventListener('resize', setSidebarState);
 });
+
+
 document.addEventListener('DOMContentLoaded', function () {
   const sidebarOpen = document.getElementById('sidebarOpen');
   const sidebar = document.querySelector('.sidebar');

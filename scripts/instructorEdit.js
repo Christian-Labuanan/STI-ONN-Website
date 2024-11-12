@@ -412,3 +412,33 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedState.style.display = 'none';
     }
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebarOpen = document.getElementById('sidebarOpen');
+    const sidebar = document.querySelector('.sidebar');
+  
+    // Toggle sidebar visibility
+    sidebarOpen.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebarOpen = document.getElementById('sidebarOpen');
+    const sidebar = document.querySelector('.sidebar');
+  
+    // Toggle sidebar visibility
+    sidebarOpen.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+    });
+  });
+  
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebarOpen = document.getElementById('sidebarOpen');
+    const sidebar = document.querySelector('.sidebar');
+  
+    // Toggle sidebar visibility
+    sidebarOpen.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+    });
+  });

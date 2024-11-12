@@ -755,57 +755,6 @@ body {
     margin-bottom: 50px;
 }
 
-.carousel-indicators {
-    position: absolute;
-    bottom: 10px;
-    left: 35%;
-    transform: translateX(-50%); /* Center indicators */
-}
-.carousel-indicators button {
-    background-color: rgba(255, 255, 255, 0.5);
-    border: none;
-    width: 12px;
-    height: 12px;
-}
-.carousel-indicators button.active {
-    background-color: #ffffff;
-}
-.carousel-item {
-  position: relative;
-  height: 650px;
-  overflow: hidden;
-}
-
-.carousel-item img {
-  height: 100%;
-  width: auto;
-  object-fit: cover;
-}
-
-.text-only {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  background-color: #f8f9fa;
-}
-
-.text-only-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  text-align: center;
-  border-radius: 5px;
-}
-
 .card-button {
   color: rgb(255, 255, 255); /* Button text color */
   padding: 10px 15px; /* Button padding */
@@ -2054,5 +2003,980 @@ body.modal-open {
 
   .main-content {
       margin-top: 50px; /* Add margin to main content for mobile */
+  }
+}
+
+
+/* For screens smaller than 1200px (tablets and small desktops) */
+@media (max-width: 1199px) {
+  .navbar {
+    padding: 10px 20px;
+  }
+
+  .navbar_content {
+    column-gap: 15px;
+  }
+
+  .navbar img {
+    width: 90px;
+    height: 45px;
+  }
+
+  .logo_item {
+    font-size: 18px;
+  }
+
+  .navbar_content i {
+    font-size: 18px;
+  }
+}
+
+/* For screens smaller than 992px (tablets) */
+@media (max-width: 991px) {
+  .navbar_content {
+    display: none; /* Hide navbar items on small tablets */
+  }
+
+  .navbar {
+    padding: 10px 15px;
+  }
+
+  .logo_item {
+    font-size: 20px;
+  }
+
+  .navbar img {
+    width: 80px;
+    height: 40px;
+  }
+}
+
+/* For screens smaller than 768px (phones in portrait mode) */
+@media (max-width: 767px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .navbar_content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .navbar img {
+    width: 80px;
+    height: 40px;
+  }
+
+  .logo_item {
+    font-size: 18px;
+  }
+
+  .navbar_content i {
+    font-size: 18px;
+  }
+}
+
+/* For screens smaller than 576px (small phones) */
+@media (max-width: 575px) {
+  .navbar {
+    padding: 8px 12px;
+  }
+
+  .navbar img {
+    width: 70px;
+    height: 35px;
+  }
+
+  .logo_item {
+    font-size: 16px;
+  }
+
+  .navbar_content i {
+    font-size: 16px;
+  }
+}
+
+/* For screens smaller than 1200px (tablets and small desktops) */
+@media (max-width: 1199px) {
+  .sidebar {
+    width: 220px; /* Slightly smaller sidebar */
+    padding: 70px 20px;
+  }
+
+  .sidebar.close {
+    width: 80px;
+  }
+
+  .sidebar.close + .main-content {
+    margin-left: 80px;
+  }
+
+  .bottom_content {
+    width: 220px;
+  }
+
+  .menu_title {
+    font-size: 16px;
+  }
+}
+
+/* For screens smaller than 992px (tablets) */
+@media (max-width: 991px) {
+  .sidebar {
+    width: 200px;
+    padding: 60px 15px;
+  }
+
+  .sidebar.close {
+    width: 70px;
+  }
+
+  .sidebar.close + .main-content {
+    margin-left: 70px;
+  }
+
+  .bottom_content {
+    width: 200px;
+  }
+
+  .menu_title {
+    font-size: 14px;
+  }
+
+  .navlink_icon {
+    font-size: 20px;
+  }
+}
+
+/* For screens smaller than 768px (phones in portrait mode) */
+@media (max-width: 767px) {
+  .sidebar {
+    width: 100%; /* Full-width sidebar for smaller screens */
+    padding: 50px 10px;
+  }
+
+  .sidebar.close {
+    width: 0; /* Sidebar fully collapsed */
+  }
+
+  .sidebar.close + .main-content {
+    margin-left: 0;
+  }
+
+  .bottom_content {
+    width: 100%;
+  }
+
+  .menu_title {
+    font-size: 12px;
+  }
+
+  .navlink_icon {
+    font-size: 18px;
+  }
+}
+
+/* For screens smaller than 576px (small phones) */
+@media (max-width: 575px) {
+  .sidebar {
+    width: 100%;
+    padding: 40px 5px;
+  }
+
+  .sidebar.close {
+    width: 0;
+  }
+
+  .sidebar.close + .main-content {
+    margin-left: 0;
+  }
+
+  .bottom_content {
+    width: 100%;
+  }
+
+  .menu_title {
+    font-size: 10px;
+  }
+
+  .navlink_icon {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1200px) {
+    .bottom i, .bottom span, .title {
+        font-size: 1.5vw; /* Reduce font size for medium screens */
+    }
+
+    .btn-announce {
+        font-size: 2vw;
+        padding: 20px 40px;
+    }
+}
+
+@media (max-width: 992px) {
+    .bottom {
+        padding: 15px 0;
+    }
+
+    .bottom i {
+        font-size: 3vw;
+    }
+
+    .bottom span {
+        font-size: 2.5vw;
+    }
+
+    .square, header {
+        height: 80px;
+    }
+
+    .title {
+        font-size: 3vw;
+    }
+
+    .btn-announce {
+        font-size: 3vw;
+        min-width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    .bottom {
+        padding: 10px 0;
+    }
+
+    .bottom i {
+        font-size: 4vw;
+    }
+
+    .bottom span {
+        font-size: 3.5vw;
+    }
+
+    .title {
+        font-size: 4vw;
+    }
+
+    .btn-announce {
+        font-size: 4vw;
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .bottom i {
+        font-size: 5vw;
+    }
+
+    .bottom span {
+        font-size: 4.5vw;
+    }
+
+    .title {
+        font-size: 5vw;
+    }
+
+    .btn-announce {
+        font-size: 5vw;
+        min-width: 100%;
+    }
+
+    .card-img-top {
+        max-height: 150px; /* Adjust image height for smaller screens */
+    }
+}
+
+/* For small screens (e.g., mobile phones) */
+@media screen and (max-width: 768px) {
+    .postsContainer {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .card {
+        flex: 1 1 calc(50% - 10px); /* Two cards per row */
+    }
+
+    .bottom i {
+        font-size: 16px;
+    }
+
+    .bottom span {
+        font-size: 14px;
+    }
+
+    .title {
+        font-size: 150%;
+    }
+
+    .btn-announce {
+        min-height: 60px;
+        min-width: 90%;
+        font-size: 1.5rem;
+        padding: 18px 36px;
+    }
+}
+
+/* For medium screens (e.g., tablets) */
+@media screen and (max-width: 1024px) {
+    .postsContainer {
+        gap: 15px;
+    }
+
+    .card {
+        flex: 1 1 calc(33.33% - 15px); /* Three cards per row */
+    }
+
+    .bottom i {
+        font-size: 18px;
+    }
+
+    .bottom span {
+        font-size: 16px;
+    }
+
+    .title {
+        font-size: 120%;
+    }
+
+    .btn-announce {
+        min-height: 70px;
+        min-width: 80%;
+        font-size: 1.8rem;
+        padding: 20px 40px;
+    }
+}
+
+/* For larger screens (e.g., desktops) */
+@media screen and (min-width: 1025px) {
+    .card {
+        flex: 1 1 calc(25% - 20px); /* Four cards per row */
+    }
+
+    .bottom i {
+        font-size: 20px;
+    }
+
+    .bottom span {
+        font-size: 18px;
+    }
+
+    .title {
+        font-size: 130%;
+    }
+
+    .btn-announce {
+        min-height: 80px;
+        min-width: 75%;
+        font-size: 2rem;
+        padding: 24px 48px;
+    }
+}
+
+/* For small screens (e.g., mobile phones) */
+@media screen and (max-width: 768px) {
+    .main-content {
+        margin-left: 0; /* Adjust layout on small screens */
+        padding: 10px;
+    }
+
+    .new-post {
+        border: 1px solid #4a93ff; /* Thinner border for smaller screens */
+    }
+
+    .new-icon {
+        font-size: 16px; /* Smaller icon on mobile */
+    }
+
+    .thumbnail {
+        max-width: 100%; /* Ensure thumbnails are responsive */
+    }
+
+    .form1 {
+        width: 90%; /* Form width adjusts on smaller screens */
+        margin: 10px auto;
+    }
+
+    #postButton {
+        top: 85%;
+        right: 5%;
+        height: 50px;
+        width: 50px;
+    }
+
+    #postButton svg {
+        height: 20px;
+        width: 18px;
+    }
+}
+
+/* For medium screens (e.g., tablets) */
+@media screen and (max-width: 1024px) {
+    .main-content {
+        margin-left: 200px; /* Adjust margin for tablets */
+    }
+
+    .new-post {
+        border: 1px solid #4a93ff; /* Thinner border for tablets */
+    }
+
+    .form1 {
+        width: 80%; /* Form width adjusts on tablets */
+    }
+
+    #postButton {
+        top: 80%;
+        right: 3%;
+        height: 55px;
+        width: 55px;
+    }
+
+    #postButton svg {
+        height: 22px;
+        width: 20px;
+    }
+}
+
+/* For larger screens (e.g., desktops) */
+@media screen and (min-width: 1025px) {
+    .main-content {
+        margin-left: 250px; /* Full layout for desktop */
+    }
+
+    .new-post {
+        border: 2px solid #4a93ff; /* Original border size for desktop */
+    }
+
+    .new-icon {
+        font-size: 20px; /* Larger icon for desktop */
+    }
+
+    .form1 {
+        width: 600px; /* Standard form width for larger screens */
+    }
+
+    #postButton {
+        top: 88%;
+        right: 1%;
+        height: 60px;
+        width: 60px;
+    }
+
+    #postButton svg {
+        height: 24px;
+        width: 20.5px;
+    }
+}
+
+@media (max-width: 1200px) {
+  .chart-container, .calendar-wrapper {
+    width: 100%;
+  }
+
+  .analytics {
+    margin-left: 0;
+  }
+
+  .container1 {
+    padding: 20px;
+  }
+
+  .announcementDiv, .scheduleDiv, .profDiv {
+    margin-left: 0;
+  }
+
+  .navigation {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* Adjusting the font sizes for smaller screens */
+  .tooltip-text {
+    width: 150px;
+    font-size: 10px;
+  }
+
+  .card-button {
+    font-size: 14px;
+  }
+
+  /* Scaling down the canvas */
+  canvas {
+    height: 300px; /* Adjust as needed */
+  }
+}
+
+@media (max-width: 768px) {
+  /* Adjust layout for tablets and smaller devices */
+  .quill-editor-container {
+    max-height: calc(100vh - 70px);
+    overflow-y: scroll;
+  }
+
+  #postButton {
+    top: 80%;
+    right: 5%;
+  }
+
+  /* Ensure buttons don't take too much space */
+  .card-button {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .announcementDiv, .scheduleDiv, .profDiv {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .navigation {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* Smaller tooltip */
+  .tooltip-text {
+    font-size: 10px;
+    right: 150%;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Mobile styles */
+  .quill-editor-container {
+    max-height: calc(100vh - 60px); /* Adjusted for smaller screens */
+  }
+
+  #postButton {
+    top: 75%;
+    right: 5%;
+  }
+
+  .card-button {
+    font-size: 12px;
+  }
+
+  .announcementDiv, .scheduleDiv, .profDiv {
+    font-size: 12px;
+  }
+
+  .navigation {
+    margin-left: 0;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .loading-overlay {
+    font-size: 12px;
+  }
+
+  /* Resize the canvas for small screens */
+  canvas {
+    height: 250px;
+  }
+}
+
+/* Adjust for extra small devices */
+@media (max-width: 320px) {
+  /* Small mobile styling */
+  .tooltip-text {
+    font-size: 8px;
+    width: 100px;
+  }
+
+  .card-button {
+    font-size: 10px;
+  }
+
+  .announcementDiv, .scheduleDiv, .profDiv {
+    padding: 8px;
+    font-size: 10px;
+  }
+
+  .navigation {
+    padding: 8px;
+  }
+
+  canvas {
+    height: 200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .fullscreen-content {
+    width: 80%;
+  }
+
+  .form-container {
+    max-width: 90%;
+  }
+}
+
+/* Adjust layout for tablets and mobile screens */
+@media (max-width: 768px) {
+  .fullscreen-content {
+    width: 90%;
+    height: 90%;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-container {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .cell-textarea {
+    width: 100%; /* Ensure textarea fills the cell in smaller screens */
+  }
+
+  /* Resize the fullscreen image thumbnail */
+  .fullscreen-thumbnail {
+    height: 50%;
+  }
+}
+
+/* Small screens (mobile devices) */
+@media (max-width: 480px) {
+  .fullscreen-content {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    margin-top: 0;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .form-container {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  /* Adjust font size for readability */
+  .form-container h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Adjust the size of the fullscreen image */
+  .fullscreen-thumbnail {
+    height: 40%;
+  }
+
+  .cell-textarea {
+    font-size: 14px; /* Adjust font size for mobile */
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .avatar-upload {
+    width: 80%; /* Ensure the avatar upload container doesn't stretch too wide */
+  }
+
+  .form-container {
+    padding: 15px;
+    margin-top: 30px;
+  }
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .instructor-modal .modal-dialog {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 992px) {
+  .avatar-label {
+    width: 80px;
+    height: 80px;
+  }
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  #excelContent table {
+    font-size: 14px;
+  }
+
+  .modal-content {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .avatar-upload {
+    width: 100%;
+  }
+
+  .form-container {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .submit-btn {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  #excelContent table {
+    font-size: 12px;
+  }
+
+  .instructor-modal .modal-dialog {
+    max-width: 90%;
+  }
+
+  .instructor-modal .modal-body {
+    max-height: 400px; /* Allow for smaller modal body height */
+  }
+}
+
+@media (max-width: 576px) {
+  .avatar-label {
+    width: 70px;
+    height: 70px;
+  }
+
+  .form-container {
+    padding: 8px;
+    margin-top: 20px;
+  }
+
+  .submit-btn {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  #excelContent table {
+    font-size: 12px;
+  }
+
+  .instructor-modal .modal-dialog {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .upload-section {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+
+  .file-upload {
+    padding: 1.5rem;
+  }
+
+  .file-upload1 {
+    padding: 1.5rem;
+  }
+
+  .btn-floor {
+    padding: 0.75rem 1rem;
+  }
+
+  #detailAvatar {
+    max-width: 200px;
+    max-height: 200px;
+  }
+}
+
+@media (max-width: 992px) {
+  .file-upload {
+    padding: 1.5rem;
+  }
+
+  .upload-section {
+    padding: 1rem;
+    max-width: 90%;
+  }
+
+  .file-upload1 {
+    padding: 1.5rem;
+  }
+
+  .btn-floor {
+    padding: 0.75rem 1rem;
+  }
+
+  #detailAvatar {
+    max-width: 180px;
+    max-height: 180px;
+  }
+
+  .upload-status {
+    padding: 0.75rem;
+  }
+
+  .file-upload-container1 {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .upload-section {
+    padding: 1rem;
+    max-width: 90%;
+  }
+
+  .file-upload {
+    padding: 1rem;
+  }
+
+  .file-upload1 {
+    padding: 1rem;
+  }
+
+  .btn-floor {
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+  }
+
+  #detailAvatar {
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  .upload-status {
+    padding: 0.5rem;
+  }
+
+  .file-upload-container1 {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .upload-section {
+    padding: 0.5rem;
+    max-width: 90%;
+  }
+
+  .file-upload {
+    padding: 1rem;
+  }
+
+  .file-upload1 {
+    padding: 1rem;
+  }
+
+  .btn-floor {
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+  }
+
+  #detailAvatar {
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  .upload-status {
+    padding: 0.5rem;
+  }
+
+  .file-upload-container1 {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Avatar resizing */
+  #detailAvatar {
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  .upload-section {
+    padding: 1rem;
+  }
+
+  .file-upload {
+    padding: 1.5rem;
+  }
+
+  .floor-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .upload-status {
+    padding: 0.75rem;
+  }
+
+  .image-preview-container {
+    min-height: 150px; /* Adjust image preview size */
+  }
+
+  /* Card Layout Adjustments */
+  .card {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  /* Textarea and Inputs */
+  .readonly-textarea, .editable-textarea {
+    font-size: 0.875rem;
+  }
+}
+
+/* Media Queries for Tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+  #detailAvatar {
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  .upload-section {
+    padding: 1.5rem;
+  }
+
+  .file-upload {
+    padding: 1.75rem;
+  }
+
+  .floor-buttons {
+    flex-direction: row;
+  }
+
+  .upload-status {
+    padding: 1rem;
+  }
+
+  .image-preview-container {
+    min-height: 200px;
+  }
+}
+
+/* Media Queries for Large Screens (min-width: 1200px) */
+@media (min-width: 1200px) {
+  .upload-section {
+    max-width: 1000px;
+    padding: 2rem;
+  }
+
+  .file-upload {
+    padding: 2rem;
+  }
+
+  .image-preview {
+    max-height: 350px;
   }
 }
