@@ -11,6 +11,17 @@
         "source": "**",
         "destination": "/login.html"
       }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(css|js|html|png|jpg|jpeg|gif|svg|ico|webp|ttf|woff|woff2)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      }
     ]
   }
 }
