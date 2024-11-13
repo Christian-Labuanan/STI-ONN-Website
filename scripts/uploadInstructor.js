@@ -121,6 +121,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Get the cancel button and modal elements
+    const cancelButton = document.getElementById('cancelButton');
+    const cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'));
+
+    // Show the cancel modal when the cancel button is clicked
+    cancelButton.addEventListener('click', () => {
+        cancelModal.show();
+    });
+    
+    // Confirm cancel action (reset the form, or navigate away)
+    const confirmCancelButton = document.getElementById('confirmCancelButton');
+    confirmCancelButton.addEventListener('click', () => {
+        form.reset();
+        window.location.href = 'instructor.html';
+        cancelModal.hide();
+    });
+
     // Handle file selection for avatar
     pictureFileInput.addEventListener('change', (event) => {
         const file = event.target.files[0];

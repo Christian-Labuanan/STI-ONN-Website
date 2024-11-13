@@ -146,6 +146,7 @@ function toggleEditLinks(enable) {
     // Department mapping
 const departmentMapping = {
     IT: "Information Technology",
+    CPE: "Computer Engineering",
     SHS: "Senior High School",
     GE: "General Education",
     THM: "Tourism and Hospitality Management",
@@ -176,12 +177,12 @@ function createInstructorCard(instructor, key) {
                     <label class="form-check-label" for="check_${key}">Select</label>
                 </div>
             </div>
-            <img src="${instructor.avatarURL}" class="card-img-top" alt="${instructor.name}" 
+            <img src="${instructor.avatarURL}" class="card-img-top object-fit-xl-scale border rounded" alt="${instructor.name}" 
                 onerror="this.src='assets/default-avatar.png'">
             <div class="card-body d-flex flex-column">
                 <h5 class="card-title text-center fw-bold fs-5"><strong>${instructor.name}</strong></h5>
                 <p class="card-text fw-bold fs-5">${instructor.description || ''}</p>
-                <p class="card-text text-center">${department}</p>
+                <p class="card-text text-center">${department} Department</p>
                 <div class="mt-auto text-center">
                     <a href="instructorEdit.html?id=${key}" class="btn btn-primary">
                         <i class="bx bx-edit"></i> Edit

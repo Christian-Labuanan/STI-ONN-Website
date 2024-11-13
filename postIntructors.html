@@ -108,6 +108,7 @@
                     <select id="department" class="form-select" required>
                         <option value="" disabled selected>Select Department</option>
                         <option value="IT">IT - Information Technology</option>
+                        <option value="CPE">CPE - Computer Engineering</option>
                         <option value="SHS">SHS - Senior High School</option>
                         <option value="GE">GE - General Education</option>
                         <option value="THM">THM - Tourism and Hospitality Management</option>
@@ -139,7 +140,7 @@
         
                 <!-- Submit Button -->
                 <div class="d-flex justify-content-end mt-3">
-                    <button type="button" class="btn btn-secondary me-2" onclick="window.location.href='instructor.html'">Cancel</button>
+                    <button type="button" class="btn btn-secondary me-2" id="cancelButton">Cancel</button>
                     <button type="submit" class="btn btn-primary">Upload</button>
                 </div>
                 <div id="uploadStatus"></div>
@@ -163,6 +164,25 @@
                     <button class="btn btn-primary" data-bs-target="#loggingOutModal" data-bs-toggle="modal" data-bs-dismiss="modal" id="confirmLogout">Logout</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Cancel Confirmation Modal -->
+    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="cancelModalLabel">Cancel Changes</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to cancel? All unsaved changes will be lost.
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            <button type="button" class="btn btn-danger" id="confirmCancelButton">Yes</button>
+            </div>
+        </div>
         </div>
     </div>
 
@@ -216,25 +236,6 @@
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteConfirmationLabel">Confirm Deletion</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want to delete the Room Schedule?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Crop Modal -->
     <div class="modal fade" id="cropModal" tabindex="-1" aria-labelledby="cropModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -248,24 +249,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="cropButton">Crop and Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Success Modal -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="successModalLabel">Success</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    The file has been deleted successfully!
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
