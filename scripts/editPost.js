@@ -107,10 +107,18 @@ editPostForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Handle the cancel button click
+// Cancel button handler
 cancelButton.addEventListener('click', () => {
-    window.location.href = 'viewUploads.html'; // Redirect to the view uploads page or another page
+    const cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'));
+    cancelModal.show();
 });
+
+// Handle confirm cancel button
+document.getElementById('confirmCancel').addEventListener('click', () => {
+    // Redirect to viewUploads page
+    window.location.href = 'viewUploads.html';
+});
+
 
 // Load the post data when the page loads
 window.addEventListener('DOMContentLoaded', loadPostData);

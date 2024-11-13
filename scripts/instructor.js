@@ -146,7 +146,6 @@ function toggleEditLinks(enable) {
     // Department mapping
 const departmentMapping = {
     IT: "Information Technology",
-    CPE: "Computer Engineering",
     SHS: "Senior High School",
     GE: "General Education",
     THM: "Tourism and Hospitality Management",

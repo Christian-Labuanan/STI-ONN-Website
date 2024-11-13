@@ -184,10 +184,16 @@ postForm.addEventListener('submit', async (e) => {
 
 // Cancel button handler
 cancelButton.addEventListener('click', () => {
-    if (confirm('Are you sure you want to cancel? All changes will be lost.')) {
-        window.location.href = 'viewUploads.html';
-    }
+    const cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'));
+    cancelModal.show();
 });
+
+// Handle confirm cancel button
+document.getElementById('confirmCancel').addEventListener('click', () => {
+    // Redirect to viewUploads page
+    window.location.href = 'viewUploads.html';
+});
+
 
 // Add authentication state observer
 auth.onAuthStateChanged((user) => {

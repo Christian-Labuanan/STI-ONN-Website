@@ -27,6 +27,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const cancelButton = document.querySelector('.btn-cancel');
+    const cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'));
+
+    // Show the modal when cancel button is clicked
+    if (cancelButton) {
+        cancelButton.addEventListener('click', () => {
+            cancelModal.show();
+        });
+    }
+
+    const confirmCancelButton = document.getElementById('confirmCancel');
+    if (confirmCancelButton) {
+        confirmCancelButton.addEventListener('click', () => {
+            // Reset file and UI
+            currentFile = null;
+            updateUploadUI(null);
+            document.getElementById('file-input').value = ''; // Clear file input
+
+            // Close the modal
+            cancelModal.hide();
+
+            // Add a small delay to allow modal to hide before redirecting
+            setTimeout(() => {
+                window.location.href = 'schedule.html'; // Redirect to schedule.html
+            }, 300); // 300ms delay to allow modal animation to finish
+        });
+    } else {
+        console.error('Confirm Cancel button not found.');
+    }
+});
 
 window.uploadFile = function(floor) {
     const fileInput = document.getElementById('file-input');
@@ -210,6 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     };
 });
+
 
 document.addEventListener('DOMContentLoaded', function () {
     const sidebarOpen = document.getElementById('sidebarOpen');
