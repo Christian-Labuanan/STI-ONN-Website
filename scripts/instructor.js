@@ -143,19 +143,29 @@ function toggleEditLinks(enable) {
     });
 }
 
-    // Create instructor card function
-    function createInstructorCard(instructor, key) {
-        const card = document.createElement('div');
-        card.classList.add('col-md-4', 'mb-4');
-        
-        if (!instructor || !instructor.name || !instructor.avatarURL) {
-            console.error('Invalid instructor data:', instructor);
-            return card;
-        }
+    // Department mapping
+const departmentMapping = {
+    IT: "Information Technology",
+    SHS: "Senior High School",
+    GE: "General Education",
+    THM: "Tourism and Hospitality Management",
+    AMT: "Academic Management Team"
+};
 
-        const department = instructor.department || 'N/A';
+// Create instructor card function
+function createInstructorCard(instructor, key) {
+    const card = document.createElement('div');
+    card.classList.add('col-md-4', 'mb-4');
+    
+    if (!instructor || !instructor.name || !instructor.avatarURL) {
+        console.error('Invalid instructor data:', instructor);
+        return card;
+    }
 
-        card.innerHTML = `
+    // Map department abbreviation to full name
+    const department = departmentMapping[instructor.department] || instructor.department || 'N/A';
+
+    card.innerHTML = `
         <div class="card" data-instructor-id="${key}" 
             data-name="${instructor.name}" 
             data-avatar="${instructor.avatarURL}" 
@@ -170,40 +180,39 @@ function toggleEditLinks(enable) {
                 onerror="this.src='assets/default-avatar.png'">
             <div class="card-body d-flex flex-column">
                 <h5 class="card-title text-center fw-bold fs-5"><strong>${instructor.name}</strong></h5>
-                <p class="card-text">${instructor.description || ''}</p>
-                <p class="card-text text-center">Department: ${department}</p>
+                <p class="card-text fw-bold fs-5">${instructor.description || ''}</p>
+                <p class="card-text text-center">${department}</p>
                 <div class="mt-auto text-center">
                     <a href="instructorEdit.html?id=${key}" class="btn btn-primary">
-                        <i class="bx bx-edit"></i> Edits
+                        <i class="bx bx-edit"></i> Edit
                     </a>
                 </div>
             </div>
         </div>
-        `;
+    `;
 
-        // Add checkbox event listener
-        const checkbox = card.querySelector('.select-instructor');
-        checkbox.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                selectedInstructors.add(key);
-            } else {
-                selectedInstructors.delete(key);
-            }
-            updateSelectedCount();
-        });
+    // Add checkbox event listener
+    const checkbox = card.querySelector('.select-instructor');
+    checkbox.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            selectedInstructors.add(key);
+        } else {
+            selectedInstructors.delete(key);
+        }
+        updateSelectedCount();
+    });
 
-        // Add card click event (for viewing details)
-        card.addEventListener('click', (e) => {
-            // Don't trigger details view when clicking checkbox or in mass delete mode
-            if (!e.target.classList.contains('form-check-input') && 
-                bulkActionControls.classList.contains('d-none')) {
-                const cardElement = e.currentTarget.querySelector('.card');
-                showInstructorDetails(cardElement);
-            }
-        });
+    // Add card click event (for viewing details)
+    card.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('form-check-input') && 
+            bulkActionControls.classList.contains('d-none')) {
+            const cardElement = e.currentTarget.querySelector('.card');
+            showInstructorDetails(cardElement);
+        }
+    });
 
-        return card;
-    }
+    return card;
+}
 
     // Show instructor details
     function showInstructorDetails(cardElement) {
