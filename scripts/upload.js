@@ -37,10 +37,9 @@ const quill = new Quill('#quillEditor', {
     placeholder: 'Write your announcement content here...',
     modules: {
         toolbar: [
-            [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+            [{ 'header': '1' }, { 'header': '2' }],
             [{ 'list': 'ordered' }, { 'list': 'bullet' }],
             ['bold', 'italic', 'underline'],
-            [{ 'color': [] }, { 'background': [] }],
             [{ 'align': [] }],
             ['link', 'image']
         ]
