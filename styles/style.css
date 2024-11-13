@@ -1254,7 +1254,20 @@ body.modal-open {
 }
 
 #departmentFilter{
+  width: 66%;
   margin-bottom:10px;
+}
+
+.searchBar {
+  margin-left: 10px;
+  margin-top: -10px;
+}
+
+#departmentFilter, #searchBar {
+  height: 40px; /* Adjust as needed for consistent height */
+  padding-top: 0; /* Remove any extra padding */
+  padding-bottom: 0;
+  box-sizing: border-box; /* Ensures padding and border are included in the total height */
 }
 
 .card-header {

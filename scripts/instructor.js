@@ -29,22 +29,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const successModal = document.getElementById('successModal');
     const departmentFilter = document.getElementById('departmentFilter');
 
+    const searchInput = document.getElementById('searchInput');
+
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase();
+        loadInstructors(departmentFilter.value, searchTerm);
+    });
+
     // Add Mass Delete Controls
     const massDeleteControl = document.createElement('div');
     massDeleteControl.innerHTML = `
         <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                
+            </div>
             <button id="massDeleteToggle" class="btn btn-secondary">Delete</button>
         </div>
         <div id="bulkActionControls" class="d-none">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
-                    <span id="selectedCount" class="me-2">0 selected</span>
+                <button id="selectAllBtn" class="btn btn-secondary">Select All</button>
                     <button id="bulkDeleteBtn" class="btn btn-danger" disabled>
                         <i class="fas fa-trash"></i> Delete Selected
                     </button>
-                </div>
-                <div>
-                    <button id="selectAllBtn" class="btn btn-secondary">Select All</button>
+                    <span id="selectedCount" class="me-2">0 selected</span>
                 </div>
             </div>
         </div>
@@ -89,32 +97,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mass Delete Toggle Functionality
     const massDeleteToggle = document.getElementById('massDeleteToggle');
-    const bulkActionControls = document.getElementById('bulkActionControls');
+const bulkActionControls = document.getElementById('bulkActionControls');
 
-    massDeleteToggle.addEventListener('click', () => {
-        const isActive = bulkActionControls.classList.contains('d-none');
-        
-        // Toggle controls visibility
-        bulkActionControls.classList.toggle('d-none');
-        massDeleteToggle.textContent = isActive ? 'Cancel Delete' : 'Delete';
-        massDeleteToggle.classList.toggle('btn-secondary');
-        massDeleteToggle.classList.toggle('btn-danger');
-        
-        // Show/hide checkboxes
-        document.querySelectorAll('.card-header').forEach(header => {
-            header.style.display = isActive ? 'block' : 'none';
+massDeleteToggle.addEventListener('click', () => {
+    const isActive = bulkActionControls.classList.contains('d-none');
+    
+    // Toggle controls visibility
+    bulkActionControls.classList.toggle('d-none');
+    massDeleteToggle.textContent = isActive ? 'Cancel Delete' : 'Delete';
+    massDeleteToggle.classList.toggle('btn-secondary');
+    massDeleteToggle.classList.toggle('btn-danger');
+    
+    // Show/hide checkboxes
+    document.querySelectorAll('.card-header').forEach(header => {
+        header.style.display = isActive ? 'block' : 'none';
+    });
+
+    // Disable/Enable edit links
+    toggleEditLinks(!isActive);
+    
+    // Clear selections when canceling
+    if (!isActive) {
+        selectedInstructors.clear();
+        updateSelectedCount();
+        document.querySelectorAll('.select-instructor').forEach(checkbox => {
+            checkbox.checked = false;
         });
-        
-        // Clear selections when canceling
-        if (!isActive) {
-            selectedInstructors.clear();
-            updateSelectedCount();
-            document.querySelectorAll('.select-instructor').forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            document.getElementById('selectAllBtn').textContent = 'Select All';
+        document.getElementById('selectAllBtn').textContent = 'Select All';
+    }
+});
+
+// Function to toggle the disabled state of Edit links
+function toggleEditLinks(enable) {
+    const editLinks = document.querySelectorAll('.card .btn-primary');
+    editLinks.forEach(link => {
+        if (enable) {
+            link.classList.remove('disabled');
+            link.style.pointerEvents = ''; // Re-enable pointer events
+            link.style.opacity = '1'; // Restore visibility
+        } else {
+            link.classList.add('disabled');
+            link.style.pointerEvents = 'none'; // Disable pointer events
+            link.style.opacity = '0.5'; // Dim the link
         }
     });
+}
 
     // Create instructor card function
     function createInstructorCard(instructor, key) {
@@ -142,12 +169,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <img src="${instructor.avatarURL}" class="card-img-top" alt="${instructor.name}" 
                 onerror="this.src='assets/default-avatar.png'">
             <div class="card-body d-flex flex-column">
-                <h5 class="card-title"><strong>${instructor.name}</strong></h5>
+                <h5 class="card-title text-center fw-bold fs-5"><strong>${instructor.name}</strong></h5>
                 <p class="card-text">${instructor.description || ''}</p>
-                <p class="card-text">Department: ${department}</p>
-                <div class="mt-auto">
+                <p class="card-text text-center">Department: ${department}</p>
+                <div class="mt-auto text-center">
                     <a href="instructorEdit.html?id=${key}" class="btn btn-primary">
-                        <i class="bx bx-edit"></i> Edit
+                        <i class="bx bx-edit"></i> Edits
                     </a>
                 </div>
             </div>
@@ -226,38 +253,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Load instructors function
-    function loadInstructors(departmentFilter = 'All') {
+    function loadInstructors(departmentFilter = 'All', searchTerm = '') {
         const instructorsRef = databaseRef(database, 'instructors');
-
+    
         onValue(instructorsRef, (snapshot) => {
             console.log('Fetching instructors data...');
             instructorCardsContainer.innerHTML = '';
             selectedInstructors.clear();
             updateSelectedCount();
-
+    
             if (!snapshot.exists()) {
                 console.log('No instructors data found');
                 instructorCardsContainer.innerHTML = '<div class="col-12"><p>No instructors found.</p></div>';
                 return;
             }
-
+    
             const instructorsArray = [];
-
+    
             snapshot.forEach((childSnapshot) => {
                 const instructorData = childSnapshot.val();
                 const instructorKey = childSnapshot.key;
-
-                if (departmentFilter === 'All' || instructorData.department === departmentFilter) {
+    
+                if (
+                    (departmentFilter === 'All' || instructorData.department === departmentFilter) &&
+                    instructorData.name.toLowerCase().includes(searchTerm)
+                ) {
                     instructorsArray.push({ key: instructorKey, ...instructorData });
                 }
             });
-
+    
             instructorsArray.sort((a, b) => b.timestamp - a.timestamp);
-
-            instructorsArray.forEach(instructor => {
-                const card = createInstructorCard(instructor, instructor.key);
-                instructorCardsContainer.appendChild(card);
-            });
+    
+            if (instructorsArray.length === 0) {
+                instructorCardsContainer.innerHTML = '<div class="col-12"><p>No instructor details found.</p></div>';
+            } else {
+                instructorsArray.forEach(instructor => {
+                    const card = createInstructorCard(instructor, instructor.key);
+                    instructorCardsContainer.appendChild(card);
+                });
+            }
         }, (error) => {
             console.error('Error loading instructors:', error);
             instructorCardsContainer.innerHTML = '<div class="col-12"><p>Error loading instructors.</p></div>';

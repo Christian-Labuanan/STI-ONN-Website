@@ -91,14 +91,20 @@
 
         <div class="container mt-5">
             <h1 class="text-center">Instructors</h1>
-            <select id="departmentFilter" class="form-select" aria-label="Instructors Departments">
-                <option value="All" selected>All Departments</option>
-                <option value="IT">IT - Information Technology</option>
-                <option value="SHS">SHS - Senior High School</option>
-                <option value="GE">GE - General Education</option>
-                <option value="THM">THM - Tourism and Hospitality Management</option>
-                <option value="AMT">AMT - Academic Management Team (Head)</option>
-            </select>
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <select id="departmentFilter" class="form-select" aria-label="Instructors Departments">
+                    <option value="All" selected>All Departments</option>
+                    <option value="IT">IT - Information Technology</option>
+                    <option value="SHS">SHS - Senior High School</option>
+                    <option value="GE">GE - General Education</option>
+                    <option value="THM">THM - Tourism and Hospitality Management</option>
+                    <option value="AMT">AMT - Academic Management Team (Head)</option>
+                </select>
+                <div class="input-group w-50">
+                    <span class="input-group-text searchBar"><i class="bx bx-search"></i></span>
+                    <input type="text" class="form-control searchBar" placeholder="Search" aria-label="Search" id="searchInput">
+                </div>
+            </div>
             <div class="row" id="instructorCards"></div>
         </div>
     </div>
