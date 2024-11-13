@@ -157,6 +157,13 @@ async function loadFileContent(itemRef, floor) {
             return;
         }
 
+        // Automatically display the first sheet
+        const firstSheetName = currentWorkbook.SheetNames[0];
+        const sheet = currentWorkbook.Sheets[firstSheetName];
+        const schedule = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+        displaySheetData(firstSheetName, schedule, floor, itemRef.name);
+
+        // Optionally, display sheet list (in case you want to allow the user to switch sheets)
         displaySheetList(currentWorkbook.SheetNames, currentWorkbook, floor, itemRef.name);
     } catch (error) {
         console.error("Error loading file content:", error);
@@ -221,6 +228,7 @@ async function displaySheetData(sheetName, data, floor, fileName) {
 
     // Store the original data for reference
     const originalData = JSON.parse(JSON.stringify(data));
+    let modifiedData = {}; // Track modified cells
 
     const tbody = document.createElement('tbody');
     const maxRows = data.length;
@@ -250,6 +258,19 @@ async function displaySheetData(sheetName, data, floor, fileName) {
             textarea.rows = 4;
             textarea.style.resize = 'none';
 
+            // Track modifications
+            textarea.addEventListener('input', () => {
+                const cellKey = `${rowIndex}-${colIndex}`;
+                const newValue = textarea.value;
+                if (newValue !== originalData[rowIndex][colIndex]) {
+                    modifiedData[cellKey] = newValue;
+                    enableSaveButton();
+                } else {
+                    delete modifiedData[cellKey];
+                    disableSaveButtonIfNoChanges();
+                }
+            });
+
             td.appendChild(textarea);
             tr.appendChild(td);
         }
@@ -271,7 +292,6 @@ async function displaySheetData(sheetName, data, floor, fileName) {
     let isEditMode = false;
     const editToggleBtn = document.getElementById('editToggleBtn');
     const allTextareas = form.querySelectorAll('textarea');
-    const saveBtn = document.getElementById('saveButton');
 
     function toggleEditMode(enable) {
         isEditMode = enable;
@@ -297,37 +317,79 @@ async function displaySheetData(sheetName, data, floor, fileName) {
             editToggleBtn.innerHTML = '<i class="fas fa-times me-2"></i>Cancel';
             editToggleBtn.classList.remove('btn-warning');
             editToggleBtn.classList.add('btn-danger');
-            saveBtn.classList.remove('d-none');
+            saveButton.classList.remove('d-none');
         } else {
             editToggleBtn.innerHTML = '<i class="fas fa-edit me-2"></i>Edit';
             editToggleBtn.classList.remove('btn-danger');
             editToggleBtn.classList.add('btn-warning');
-            saveBtn.classList.add('d-none');
+            saveButton.classList.add('d-none');
         }
     }
 
-    editToggleBtn.addEventListener('click', () => {
-        if (isEditMode) {
-            if (confirm('Are you sure you want to cancel editing? All changes will be lost.')) {
-                toggleEditMode(false);
-                // Restore original values
-                allTextareas.forEach(textarea => {
-                    const row = parseInt(textarea.dataset.row);
-                    const col = parseInt(textarea.dataset.col);
-                    textarea.value = (originalData[row] && originalData[row][col]) !== undefined ? originalData[row][col] : '';
-                });
-            }
-        } else {
-            toggleEditMode(true);
+    // Enable save button when there's a modification
+    function enableSaveButton() {
+        const saveBtn = document.getElementById('saveButton');
+        if (saveBtn) {
+            saveBtn.disabled = false;
         }
-    });
+    }
+
+    // Disable save button if there are no modifications
+    function disableSaveButtonIfNoChanges() {
+        const saveBtn = document.getElementById('saveButton');
+        if (saveBtn && Object.keys(modifiedData).length === 0) {
+            saveBtn.disabled = true;
+        }
+    }
+
+    // Get the modal elements
+const cancelEditModal = new bootstrap.Modal(document.getElementById('cancelEditModal'));
+const confirmCancelEditBtn = document.getElementById('confirmCancelEditBtn');
+let cancelCallback; // A variable to store the cancel callback function
+
+// Event listener for the edit toggle button (to start editing or cancel)
+editToggleBtn.addEventListener('click', () => {
+    if (isEditMode) {
+        // If editing, show the cancel confirmation modal
+        cancelCallback = () => {
+            toggleEditMode(false); // Exit edit mode
+            // Restore original values
+            allTextareas.forEach(textarea => {
+                const row = parseInt(textarea.dataset.row);
+                const col = parseInt(textarea.dataset.col);
+                textarea.value = (originalData[row] && originalData[row][col]) !== undefined ? originalData[row][col] : '';
+            });
+            modifiedData = {}; // Clear modified data
+            disableSaveButtonIfNoChanges(); // Ensure save button is disabled
+        };
+        cancelEditModal.show(); // Show the modal
+    } else {
+        // If not editing, enable editing mode
+        toggleEditMode(true);
+    }
+});
+
+// Handle confirming the cancel action in the modal
+confirmCancelEditBtn.addEventListener('click', () => {
+    if (cancelCallback) {
+        cancelCallback(); // Execute the cancel action
+    }
+    cancelEditModal.hide(); // Hide the modal
+});
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        if (!isEditMode) return;
+        if (!isEditMode || Object.keys(modifiedData).length === 0) return;
 
         try {
             showLoading('Saving changes...');
+
+            // Create updated data array from modifiedData
+            const updatedData = JSON.parse(JSON.stringify(originalData));
+            for (const cellKey in modifiedData) {
+                const [row, col] = cellKey.split('-').map(Number);
+                updatedData[row][col] = modifiedData[cellKey];
+            }
 
             // Get the current file content first
             const storageRef = ref(storage, `schedules/${floor}/${fileName}`);
@@ -336,15 +398,7 @@ async function displaySheetData(sheetName, data, floor, fileName) {
             const fileData = await response.arrayBuffer();
             const existingWorkbook = XLSX.read(new Uint8Array(fileData), { type: 'array' });
 
-            // Create updated data array from form
-            const updatedData = Array(maxRows).fill().map(() => Array(maxCols).fill(''));
-            allTextareas.forEach(textarea => {
-                const row = parseInt(textarea.dataset.row);
-                const col = parseInt(textarea.dataset.col);
-                updatedData[row][col] = textarea.value;
-            });
-
-            // Create a new worksheet for the edited sheet
+            // Create new worksheet for the edited sheet
             const newWorksheet = XLSX.utils.aoa_to_sheet(updatedData);
 
             // Update only the edited sheet in the existing workbook
@@ -360,10 +414,8 @@ async function displaySheetData(sheetName, data, floor, fileName) {
             hideLoading();
             showModal('successModal');
             toggleEditMode(false);
-
-            // Update the original data reference
-            Object.assign(originalData, updatedData);
-
+            modifiedData = {}; // Clear modified data after save
+            disableSaveButtonIfNoChanges(); // Disable save button
         } catch (error) {
             console.error('Error saving changes:', error);
             hideLoading();
