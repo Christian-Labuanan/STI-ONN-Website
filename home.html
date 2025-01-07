@@ -1,80 +1,115 @@
-<!DOCTYPE html><!DOCTYPE html>
-<html>
-    <head>
-        <title>Home Page</title>
-    <link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Home Page for STI ONN Navigation Admin">
+    <title>Home Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link
-      href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/calendar.css">
 </head>
-    <body>
-        <nav>
-            <div class="logo">
-              <i class="bx bx-menu menu-icon"></i>
-              <span class="logo-name">STI ONN | Dashboard</span>
-            </div>
-            <div class="sidebar">
-              <div class="logo">
-                <i class="bx bx-menu menu-icon"></i>
-                <span class="logo-name">STI ONN</span>
-              </div>
-              <div class="sidebar-content">
-                <ul class="lists">
-                  <li class="list">
-                    <a href="home.html" class="nav-link">
-                      <i class="bx bx-home-alt icon"></i>
-                      <span class="link">Dashboard</span>
-                    </a>
-                  </li>
-                  <li class="list">
-                    <a href="announce.html" class="nav-link">
-                      <i class="bx bx-bell icon"></i>
-                      <span class="link">Announcement</span>
-                    </a>
-                  </li>
-                  <li class="list">
-                    <a href="#" class="nav-link">
-                      <i class="bx bx-calendar icon"></i>
-                      <span class="link">Room Schedules</span>
-                    </a>
-                  </li>
+<body class="home-page">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo_item">
+            <i class="bx bx-menu" id="sidebarOpen" aria-label="Open Sidebar"></i>
+            <img src="assets/STI ONN Logo transparent 3.png" alt="STI ONN Logo"> STI ONN | Over New Navigation Admin
+        </div>
+        <div class="navbar_content">
+            <i class="bi bi-grid" aria-label="Grid Menu"></i>
+            <div id="user-info" class="user" aria-label="User Info"></div>
+            <div class="dropdown">
+                <i class="bx bx-user" id="userIcon" data-bs-toggle="dropdown" aria-label="User Menu"></i>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userIcon">
+                    <li><a class="dropdown-item nav-link" id="logout" data-bs-toggle="modal" href="#logoutConfirmationModal">Logout</a></li>
                 </ul>
-                <div class="bottom-cotent">
-                  <li class="list">
-                    <div id="user-info"></div>
-                  </li>
-                  <li class="list">
-                    <button id="logout" class="nav-link">
-                      <i class="bx bx-log-out icon"></i>
-                      <span class="link">Logout</span>
-                    </button>
-                  </li>
-                </div>
-              </div>
             </div>
-        </nav>
-        <section class="overlay"></section>
+        </div>
+    </nav>
+
+    <main >
+        <h1 class="text-center" style="margin-top: 5%;">STI ONN Admin Homepage</h1>
+        <div class="analytics container-fluid p-4 w-75 p-3">
+            <div id="chart-calendar-container">
+                <div class="chart-container">
+                    <h4 class="Title">User Engagement</h4>
+                    <div id="chart"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <div class="announcementDiv">
+                <h6 class="announcementTitle">Announcement</h6>
+                <img src="assets/school-solid-156.png" alt="Announcement Icon"><br>
+                <a href="viewUploads.html" class="btn btn-light"><i class="bx bx-flag"></i> View</a>
+                <a href="viewUploads.html" class="btn btn-light"><i class="bx bx-edit-alt"></i> Edit</a>
+                <a href="post.html" class="btn btn-light"><i class='bx bx-message-alt-add'></i> Post</a>
+            </div>
+
+            <div class="scheduleDiv">
+                <h6 class="scheduleTitle">Schedule</h6>
+                <img src="assets/clipboard-regular-156.png" alt="Schedule Icon"><br>
+                <a href="schedule.html" class="btn btn-light"><i class="bx bx-flag"></i> View</a>
+                <a href="schedule.html" class="btn btn-light"><i class="bx bx-edit-alt"></i> Edit</a>
+                <a href="postSchedule.html" class="btn btn-light"><i class='bx bx-message-alt-add'></i> Post</a>
+            </div>
+
+            <div class="profDiv">
+                <h6 class="announcementTitle">Instructors</h6>
+                <img src="assets/user-regular-156.png" alt="Professors Icon"><br>
+                <a href="instructor.html" class="btn btn-light"><i class="bx bx-flag"></i> View</a>
+                <a href="instructor.html" class="btn btn-light"><i class="bx bx-edit-alt"></i> Edit</a>
+                <a href="postIntructors.html" class="btn btn-light"><i class='bx bx-message-alt-add'></i> Add</a>
+            </div>
+        </div>
+
+        <!-- Logout Confirmation Modal -->
+        <div class="modal fade" id="logoutConfirmationModal" tabindex="-1" aria-labelledby="logoutConfirmationModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="logoutConfirmationModalLabel">Logout Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to log out?
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-primary" data-bs-target="#loggingOutModal" data-bs-toggle="modal" data-bs-dismiss="modal" id="confirmLogout">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Logging Out Modal -->
-    <div class="modal fade" id="loggingOutModal" tabindex="-1" aria-labelledby="loggingOutModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="loggingOutModalLabel">Please wait</h5>
-              </div>
-              <div class="modal-body">
-                  Logging Out...
-              </div>
-          </div>
-      </div>
-  </div>
+        <div class="modal fade" id="loggingOutModal" tabindex="-1" aria-labelledby="loggingOutModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loggingOutModalLabel">Logging Out</h5>
+                    </div>
+                    <div class="modal-body">
+                        Logging Out...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-        <script type = "module" defer src="scripts/logout.js"></script>
-        <script type = "module" defer src="/scripts/user.js"></script>
-        <script src="scripts/script.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-      </body>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script type="module" src="scripts/home.js"></script>
+    <script type="module" defer src="scripts/logout.js"></script>
+    <script type="module" defer src="/scripts/user.js"></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.x/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x/firebase-storage.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+</body>
 </html>

@@ -1,3 +1,10 @@
+// Import Firebase modules
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+import { getDatabase, ref as dbRef, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBfZyTFzkgn8hbaPnqNEdslEglKjBkrPPs",
     authDomain: "sti-onn-d0161.firebaseapp.com",
@@ -6,120 +13,227 @@ const firebaseConfig = {
     storageBucket: "sti-onn-d0161.appspot.com",
     messagingSenderId: "538337032363",
     appId: "1:538337032363:web:7e17df22799b2bad85dfee"
-  };
-  const app = firebase.initializeApp(firebaseConfig);
-  const storage = firebase.storage();
-
-  const inp = document.querySelector(".inp");
-  const imgPreview = document.querySelector(".img");
-  const progressbar = document.querySelector(".progress");
-  const img = document.querySelector(".img");
-  const fileData = document.querySelector(".filedata");
-  const loading = document.querySelector(".loading");
-  
-  const docPreview = document.createElement('iframe'); // Create an iframe for document preview
-  document.body.appendChild(docPreview); // Append iframe to body or a specific container
-  docPreview.style.display = 'none'; // Initially hide the iframe
-  docPreview.style.width = '100%';
-  docPreview.style.height = '600px';
-  const fileListContainer = document.getElementById('fileList');
-  let file;
-  let fileName;
-  let progress = 0;
-  let isLoading = false;
-  let uploadedFileName;
-  // Function to display error messages
-const showError = (error) => {
-    console.error(error);
-    alert("An error occurred. Please try again.");
 };
-  const selectImage = () => {
-    inp.click();
-  };
-  const getImageData = (e) => {
-    file = e.target.files[0];
-    fileName = Math.round(Math.random() * 9999) + file.name;
-    if (fileName) {
-      fileData.style.display = "block";
-    }
-    fileData.innerHTML = fileName;
-    console.log(file, fileName);
-  };
 
-  const uploadImage = () => {
-    if (!file) {
-        alert("Please select a file.");
+// Initialize Firebase services
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+const storage = getStorage(app);
+const auth = getAuth();
+
+// Initialize UI elements
+const postForm = document.getElementById('postForm');
+const imageUpload = document.getElementById('imageUpload');
+const cancelButton = document.getElementById('cancelButton');
+const postTitle = document.getElementById('postTitle');
+const loadingIndicator = document.getElementById('loadingIndicator');
+const currentImage = document.getElementById('currentImage');
+const removeImageBtn = document.getElementById('removeImage');
+const imageUploadContainer = document.getElementById('imageUploadContainer');
+
+// Initialize Quill editor with your configuration
+const quill = new Quill('#quillEditor', {
+    theme: 'snow',
+    placeholder: 'Write your announcement content here...',
+    modules: {
+        toolbar: [
+            [{ 'header': '1' }, { 'header': '2' }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['bold', 'italic', 'underline'],
+            [{ 'align': [] }],
+            ['link', 'image']
+        ]
+    }
+});
+
+// Image handling functions
+function showLoadingIndicator() {
+    loadingIndicator.style.display = 'block';
+}
+
+function hideLoadingIndicator() {
+    loadingIndicator.style.display = 'none';
+}
+
+function showImagePreview(src) {
+    currentImage.src = src;
+    currentImage.style.display = 'block';
+    removeImageBtn.style.display = 'flex';
+}
+
+function clearImagePreview() {
+    currentImage.src = '';
+    currentImage.style.display = 'none';
+    removeImageBtn.style.display = 'none';
+    imageUpload.value = '';
+}
+
+// Image upload event listeners
+imageUploadContainer.addEventListener('click', () => {
+    imageUpload.click();
+});
+
+imageUploadContainer.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    imageUploadContainer.style.borderColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--primary-color').trim();
+    imageUploadContainer.style.backgroundColor = 'rgba(99, 102, 241, 0.05)';
+});
+
+imageUploadContainer.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    imageUploadContainer.style.borderColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--border-color').trim();
+    imageUploadContainer.style.backgroundColor = getComputedStyle(document.documentElement)
+        .getPropertyValue('--background-color').trim();
+});
+
+imageUploadContainer.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        handleImageFile(files[0]);
+    }
+});
+
+imageUpload.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        handleImageFile(e.target.files[0]);
+    }
+});
+
+removeImageBtn.addEventListener('click', clearImagePreview);
+
+function handleImageFile(file) {
+    if (file.type.startsWith('image/')) {
+        showLoadingIndicator();
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            hideLoadingIndicator();
+            showImagePreview(e.target.result);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert('Please upload an image file (PNG, JPG, or GIF)');
+    }
+}
+
+// Form submission handler
+postForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const user = auth.currentUser;
+    if (!user) {
+        alert('You must be logged in to post announcements.');
         return;
     }
-    loading.style.display = "block";
-    const storageRef = storage.ref().child("Files");
-    const folderRef = storageRef.child(fileName);
-    const uploadtask = folderRef.put(file);
-    uploadtask.on(
-      "state_changed",
-      (snapshot) => {
-        console.log("Snapshot", snapshot.ref.name);
-        progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        progress = Math.round(progress);
-        progressbar.style.width = progress + "%";
-        progressbar.innerHTML = progress + "%";
-        uploadedFileName = snapshot.ref.name;
-      },
-      (error) => {
-        showError(error);
-      },
-      () => {
-        storage
-          .ref("Files")
-          .child(uploadedFileName)
-          .getDownloadURL()
-          .then((url) => {
-            console.log("URL", url);
-            if (!url) {
-              img.style.display = "none";
-              loading.style.display = "none";
-            if (file.type === 'application/pdf') {
-              img.style.display = "none"; // Hide image preview if it's a document
-              docPreview.src = url; // Set the iframe src to the file URL
-              docPreview.style.display = 'block'; // Show the iframe
-            } else {
-              img.style.display = "block";
-              loading.style.display = "none";
-            }
-            img.setAttribute("src", url);
-            }
-            // Add the new file to the list
-            displayFiles();
-          });
-        console.log("File Uploaded Successfully");
+
+    const title = postTitle.value.trim();
+    const text = quill.root.innerHTML;
+    const file = imageUpload.files[0];
+
+    if (!title || !text) {
+        alert("Title and text content are required.");
+        return;
+    }
+
+    // Show loading state
+    const submitButton = postForm.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.innerHTML;
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<span class="spinner"></span> Publishing...';
+
+    try {
+        const postId = Date.now().toString();
+        const postRef = dbRef(database, 'posts/' + postId);
+        let imageUrl = '';
+
+        if (file) {
+            const imageRef = storageRef(storage, 'images/' + postId);
+            const snapshot = await uploadBytes(imageRef, file);
+            imageUrl = await getDownloadURL(snapshot.ref);
+        }
+
+        await set(postRef, {
+            title: title,
+            text: text,
+            imageUrl: imageUrl,
+            timestamp: new Date().toISOString(),
+            authorId: user.uid,
+            authorName: user.displayName || 'Anonymous'
+        });
+
         // Show success modal
         const successModal = new bootstrap.Modal(document.getElementById('successModal'));
         successModal.show();
-        // Hide loading indicator
-        loading.style.display = "none";
-      }
-    );
-  };
-// Function to display the list of files
-const displayFiles = () => {
-  const storageRef = storage.ref().child("Files");
-  storageRef.listAll().then((result) => {
-    fileListContainer.innerHTML = ''; // Clear the existing list
-    result.items.forEach((fileRef) => {
-      fileRef.getDownloadURL().then((url) => {
-        const li = document.createElement('li');
-        li.innerHTML = `<a href="${url}" target="_blank">${fileRef.name}</a>`;
-        fileListContainer.appendChild(li);
-      }).catch((error) => {
-        showError(error);
-      });
-    });
-  }).catch((error) => {
-    showError(error);
-  });
-};
 
-// Initial call to display the files when the page loads
-document.addEventListener("DOMContentLoaded", (event) => {
-  displayFiles();
+        // Add redirect listener
+        document.getElementById('redirectButton').addEventListener('click', () => {
+            window.location.href = 'viewUploads.html';
+        });
+
+    } catch (error) {
+        console.error("Error posting content:", error);
+        alert("There was an error uploading your post. Please try again.");
+        
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonText;
+    }
 });
+
+// Cancel button handler
+cancelButton.addEventListener('click', () => {
+    const cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'));
+    cancelModal.show();
+});
+
+// Handle confirm cancel button
+document.getElementById('confirmCancel').addEventListener('click', () => {
+    // Redirect to viewUploads page
+    window.location.href = 'viewUploads.html';
+});
+
+
+// Add authentication state observer
+auth.onAuthStateChanged((user) => {
+    const submitButton = postForm.querySelector('button[type="submit"]');
+    if (!user) {
+        submitButton.disabled = true;
+        submitButton.title = 'Please log in to post announcements';
+    } else {
+        submitButton.disabled = false;
+        submitButton.title = '';
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const sidebarOpen = document.getElementById('sidebarOpen');
+    const sidebar = document.querySelector('.sidebar');
+  
+    // Toggle sidebar visibility
+    sidebarOpen.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+    });
+  });
+  
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebarOpen = document.getElementById('sidebarOpen');
+    const sidebar = document.querySelector('.sidebar');
+  
+    // Toggle sidebar visibility
+    sidebarOpen.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+    });
+  });
+  
+  document.addEventListener('DOMContentLoaded', function () {
+    const sidebarOpen = document.getElementById('sidebarOpen');
+    const sidebar = document.querySelector('.sidebar');
+  
+    // Toggle sidebar visibility
+    sidebarOpen.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+    });
+  });

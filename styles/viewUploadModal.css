@@ -1,0 +1,220 @@
+.modal-content1 img {
+    width: 100%; /* Ensure image fills modal width */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 500px; /* Increase max-height */
+    object-fit: contain; /* Preserve aspect ratio */
+    margin-bottom: 20px;
+}
+
+.modal-close-btn {
+    cursor: pointer;
+    color: #007bff;
+    text-align: right;
+}
+
+.modal-content1 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%; /* Increase width */
+    max-width: 1020px; /* Adjust as needed */
+    max-height: 80%; /* Increase max-height */
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    display: none;
+    border-radius: 10px;
+    overflow: auto; /* Allow scrolling if needed */
+}
+
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40%; /* Increase width */
+    max-width: 1020px; /* Adjust as needed */
+    max-height: 80%; /* Increase max-height */
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    border-radius: 10px;
+    overflow: auto; /* Allow scrolling if needed */
+}
+
+.modal-header1 {
+    display: flex;
+    justify-content: center; /* Center-aligns the title horizontally */
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.modal-title {
+    margin: 0;
+    text-align: center; /* Center-aligns text within the title element */
+    font-size: 1.5rem;
+    font-weight: 500;
+    flex: 1; /* Ensure the title takes full width for proper centering */
+}
+
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040 ;
+}
+
+/* Modal Navigation Buttons Styling */
+.modal-navigation {
+    position: fixed; /* Changed to fixed positioning */
+    top: 50%; /* Vertically center */
+    left: 0; /* Align to the left edge */
+    right: 0; /* Align to the right edge */
+    display: none;
+    justify-content: space-between;
+    z-index: 1050; /* Ensure buttons are above other content */
+    transform: translateY(-50%); /* Vertically center the buttons */
+    padding: 0 20px; /* Add padding to prevent buttons from touching the edges */
+}
+
+#modalBackBtn,
+#modalNextBtn {
+    flex: 0 0 auto; /* Prevent buttons from growing */
+}
+
+
+/* Basic modal backdrop styling */
+.modal-backdrop1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 999;
+    display: none; /* Initially hidden */
+}
+
+/* Basic modal content styling */
+.modal-content1 {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    display: none; /* Initially hidden */
+}
+
+/* Basic modal backdrop styling */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: 999;
+}
+
+/* Basic modal content styling */
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1000;
+    min-width: 500px; /* Set a minimum width */
+}
+
+/* Show modal */
+.modal-content.show, .modal-backdrop.show {
+    display: block;
+}
+.modal-content1.show, .modal-backdrop1.show {
+    display: block;
+}
+
+.modal-content, .card {
+    z-index: 999;
+}
+
+.modal-content1, .card {
+    z-index: 999;
+}
+
+.modal-alternative{
+    margin-top: 3%;
+    border-top: .1px solid rgb(128, 128, 128);
+}
+
+
+/* General Modal Styles */
+.modal-content1,
+.modal-content {
+    width: 90%; /* Use percentage width for responsiveness */
+    max-width: 1020px; /* Keep your max-width */
+}
+
+/* Adjusting Card Button Container */
+.btn-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap */
+    justify-content: flex-start; /* Align buttons to the left */
+}
+
+/* Make buttons stack vertically on small screens */
+@media (max-width: 576px) {
+    .modal-content1,
+    .modal-content {
+        width: 95%; /* Increase width for small devices */
+        padding: 15px; /* Adjust padding */
+    }
+
+    .btn-container {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: flex-start; /* Align buttons to the left */
+    }
+
+    .btn-container .btn {
+        width: 100%; /* Make buttons full-width */
+        margin-bottom: 10px; /* Add spacing between buttons */
+    }
+}
+
+/* Medium-sized screens */
+@media (min-width: 577px) and (max-width: 768px) {
+    .modal-content1,
+    .modal-content {
+        width: 90%; /* Keep modal width responsive */
+    }
+
+    .btn-container .btn {
+        margin-right: 10px; /* Add right margin for spacing */
+    }
+}
+
+/* Larger screens */
+@media (min-width: 769px) {
+    .modal-content1,
+    .modal-content {
+        width: 70%; /* Make it narrower for larger screens */
+    }
+
+    .btn-container .btn {
+        margin-right: 15px; /* Increase spacing */
+    }
+}

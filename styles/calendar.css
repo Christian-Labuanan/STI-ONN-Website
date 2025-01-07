@@ -1,0 +1,164 @@
+.wrapper {
+  flex: 2;                        /* Flex to occupy 1/3 of the space */
+  min-width: 300px;               /* Ensure it doesn't shrink too much */
+  max-width: 450px;               /* Limits the max width */
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  transition: all 0.3s ease;     /* Smooth transition for responsiveness */
+}
+
+.wrapper header {
+  display: flex;
+  align-items: center;
+  padding: 25px 30px 10px;
+  justify-content: space-between;
+  border-radius: 3%;
+}
+
+header .icons {
+  display: flex;
+}
+
+header .icons span {
+  height: 38px;
+  width: 38px;
+  margin: 0 1px;
+  cursor: pointer;
+  color: #878787;
+  text-align: center;
+  line-height: 38px;
+  font-size: 1.9rem;
+  user-select: none;
+  border-radius: 50%;
+}
+
+.icons span:last-child {
+  margin-right: -10px;
+}
+
+header .icons span:hover {
+  background: #f2f2f2;
+}
+
+header .current-date {
+  font-size: 1.45rem;
+  font-weight: 500;
+}
+
+.calendar {
+  padding: 15px;
+}
+
+.calendar ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  text-align: center;
+}
+
+.calendar .days {
+  margin-bottom: 20px;
+}
+
+.calendar li {
+  color: #333;
+  width: calc(100% / 7);        /* Each day occupies 1/7 of the available width */
+  font-size: 1.07rem;
+  padding: 5px;                  /* Added padding for touch targets */
+}
+
+.calendar .weeks li {
+  font-weight: 500;
+  cursor: default;
+}
+
+.calendar .days li {
+  z-index: 1;
+  cursor: pointer;
+  position: relative;
+  margin-top: 30px;
+}
+
+.days li.inactive {
+  color: #aaa;
+}
+
+.days li.active {
+  color: #fff;
+}
+
+.days li::before {
+  position: absolute;
+  content: "";
+  left: 50%;
+  top: 50%;
+  height: 40px;
+  width: 40px;
+  z-index: -1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.days li.active::before {
+  background: #9B59B6;
+}
+
+.days li:not(.active):hover::before {
+  background: #f2f2f2;
+}
+
+.head {
+  background: white;
+  padding-top: 6%;
+  border-radius: 5%;
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .wrapper {
+    max-width: 100%; /* Take full width on medium screens */
+    padding: 15px;
+  }
+
+  header .current-date {
+    font-size: 1.2rem; /* Slightly smaller text */
+  }
+
+  .calendar li {
+    font-size: 1rem; /* Adjust font size of days for readability */
+  }
+  
+  .calendar .days li {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    padding: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Reduced shadow for smaller screens */
+  }
+
+  header .current-date {
+    font-size: 1rem;
+  }
+
+  header .icons span {
+    height: 32px;
+    width: 32px;
+    line-height: 32px;
+    font-size: 1.5rem;
+  }
+
+  .calendar li {
+    font-size: 0.9rem; /* Further adjust for smaller screens */
+  }
+
+  .days li::before {
+    height: 35px;
+    width: 35px; /* Reduced size of the background circle */
+  }
+}

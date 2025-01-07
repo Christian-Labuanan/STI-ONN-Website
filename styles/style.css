@@ -1,0 +1,3001 @@
+/* Google Fonts - Poppins */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+:root {
+  --white-color: #fff;
+  --blue-color: #0B5793;
+  --grey-color: #707070;
+  --grey-color-light: #aaa;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  min-height: 100%;
+  background-color: #e7f1fc;
+  transition: all 0.5s ease;
+  padding-top: 60px;
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  left: 0;
+  background-color: var(--blue-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  z-index: 1060;
+  box-shadow: 0 0 2px var(--grey-color-light);
+}
+
+.navbar img {
+  width: 110px;
+  height: 55px;
+}
+
+.navbar_content i {
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--white-color);
+}
+
+.logo_item {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--white-color);
+}
+
+.navbar img {
+  width: 110px;
+  height: 55px;
+}
+
+.navbar_content {
+  display: flex;
+  align-items: center;
+  column-gap: 25px;
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: var(--white-color);
+  width: 260px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh; /* Set sidebar height to full viewport height */
+  padding: 80px 20px;
+  z-index: 100;
+  box-shadow: 0 0 1px var(--grey-color-light);
+  transition: width 0.5s ease;
+}
+
+.sidebar.close {
+  padding: 60px 0;
+  width: 80px;
+}
+
+.sidebar.close + .main-content {
+  margin-left: 80px; /* Adjust this based on the collapsed width of your sidebar */
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.menu_content {
+  position: fixed;
+  margin-top: 50px;
+}
+
+.menu_title {
+  margin: 15px 0;
+  padding: 0 20px;
+  font-size: 18px;
+}
+
+.sidebar.close .menu_title {
+  padding: 6px 30px;
+}
+
+.menu_title::before {
+  color: var(--grey-color);
+  white-space: nowrap;
+}
+
+.menu_dahsboard::before {
+  content: "Dashboard";
+}
+
+.menu_editor::before {
+  content: "Editor";
+}
+
+.menu_setting::before {
+  content: "Setting";
+}
+
+.sidebar.close .menu_title::before {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 18px;
+  border-radius: 12px;
+  background: var(--grey-color-light);
+}
+
+.menu_items {
+  padding: 0;
+  list-style: none;
+}
+
+.navlink_icon {
+  position: relative;
+  font-size: 22px;
+  min-width: 50px;
+  line-height: 40px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 6px;
+}
+
+.navlink_icon::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: calc(100% + 100px);
+  left: -20px;
+}
+
+.navlink_icon:hover {
+  background: var(--blue-color);
+}
+
+.sidebar .nav_link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 4px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--grey-color);
+  white-space: nowrap;
+}
+
+.sidebar.close .navlink {
+  display: none;
+}
+
+.nav_link:hover {
+  color: var(--white-color);
+  background: var(--blue-color);
+}
+
+.sidebar.close .nav_link:hover {
+  background: var(--white-color);
+}
+
+.submenu_item {
+  cursor: pointer;
+}
+
+.submenu {
+  display: none;
+}
+
+.submenu_item .arrow-left {
+  position: absolute;
+  right: 10px;
+  display: inline-block;
+  margin-right: auto;
+}
+
+.sidebar.close .submenu {
+  display: none;
+}
+
+.show_submenu ~ .submenu {
+  display: block;
+}
+
+.show_submenu .arrow-left {
+  transform: rotate(90deg);
+}
+
+.submenu .sublink {
+  padding: 15px 15px 15px 52px;
+}
+
+.bottom_content {
+  position: fixed;
+  bottom: 60px;
+  left: 0;
+  width: 260px;
+  cursor: pointer;
+  transition: all 0.5s ease;
+}
+
+.bottom {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    left: 0;
+    justify-content: space-around;
+    padding: 18px 0;
+    text-align: center;
+    width: 100%;
+    color: var(--grey-color);
+    border-top: 1px solid var(--grey-color-light);
+    background-color: var(--white-color);
+}
+
+.bottom i {
+    font-size: 2vw; /* Responsive font size */
+}
+
+.bottom span {
+    font-size: 1.8vw; /* Responsive font size */
+}
+
+.sidebar.close .bottom_content {
+    width: 50px;
+    left: 15px;
+}
+
+.sidebar.close .bottom span {
+    display: none;
+}
+
+.sidebar.hoverable .collapse_sidebar {
+    display: none;
+}
+
+#sidebarOpen {
+    display: none;
+}
+
+.square, header {
+    background-color: #0B5793;
+    width: 100%;
+    height: 90px;
+}
+
+.title {
+    color: white;
+    font-family: sans-serif;
+    font-weight: bolder;
+    width: auto;
+    padding-top: 0.1%;
+    height: auto;
+    font-size: 2.5vw; /* Responsive font size */
+}
+
+.tutu {
+    padding-top: 5%;
+}
+
+.btn-announce {
+    min-height: 80px;
+    min-width: 80%; /* Use percentage for responsiveness */
+    max-width: 330px; /* Max width for larger screens */
+    font-size: 2vw; /* Responsive font size */
+    padding: 24px 48px;
+    border-radius: 12px;
+    background: #4070f4;
+    color: white;
+    border: none;
+    justify-content: center;
+    font-weight: 500;
+}
+
+.btn-announce:hover {
+    background: #0B5793;
+}
+
+.preview {
+    width: 5px;
+    height: 5px;
+    margin: 5px;
+}
+
+.previewContaineriner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.position-relative {
+    position: relative;
+}
+
+.position-absolute {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.zoom-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border: none;
+    background-color: transparent;
+    color: #007bff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.card-header {
+    padding: 0.25rem 1.15rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    align-items: center;
+}
+
+.card-title {
+    margin-bottom: 0;
+    font-size: 1.15rem;
+    font-weight: 200;
+    align-items: center;
+}
+
+.card-img-top {
+    width: 100%; /* Full width of the card */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 200px; /* Limit height */
+    object-fit: cover; /* Cover the area */
+}
+
+.card-body img {
+    width: 100%; /* Full width of the card */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 200px; /* Optional: Limit height */
+    object-fit: contain; /* Ensure visibility */
+}
+
+.new-post {
+    border: 2px solid #4a93ff; /* Red border for new posts */
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Enhanced shadow effect */
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.new-post::before {
+    content: "New";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #4a93ff;
+    color: #fff;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.new-post:hover {
+    transform: scale(1.02); /* Slightly enlarge on hover */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3); /* Stronger shadow on hover */
+}
+
+.new-post.removed-highlight {
+    border-color: transparent; /* Remove the highlight permanently */
+}
+
+.new-post .new-icon {
+    display: inline-block; /* Show the "new" icon */
+}
+
+.new-post.removed-highlight .new-icon {
+    display: none; /* Hide the "new" icon when highlight is removed */
+}
+
+.card:hover {
+    border-color: transparent; /* Remove highlight on hover */
+}
+
+.bottom {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    left: 0;
+    justify-content: space-around;
+    padding: 18px 0;
+    text-align: center;
+    width: 100%;
+    color: var(--grey-color);
+    border-top: 1px solid var(--grey-color-light);
+    background-color: var(--white-color);
+}
+.bottom i {
+    font-size: 20px;
+}
+.bottom span {
+    font-size: 18px;
+}
+.sidebar.close .bottom_content {
+    width: 50px;
+    left: 15px;
+}
+.sidebar.close .bottom span {
+    display: none;
+}
+.sidebar.hoverable .collapse_sidebar {
+    display: none;
+}
+#sidebarOpen {
+    display: none;
+}
+
+.square, header {
+    background-color: #0B5793;
+    width: 100%;
+    height: 90px;
+}
+
+.title {
+    color: white;
+    font-family: sans-serif;
+    font-weight: bolder;
+    width: auto;
+    padding-top: 0.1%;
+    height: auto;
+    font-size: 130%;
+}
+
+.tutu {
+    padding-top: 5%;
+}
+
+.preview {
+    width: 5px;
+    height: 5px;
+    margin: 5px;
+}
+
+.previewContaineriner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.position-relative {
+    position: relative;
+}
+.position-absolute {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.postsContainer {
+  display: flex; /* Use flex for card container */
+  flex-wrap: wrap; /* Allow cards to wrap to the next line */
+  gap: 20px; /* Space between cards */
+  width: 100%; /* Take full width of main content */
+  padding: 20px; /* Optional: Add padding around cards */
+  box-sizing: border-box; /* Ensure padding is included in width */
+}
+
+.card {
+  background-color: #f8f9fa; /* Card background */
+  border-radius: 5px; /* Rounded corners */
+  padding: 20px; /* Inner padding */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  flex: 1 1 calc(25% - 20px); /* Adjust card size to fit 4 in a row with gap */
+  min-width: 250px; /* Minimum width for cards */
+  display: flex; /* Enable flexbox */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: space-between; /* Space out items */
+  transition: transform 0.2s; /* Smooth transform effect */
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Slight lift effect on hover */
+}
+
+.zoom-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border: none;
+    background-color: transparent;
+    color: #007bff;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.card-header {
+    padding: 0.25rem 1.15rem;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    align-items: center;
+}
+
+.card-title {
+    margin-bottom: 0;
+    font-size: 1.15rem;
+    font-weight: 200;
+    align-items: center;
+}
+
+.card-img-top {
+    width: 100%;  /* Make sure it covers the full width of the card */
+    height: auto; /* Maintain the aspect ratio */
+    max-height: 200px; /* Limit the height to stay within the card */
+    object-fit: cover; /* This will ensure the image covers the area without stretching. */
+}
+
+.card-body img {
+    width: 100%;  /* Ensures the image takes up no more than the width of the card */
+    height: auto; /* Maintains the aspect ratio of the image */
+    max-height: 200px; /* Optional: Limits the height of the image */
+    object-fit: contain; /* Ensures the entire image is visible without cropping */
+}
+
+.new-post {
+    border: 2px solid #4a93ff; /* Red border for new posts */
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Enhanced shadow effect */
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.new-post::before {
+    content: "New";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #4a93ff;
+    color: #fff;
+    padding: 5px 10px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.new-post:hover {
+    transform: scale(1.02); /* Slightly enlarge on hover */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3); /* Stronger shadow on hover */
+}
+
+.new-post.removed-highlight {
+    border-color: transparent; /* Remove the highlight permanently */
+}
+
+.new-post .new-icon {
+    display: inline-block; /* Show the "new" icon */
+}
+
+.new-post.removed-highlight .new-icon {
+    display: none; /* Hide the "new" icon when highlight is removed */
+}
+
+.card:hover {
+    border-color: transparent; /* Remove the highlight on hover */
+}
+
+.new-icon {
+    position: absolute; /* Position the icon within the card */
+    top: 10px; /* Adjust positioning as needed */
+    right: 10px;
+    background: #007bff; /* Background color for the icon */
+    color: #fff; /* Icon color */
+    padding: 5px;
+    border-radius: 50%;
+    display: inline-block;
+    transition: opacity 0.3s ease; /* Smooth transition for icon visibility */
+}
+
+.card:hover .new-icon {
+    display: none; /* Hide the "new" icon on hover */
+}
+
+.user {
+    color: white;
+    padding-top: 12px;
+}
+
+/* Main Content Area */
+.main-content {
+  transition: margin-left 0.3s ease;
+  margin-left: 250px;
+  padding: 20px;
+  padding-top: 70px;
+  justify-content: center;
+  flex: 1;
+  width: auto;
+  flex-grow: 1;
+}
+
+.main-content.collapsed {
+    margin-left: 80px;
+}
+
+.quill-container {
+    position: relative; /* Ensure it's positioned correctly */
+    z-index: 1050; /* Higher z-index value to stay above the navbar */
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+/* Quill editor container styles */
+.quill-editor-container {
+    max-height: calc(100vh - 70px); /* 70px for the navbar height */
+    overflow-y: auto; /* Enable scrolling inside the editor container */
+    padding-bottom: 20px; /* Optional: Add some padding at the bottom */
+}
+
+.thumbnail {
+    margin-top: 20px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+}
+.thumbnail div {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+.thumbnail img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.hh1 {
+    margin-bottom: 20px;
+}
+.inpt {
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+.lbl1 {
+    padding-top: 2%;
+    align-items: center;
+    font-size: 20px;
+}
+.form1 {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#postButton {
+    position: fixed;
+    top: 88%;
+    right: 1%;
+    z-index: 1000;
+    display: block;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    align-items: center;
+    background-color: #0B5793;
+    color: #fff;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#postButton svg {
+    height: 24px;
+    width: 20.5px;
+}
+
+#postButton:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+#postButton.dimmed {
+    opacity: 0.5;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1001;
+    top: 30%;
+    right: 300%;
+    transform: translateX(50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 12px;
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent #333;
+}
+
+.btn {
+    margin: 5px; /* Adjust the value as needed */
+}
+
+.slide {
+    background-color: #d1d1d1;
+    margin-bottom: 50px;
+}
+
+.card-button {
+  color: rgb(255, 255, 255); /* Button text color */
+  padding: 10px 15px; /* Button padding */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  font-size: 16px; /* Font size */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+  width: 100%; /* Full width for responsive design */
+}
+
+#engagement-data {
+  margin-top: 20px;
+}
+
+#chart {
+  min-width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  max-width: 100%;
+}
+
+canvas {
+  width: 100% ; /* Ensure canvas takes full width */
+  height: auto !important; /* Maintain aspect ratio */
+  background-color: #fff; /* White background for the chart */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Full-screen container for chart and calendar */
+canvas {
+  width: 100%;
+  height: auto !important;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Chart styles */
+.chart-container {
+  flex: 2;                      /* Chart takes up more space than the calendar */
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  width: 130%;                  /* Allow the chart to expand to fill its container */
+}
+
+/* Calendar wrapper styles */
+.calendar-wrapper {
+  flex: 2;                      /* Calendar takes up less space than the chart */
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  width: 100%;                  /* Allow the calendar to expand to fill its container */
+}
+
+.const{
+  background-color: white;
+  border-radius: 25px;
+  padding: 50px;
+}
+
+/* Ensure flex elements take the entire width of the page */
+.analytics {
+  width: 100%;
+  margin-left: 1%;
+}
+
+.container1{
+  background-color: white;
+  padding: 40px;
+  border-radius: 15px;
+}
+
+.announcementDiv,
+.scheduleDiv,
+.profDiv {
+  width: 100%;
+  height: auto;
+  padding: 15px;
+  border-radius: 10px;
+  margin-left: 2% ;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  color: white;
+
+}
+
+.announcementDiv {
+  background-color: #3B71CA;
+}
+
+.scheduleDiv {
+  background-color: #E4A11B;
+}
+
+.profDiv {
+  background-color: #14A44D;
+}
+
+.announcementTitle{
+  text-align: center;
+  color: white;
+}
+
+button{
+  text-align: center;
+}
+.Title{
+  border-bottom:1px solid black;
+  padding: 5px;
+}
+
+.navigation{
+  background-color: white;
+  padding: 15px;
+  margin-left: 3.3%;
+  border-radius: 10px;
+  width: 92.5%;
+  display: flex;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.table td {
+  height: auto; /* Fixed height for table cells */
+  text-align: center; /* Center text horizontally */
+  vertical-align: middle; /* Center text vertically */
+  padding: 3px;
+}
+
+.cell-textarea {
+  width: 105%; /* Make textarea fill the cell */
+  border: 1px solid #ced4da; /* Border similar to Bootstrap's */
+  border-radius: 4px; /* Slightly rounded corners */
+  box-shadow: none; /* Remove default shadow */
+  padding: 5px; /* Padding for better spacing */
+  overflow: hidden; /* Hide overflow */
+}
+
+.cell-textarea:focus {
+  border-color: #80bdff; /* Change border color on focus */
+  outline: none; /* Remove default outline */
+  transition: border-color 0.2s;
+}
+
+
+.fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(43, 43, 43, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.fullscreen-content {
+  width: 60%;
+  height: 80%;
+  background: white;
+  padding: 20px;
+  overflow: auto;
+  position: relative;
+  border-radius: 20px;
+  margin-top: 5%;
+}
+
+/* Apply Quill's default styling within fullscreen content */
+.fullscreen-content p, 
+.fullscreen-content h1, .fullscreen-content h2, .fullscreen-content h3, 
+.fullscreen-content ul, .fullscreen-content ol, 
+.fullscreen-content img {
+  margin: 0; /* Keep original margins from Quill */
+  line-height: 1.5; /* Ensure readable line spacing */
+  font-size: inherit; /* Keep the original font size */
+}
+
+.fullscreen-content img {
+  width: 100%; /* Fit image within content */
+  height: 70%;
+  object-fit:contain;
+  margin-bottom: 15px;
+}
+
+/* Minimal Scrollbar Style */
+.fullscreen-content::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 10px;
+}
+
+.fullscreen-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 20px;
+}
+
+.fullscreen-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 20px;
+}
+
+.fullscreen-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Firefox Scrollbar */
+.fullscreen-content {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+}
+
+.fullscreen-thumbnail {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 20px; /* Space between the thumbnail and Quill content */
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between; /* Space between buttons */
+  margin-top: 20px; /* Space above the button container */
+}
+
+
+/* Container */
+.form-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-top: 50px;
+}
+
+/* Heading */
+.form-container h2 {
+  color: #333;
+  font-family: Arial, sans-serif;
+  margin-bottom: 20px;
+}
+
+/* Avatar Upload */
+.avatar-upload {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.avatar-label {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #e0e0e0;
+  border: 2px solid #ccc;
+}
+
+.avatar-label img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #555;
+  font-family: Arial, sans-serif;
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Button */
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
+
+/* Upload Status */
+#uploadStatus {
+  margin-top: 15px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Avatar Upload */
+.avatar-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.avatar-label {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #e0e0e0;
+  border: 2px solid #ccc;
+}
+
+.avatar-label img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* "Add Avatar" Text */
+.avatar-text {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #555;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+/* Custom styles for Excel content */
+#excelContent {
+  margin-top: 20px;
+}
+
+#excelContent table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#excelContent th,
+#excelContent td {
+  padding: 10px;
+  border: 1px solid #dddddd;
+  text-align: left;
+}
+
+#excelContent th {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+#excelContent tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#excelContent tr:hover {
+  background-color: #e9ecef; /* Change the background color on hover */
+}
+
+#excelContent caption {
+  font-size: 1.5em;
+  margin: 10px;
+  font-weight: bold;
+}
+
+body.modal-open {
+  overflow: auto !important;
+  padding-right: 0 !important;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}
+
+/* Ensure modal is above backdrop */
+.modal {
+  z-index: 1050;
+}
+
+/* Make sure body has proper modal open state */
+body.modal-open {
+  overflow: hidden;
+  padding-right: 0 !important;
+}
+
+/* Ensure modal content is visible */
+.modal-content {
+  background-color: #fff;
+  position: relative;
+}
+
+/* Fix multiple backdrop issue */
+.modal-backdrop + .modal-backdrop {
+  display: none;
+}
+
+/* Custom styles for the instructor detail modal */
+.instructor-modal .modal-dialog {
+  max-width: 1200px; /* Set maximum width for the instructor detail modal */
+  width: 100%; /* Ensure it uses full width available */
+}
+
+.instructor-modal .modal-content {
+  height: auto; /* Let the content dictate the height */
+}
+
+/* Optional: Limit the height and add scroll if needed */
+.instructor-modal .modal-body {
+  max-height: 600px; /* Set a max height for the modal body */
+  overflow-y: auto; /* Allow scrolling if content exceeds height */
+}
+
+
+/* Style for the instructor avatar image */
+#detailAvatar {
+  width: 100%; /* Make the image take full width of its container */
+  height: auto; /* Maintain the aspect ratio */
+  max-width: 250px; /* Limit the maximum width */
+  max-height: 250px; /* Limit the maximum height */
+  border-radius: 50%; /* Make it circular */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+  object-fit: cover; /* Ensure the image covers the container without stretching */
+}
+
+/* Hover effect */
+#detailAvatar:hover {
+  transform: scale(1.05); /* Slightly enlarge the image on hover */
+}
+
+/* Card styling */
+.card {
+  height: 100%; /* Ensures uniform card height */
+}
+
+#departmentFilter{
+  width: 66%;
+  margin-bottom:10px;
+}
+
+.searchBar {
+  margin-left: 10px;
+  margin-top: -10px;
+}
+
+#departmentFilter, #searchBar {
+  height: 40px; /* Adjust as needed for consistent height */
+  padding-top: 0; /* Remove any extra padding */
+  padding-bottom: 0;
+  box-sizing: border-box; /* Ensures padding and border are included in the total height */
+}
+
+.card-header {
+  background-color: transparent;
+  border-bottom: none;
+}
+
+.form-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+.form-check-input {
+  cursor: pointer;
+}
+
+#bulkDeleteBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Readonly state */
+.readonly-textarea {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  cursor: default;
+  color: #495057;
+}
+
+/* Editable state */
+.editable-textarea {
+  background-color: #fff;
+  border: 1px solid #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+  cursor: text;
+}
+
+#saveButton {
+  transition: all 0.3s ease;
+}
+
+/* Hover effects for editable textareas */
+.editable-textarea:hover, 
+.editable-textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Disabled appearance for readonly textareas */
+.readonly-textarea:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.main-content.expanded {
+  margin-left: var(--sidebar-collapsed-width);
+}
+
+.upload-section {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.file-upload {
+  border: 2px dashed #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.file-upload:hover {
+  border-color: var(--primary-color);
+  background-color: #f8fafc;
+}
+
+.floor-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.btn-floor {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.btn-floor:hover {
+  transform: translateY(-2px);
+}
+
+.upload-status {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #f8fafc;
+}
+
+#selected-filename {
+  font-size: 0.9rem;
+  margin-top: 8px;
+  word-break: break-word;
+}
+
+.file-upload-container1 {
+  width: 100%;
+  padding: 1rem;
+}
+
+.file-upload1 {
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.upload-content1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Initial Upload State */
+.upload-icon1 {
+  font-size: 2.5rem;
+  color: #0d6efd;
+  margin-bottom: 0.5rem;
+}
+
+/* Selected File State */
+.upload-content1.selected-state1 {
+  display: none;
+}
+
+.check-icon1 {
+  font-size: 2.5rem;
+  color: #198754;
+  margin-bottom: 0.5rem;
+}
+
+.filename1 {
+  color: #198754;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+.change-text1 {
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* File Selected State Styles */
+.file-upload.has-file1 {
+  border-style: dashed;
+  border-color: #ddd;
+  background-color: #fff;
+}
+
+/* announcement */
+ /* Image Upload Styles */
+ .image-upload-container {
+  border: 2px dashed var(--border-color);
+  padding: 2rem;
+  text-align: center;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: var(--background-color);
+  border-style: dashed;
+  border-color: #ddd;
+}
+
+.image-upload-container:hover {
+  border-color: var(--primary-color);
+  background-color: rgba(99, 102, 241, 0.05);
+}
+
+.upload-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: var(--secondary-color);
+}
+
+.file-info {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.image-preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  min-height: 100px;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 300px; /* Adjust this value based on your needs */
+  object-fit: contain;
+  margin-top: 15px;
+}
+
+.remove-image {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100px;
+  text-align: center;
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  /* Adjust card layout */
+  .postsContainer {
+    gap: 15px;
+  }
+
+  .card {
+    flex: 1 1 calc(33.33% - 15px);
+  }
+}
+
+@media (max-width: 992px) {
+  /* Sidebar adjustments */
+  .sidebar {
+    width: 220px;
+  }
+
+  .sidebar.close {
+    width: 70px;
+  }
+
+  .navbar img {
+    width: 70px;
+    height: 35px;
+  }
+
+  /* Adjust card layout */
+  .card {
+    flex: 1 1 calc(50% - 15px);
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar img {
+    width: 60px;
+    height: 30px;
+  }
+
+  /* Sidebar and navbar adjustments */
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar.close {
+    width: 60px;
+  }
+
+  .postsContainer {
+    padding: 15px;
+  }
+
+  /* Adjust card layout */
+  .card {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  /* Navbar padding adjustment */
+  .navbar {
+    padding: 10px;
+  }
+
+  /* Sidebar adjustments */
+  .sidebar {
+    width: 180px;
+  }
+
+  .sidebar.close {
+    width: 60px;
+  }
+
+  .navbar_content i {
+    font-size: 16px;
+  }
+
+  /* Bottom content */
+  .bottom_content {
+    padding: 8px 0;
+  }
+
+  /* Card and text adjustments */
+  .card {
+    padding: 15px;
+  }
+
+  .menu_title,
+  .nav_link {
+    font-size: 14px;
+  }
+}
+
+
+/* For tablets and small laptops */
+@media (max-width: 991px) {
+  .fullscreen-content {
+    width: 80%;
+    height: 70%;
+  }
+
+  .navigation {
+    flex-direction: column;
+    margin-left: 0;
+  }
+
+  .form-container {
+    max-width: 90%;
+  }
+
+  .avatar-label {
+    width: 80px;
+    height: 80px;
+  }
+
+  .fullscreen-content img {
+    height: auto;
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 767px) {
+  .fullscreen-content {
+    width: 95%;
+    height: 70%;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navigation {
+    padding: 10px;
+    margin-left: 0;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .form-container {
+    max-width: 100%;
+  }
+
+  .avatar-label {
+    width: 70px;
+    height: 70px;
+  }
+
+  .fullscreen-content img {
+    height: auto;
+  }
+
+  /* Reduce font size for headings in the form */
+  .form-container h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Avatar */
+  #detailAvatar {
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  /* Adjust modal content width */
+  .instructor-modal .modal-dialog {
+    max-width: 90%;
+  }
+
+  .upload-section {
+    max-width: 100%;
+    padding: 1rem;
+  }
+}
+
+/* For extra-small devices */
+@media (max-width: 575px) {
+  .fullscreen-content {
+    width: 100%;
+    height: auto;
+  }
+
+  .avatar-upload {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Adjust card layout */
+  .card {
+    width: 100%;
+    margin: 0;
+  }
+
+  /* Make sure all elements fit comfortably */
+  .form-container,
+  .button-container {
+    width: 100%;
+  }
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+  .file-upload, .file-upload1, .image-upload-container {
+    padding: 1.5rem;
+  }
+  
+  .upload-icon, .upload-icon1,
+  .check-icon, .check-icon1 {
+    font-size: 2rem;
+  }
+
+  .floor-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .btn-floor {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .file-upload, .file-upload1, .image-upload-container {
+    padding: 1rem;
+  }
+  
+  .upload-icon, .upload-icon1,
+  .check-icon, .check-icon1 {
+    font-size: 1.5rem;
+  }
+  
+  .filename, .filename1 {
+    font-size: 0.8rem;
+  }
+
+  .btn-floor {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* For small devices (mobile) */
+@media (max-width: 576px) {
+  .announcementDiv,
+  .scheduleDiv,
+  .profDiv {
+    width: 100%;
+    height: auto;
+    margin-top: 15px;
+  }
+
+  #chart-calendar-container {
+    flex-direction: column;  /* Stack chart and calendar on small screens */
+    width: 100%;
+  }
+
+  .chart-container {
+    margin-bottom: 20px;
+  }
+
+  .navigation {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+/* For medium devices (tablets) */
+@media (min-width: 577px) and (max-width: 992px) {
+  .announcementDiv,
+  .scheduleDiv,
+  .profDiv {
+    width: 48%;  /* Slightly smaller on tablets */
+    margin-top: 15px;
+  }
+
+  #chart-calendar-container {
+    flex-wrap: wrap;
+  }
+
+  .navigation {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 15px;
+  }
+
+  .navigation > div {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+/* For larger screens (desktops) */
+@media (min-width: 993px) and (max-width: 1200px) {
+  .announcementDiv,
+  .scheduleDiv,
+  .profDiv {
+    width: 30%;  /* Adjust for larger screens */
+  }
+
+  #chart-calendar-container {
+    gap: 30px;
+  }
+}
+
+/* For very large screens (4k displays) */
+@media (min-width: 1201px) {
+  .announcementDiv,
+  .scheduleDiv,
+  .profDiv {
+    width: 30%;
+    margin-top: 30px;
+  }
+
+  #chart-calendar-container {
+    gap: 40px;
+    width: 100%;
+  }
+
+  .navigation {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .sidebar {
+      width: 100%;
+      position: relative;
+      top: auto;
+      left: auto;
+  }
+
+  .main-content {
+      margin-left: 0;
+      padding: 10px;
+  }
+
+  /* Sidebar collapse and toggle */
+  .sidebar {
+      display: none;
+  }
+
+  .sidebar.show {
+      display: block;
+  }
+
+  .expand_sidebar {
+      display: block;
+  }
+
+  .collapse_sidebar {
+      display: block;
+  }
+
+  /* Adjust the button layout */
+  #postButton {
+      width: 100%;
+      margin-top: 10px;
+  }
+}
+
+/* For medium screens (tablets) */
+@media (max-width: 991px) {
+  .navbar .logo_item {
+      display: flex;
+      justify-content: center;
+  }
+
+  .sidebar {
+      width: 200px;
+  }
+
+  .main-content {
+      margin-left: 220px;
+  }
+
+  /* Adjust card layouts on smaller screens */
+  .col-md-3 {
+      width: 100%; /* Make cards full width on smaller screens */
+  }
+}
+
+/* Make the button smaller on medium and small screens */
+@media (max-width: 991px) {
+  #postButton {
+      height: 50px;
+      width: 50px;
+  }
+
+  #postButton svg {
+      height: 20px;
+      width: 17px;
+  }
+}
+
+/* Further adjust the button for small screens (phones) */
+@media (max-width: 767px) {
+  #postButton {
+      height: 45px;
+      width: 45px;
+      top: 80%; /* Adjust position */
+      right: 2%;
+  }
+
+  #postButton svg {
+      height: 18px;
+      width: 16px;
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: -250px; /* Hide sidebar off-screen */
+        transition: left 0.3s ease;
+        width: 250px; /* Set width of sidebar */
+        height: auto; /* Full height */
+        background-color: #f8f9fa; /* Background color */
+        z-index: 1000; /* Ensure it's above other content */
+    }
+
+    .sidebar.active {
+        left: 0; /* Show sidebar */
+    }
+
+    .navbar .logo_item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .navbar .navbar_content {
+        display: none; /* Hide navbar content on smaller screens */
+    }
+
+    #sidebarOpen {
+        display: block; /* Show burger icon */
+        cursor: pointer;
+    }
+
+    /* Hide sidebar toggle buttons */
+    .bottom_content {
+        display: none;
+    }
+
+    .main-content {
+        margin-left: 0; /* Remove left margin on smaller screens */
+    }
+}
+
+@media (min-width: 769px) {
+    #sidebarOpen {
+        display: none; /* Hide burger icon on larger screens */
+    }
+
+    .sidebar {
+        position: fixed; /* Set sidebar to static */
+        left: 0; /* Reset left position */
+    }
+
+    .navbar .navbar_content {
+        display: flex; /* Show navbar content on larger screens */
+    }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+      width: 100%; /* Make sidebar full width */
+      height: auto; /* Auto height for content */
+      left: 0; /* Show sidebar fully */
+  }
+
+  .sidebar ul {
+      padding: 0;
+  }
+
+  .sidebar li {
+      padding: 10px;
+  }
+
+  .main-content {
+      margin-top: 50px; /* Add margin to main content for mobile */
+  }
+}
+
+
+/* For screens smaller than 1200px (tablets and small desktops) */
+@media (max-width: 1199px) {
+  .navbar {
+    padding: 10px 20px;
+  }
+
+  .navbar_content {
+    column-gap: 15px;
+  }
+
+  .navbar img {
+    width: 90px;
+    height: 45px;
+  }
+
+  .logo_item {
+    font-size: 18px;
+  }
+
+  .navbar_content i {
+    font-size: 18px;
+  }
+}
+
+/* For screens smaller than 992px (tablets) */
+@media (max-width: 991px) {
+  .navbar_content {
+    display: none; /* Hide navbar items on small tablets */
+  }
+
+  .navbar {
+    padding: 10px 15px;
+  }
+
+  .logo_item {
+    font-size: 20px;
+  }
+
+  .navbar img {
+    width: 80px;
+    height: 40px;
+  }
+}
+
+/* For screens smaller than 768px (phones in portrait mode) */
+@media (max-width: 767px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .navbar_content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .navbar img {
+    width: 80px;
+    height: 40px;
+  }
+
+  .logo_item {
+    font-size: 18px;
+  }
+
+  .navbar_content i {
+    font-size: 18px;
+  }
+}
+
+/* For screens smaller than 576px (small phones) */
+@media (max-width: 575px) {
+  .navbar {
+    padding: 8px 12px;
+  }
+
+  .navbar img {
+    width: 70px;
+    height: 35px;
+  }
+
+  .logo_item {
+    font-size: 16px;
+  }
+
+  .navbar_content i {
+    font-size: 16px;
+  }
+}
+
+/* For screens smaller than 1200px (tablets and small desktops) */
+@media (max-width: 1199px) {
+  .sidebar {
+    width: 220px; /* Slightly smaller sidebar */
+    padding: 70px 20px;
+  }
+
+  .sidebar.close {
+    width: 80px;
+  }
+
+  .sidebar.close + .main-content {
+    margin-left: 80px;
+  }
+
+  .bottom_content {
+    width: 220px;
+  }
+
+  .menu_title {
+    font-size: 16px;
+  }
+}
+
+/* For screens smaller than 992px (tablets) */
+@media (max-width: 991px) {
+  .sidebar {
+    width: 200px;
+    padding: 60px 15px;
+  }
+
+  .sidebar.close {
+    width: 70px;
+  }
+
+  .sidebar.close + .main-content {
+    margin-left: 70px;
+  }
+
+  .bottom_content {
+    width: 200px;
+  }
+
+  .menu_title {
+    font-size: 14px;
+  }
+
+  .navlink_icon {
+    font-size: 20px;
+  }
+}
+
+/* For screens smaller than 768px (phones in portrait mode) */
+@media (max-width: 767px) {
+  .sidebar {
+    width: 100%; /* Full-width sidebar for smaller screens */
+    padding: 50px 10px;
+  }
+
+  .sidebar.close {
+    width: 0; /* Sidebar fully collapsed */
+  }
+
+  .sidebar.close + .main-content {
+    margin-left: 0;
+  }
+
+  .bottom_content {
+    width: 100%;
+  }
+
+  .menu_title {
+    font-size: 12px;
+  }
+
+  .navlink_icon {
+    font-size: 18px;
+  }
+}
+
+/* For screens smaller than 576px (small phones) */
+@media (max-width: 575px) {
+  .sidebar {
+    width: 100%;
+    padding: 40px 5px;
+  }
+
+  .sidebar.close {
+    width: 0;
+  }
+
+  .sidebar.close + .main-content {
+    margin-left: 0;
+  }
+
+  .bottom_content {
+    width: 100%;
+  }
+
+  .menu_title {
+    font-size: 10px;
+  }
+
+  .navlink_icon {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1200px) {
+    .bottom i, .bottom span, .title {
+        font-size: 1.5vw; /* Reduce font size for medium screens */
+    }
+
+    .btn-announce {
+        font-size: 2vw;
+        padding: 20px 40px;
+    }
+}
+
+@media (max-width: 992px) {
+    .bottom {
+        padding: 15px 0;
+    }
+
+    .bottom i {
+        font-size: 3vw;
+    }
+
+    .bottom span {
+        font-size: 2.5vw;
+    }
+
+    .square, header {
+        height: 80px;
+    }
+
+    .title {
+        font-size: 3vw;
+    }
+
+    .btn-announce {
+        font-size: 3vw;
+        min-width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    .bottom {
+        padding: 10px 0;
+    }
+
+    .bottom i {
+        font-size: 4vw;
+    }
+
+    .bottom span {
+        font-size: 3.5vw;
+    }
+
+    .title {
+        font-size: 4vw;
+    }
+
+    .btn-announce {
+        font-size: 4vw;
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .bottom i {
+        font-size: 5vw;
+    }
+
+    .bottom span {
+        font-size: 4.5vw;
+    }
+
+    .title {
+        font-size: 5vw;
+    }
+
+    .btn-announce {
+        font-size: 5vw;
+        min-width: 100%;
+    }
+
+    .card-img-top {
+        max-height: 150px; /* Adjust image height for smaller screens */
+    }
+}
+
+/* For small screens (e.g., mobile phones) */
+@media screen and (max-width: 768px) {
+    .postsContainer {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .card {
+        flex: 1 1 calc(50% - 10px); /* Two cards per row */
+    }
+
+    .bottom i {
+        font-size: 16px;
+    }
+
+    .bottom span {
+        font-size: 14px;
+    }
+
+    .title {
+        font-size: 150%;
+    }
+
+    .btn-announce {
+        min-height: 60px;
+        min-width: 90%;
+        font-size: 1.5rem;
+        padding: 18px 36px;
+    }
+}
+
+/* For medium screens (e.g., tablets) */
+@media screen and (max-width: 1024px) {
+    .postsContainer {
+        gap: 15px;
+    }
+
+    .card {
+        flex: 1 1 calc(33.33% - 15px); /* Three cards per row */
+    }
+
+    .bottom i {
+        font-size: 18px;
+    }
+
+    .bottom span {
+        font-size: 16px;
+    }
+
+    .title {
+        font-size: 120%;
+    }
+
+    .btn-announce {
+        min-height: 70px;
+        min-width: 80%;
+        font-size: 1.8rem;
+        padding: 20px 40px;
+    }
+}
+
+/* For larger screens (e.g., desktops) */
+@media screen and (min-width: 1025px) {
+    .card {
+        flex: 1 1 calc(25% - 20px); /* Four cards per row */
+    }
+
+    .bottom i {
+        font-size: 20px;
+    }
+
+    .bottom span {
+        font-size: 18px;
+    }
+
+    .title {
+        font-size: 130%;
+    }
+
+    .btn-announce {
+        min-height: 80px;
+        min-width: 75%;
+        font-size: 2rem;
+        padding: 24px 48px;
+    }
+}
+
+/* For small screens (e.g., mobile phones) */
+@media screen and (max-width: 768px) {
+    .main-content {
+        margin-left: 0; /* Adjust layout on small screens */
+        padding: 10px;
+    }
+
+    .new-post {
+        border: 1px solid #4a93ff; /* Thinner border for smaller screens */
+    }
+
+    .new-icon {
+        font-size: 16px; /* Smaller icon on mobile */
+    }
+
+    .thumbnail {
+        max-width: 100%; /* Ensure thumbnails are responsive */
+    }
+
+    .form1 {
+        width: 90%; /* Form width adjusts on smaller screens */
+        margin: 10px auto;
+    }
+
+    #postButton {
+        top: 85%;
+        right: 5%;
+        height: 50px;
+        width: 50px;
+    }
+
+    #postButton svg {
+        height: 20px;
+        width: 18px;
+    }
+}
+
+/* For medium screens (e.g., tablets) */
+@media screen and (max-width: 1024px) {
+    .main-content {
+        margin-left: 200px; /* Adjust margin for tablets */
+    }
+
+    .new-post {
+        border: 1px solid #4a93ff; /* Thinner border for tablets */
+    }
+
+    .form1 {
+        width: 80%; /* Form width adjusts on tablets */
+    }
+
+    #postButton {
+        top: 80%;
+        right: 3%;
+        height: 55px;
+        width: 55px;
+    }
+
+    #postButton svg {
+        height: 22px;
+        width: 20px;
+    }
+}
+
+/* For larger screens (e.g., desktops) */
+@media screen and (min-width: 1025px) {
+    .main-content {
+        margin-left: 250px; /* Full layout for desktop */
+    }
+
+    .new-post {
+        border: 2px solid #4a93ff; /* Original border size for desktop */
+    }
+
+    .new-icon {
+        font-size: 20px; /* Larger icon for desktop */
+    }
+
+    .form1 {
+        width: 600px; /* Standard form width for larger screens */
+    }
+
+    #postButton {
+        top: 88%;
+        right: 1%;
+        height: 60px;
+        width: 60px;
+    }
+
+    #postButton svg {
+        height: 24px;
+        width: 20.5px;
+    }
+}
+
+@media (max-width: 1200px) {
+  .chart-container, .calendar-wrapper {
+    width: 100%;
+  }
+
+  .analytics {
+    margin-left: 0;
+  }
+
+  .container1 {
+    padding: 20px;
+  }
+
+  .announcementDiv, .scheduleDiv, .profDiv {
+    margin-left: 0;
+  }
+
+  .navigation {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* Adjusting the font sizes for smaller screens */
+  .tooltip-text {
+    width: 150px;
+    font-size: 10px;
+  }
+
+  .card-button {
+    font-size: 14px;
+  }
+
+  /* Scaling down the canvas */
+  canvas {
+    height: 300px; /* Adjust as needed */
+  }
+}
+
+@media (max-width: 768px) {
+  /* Adjust layout for tablets and smaller devices */
+  .quill-editor-container {
+    max-height: calc(100vh - 70px);
+    overflow-y: scroll;
+  }
+
+  #postButton {
+    top: 80%;
+    right: 5%;
+  }
+
+  /* Ensure buttons don't take too much space */
+  .card-button {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .announcementDiv, .scheduleDiv, .profDiv {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .navigation {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  /* Smaller tooltip */
+  .tooltip-text {
+    font-size: 10px;
+    right: 150%;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Mobile styles */
+  .quill-editor-container {
+    max-height: calc(100vh - 60px); /* Adjusted for smaller screens */
+  }
+
+  #postButton {
+    top: 75%;
+    right: 5%;
+  }
+
+  .card-button {
+    font-size: 12px;
+  }
+
+  .announcementDiv, .scheduleDiv, .profDiv {
+    font-size: 12px;
+  }
+
+  .navigation {
+    margin-left: 0;
+    width: 100%;
+    padding: 10px;
+  }
+
+  .loading-overlay {
+    font-size: 12px;
+  }
+
+  /* Resize the canvas for small screens */
+  canvas {
+    height: 250px;
+  }
+}
+
+/* Adjust for extra small devices */
+@media (max-width: 320px) {
+  /* Small mobile styling */
+  .tooltip-text {
+    font-size: 8px;
+    width: 100px;
+  }
+
+  .card-button {
+    font-size: 10px;
+  }
+
+  .announcementDiv, .scheduleDiv, .profDiv {
+    padding: 8px;
+    font-size: 10px;
+  }
+
+  .navigation {
+    padding: 8px;
+  }
+
+  canvas {
+    height: 200px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .fullscreen-content {
+    width: 80%;
+  }
+
+  .form-container {
+    max-width: 90%;
+  }
+}
+
+/* Adjust layout for tablets and mobile screens */
+@media (max-width: 768px) {
+  .fullscreen-content {
+    width: 90%;
+    height: 90%;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .form-container {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .cell-textarea {
+    width: 100%; /* Ensure textarea fills the cell in smaller screens */
+  }
+
+  /* Resize the fullscreen image thumbnail */
+  .fullscreen-thumbnail {
+    height: 50%;
+  }
+}
+
+/* Small screens (mobile devices) */
+@media (max-width: 480px) {
+  .fullscreen-content {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    margin-top: 0;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .form-container {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  /* Adjust font size for readability */
+  .form-container h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Adjust the size of the fullscreen image */
+  .fullscreen-thumbnail {
+    height: 40%;
+  }
+
+  .cell-textarea {
+    font-size: 14px; /* Adjust font size for mobile */
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .avatar-upload {
+    width: 80%; /* Ensure the avatar upload container doesn't stretch too wide */
+  }
+
+  .form-container {
+    padding: 15px;
+    margin-top: 30px;
+  }
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .instructor-modal .modal-dialog {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 992px) {
+  .avatar-label {
+    width: 80px;
+    height: 80px;
+  }
+
+  .submit-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  #excelContent table {
+    font-size: 14px;
+  }
+
+  .modal-content {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .avatar-upload {
+    width: 100%;
+  }
+
+  .form-container {
+    max-width: 100%;
+    padding: 10px;
+  }
+
+  .submit-btn {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  #excelContent table {
+    font-size: 12px;
+  }
+
+  .instructor-modal .modal-dialog {
+    max-width: 90%;
+  }
+
+  .instructor-modal .modal-body {
+    max-height: 400px; /* Allow for smaller modal body height */
+  }
+}
+
+@media (max-width: 576px) {
+  .avatar-label {
+    width: 70px;
+    height: 70px;
+  }
+
+  .form-container {
+    padding: 8px;
+    margin-top: 20px;
+  }
+
+  .submit-btn {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  #excelContent table {
+    font-size: 12px;
+  }
+
+  .instructor-modal .modal-dialog {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .upload-section {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+
+  .file-upload {
+    padding: 1.5rem;
+  }
+
+  .file-upload1 {
+    padding: 1.5rem;
+  }
+
+  .btn-floor {
+    padding: 0.75rem 1rem;
+  }
+
+  #detailAvatar {
+    max-width: 200px;
+    max-height: 200px;
+  }
+}
+
+@media (max-width: 992px) {
+  .file-upload {
+    padding: 1.5rem;
+  }
+
+  .upload-section {
+    padding: 1rem;
+    max-width: 90%;
+  }
+
+  .file-upload1 {
+    padding: 1.5rem;
+  }
+
+  .btn-floor {
+    padding: 0.75rem 1rem;
+  }
+
+  #detailAvatar {
+    max-width: 180px;
+    max-height: 180px;
+  }
+
+  .upload-status {
+    padding: 0.75rem;
+  }
+
+  .file-upload-container1 {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .upload-section {
+    padding: 1rem;
+    max-width: 90%;
+  }
+
+  .file-upload {
+    padding: 1rem;
+  }
+
+  .file-upload1 {
+    padding: 1rem;
+  }
+
+  .btn-floor {
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+  }
+
+  #detailAvatar {
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  .upload-status {
+    padding: 0.5rem;
+  }
+
+  .file-upload-container1 {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .upload-section {
+    padding: 0.5rem;
+    max-width: 90%;
+  }
+
+  .file-upload {
+    padding: 1rem;
+  }
+
+  .file-upload1 {
+    padding: 1rem;
+  }
+
+  .btn-floor {
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+  }
+
+  #detailAvatar {
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  .upload-status {
+    padding: 0.5rem;
+  }
+
+  .file-upload-container1 {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Avatar resizing */
+  #detailAvatar {
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  .upload-section {
+    padding: 1rem;
+  }
+
+  .file-upload {
+    padding: 1.5rem;
+  }
+
+  .floor-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .upload-status {
+    padding: 0.75rem;
+  }
+
+  .image-preview-container {
+    min-height: 150px; /* Adjust image preview size */
+  }
+
+  /* Card Layout Adjustments */
+  .card {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  /* Textarea and Inputs */
+  .readonly-textarea, .editable-textarea {
+    font-size: 0.875rem;
+  }
+}
+
+/* Media Queries for Tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+  #detailAvatar {
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  .upload-section {
+    padding: 1.5rem;
+  }
+
+  .file-upload {
+    padding: 1.75rem;
+  }
+
+  .floor-buttons {
+    flex-direction: row;
+  }
+
+  .upload-status {
+    padding: 1rem;
+  }
+
+  .image-preview-container {
+    min-height: 200px;
+  }
+}
+
+/* Media Queries for Large Screens (min-width: 1200px) */
+@media (min-width: 1200px) {
+  .upload-section {
+    max-width: 1000px;
+    padding: 2rem;
+  }
+
+  .file-upload {
+    padding: 2rem;
+  }
+
+  .image-preview {
+    max-height: 350px;
+  }
+}
